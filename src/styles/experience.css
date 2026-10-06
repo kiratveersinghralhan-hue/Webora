@@ -1,0 +1,234 @@
+/* The opt-in is visible when the system requests reduced motion. */
+.motion-choice {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 80;
+  min-height: 44px;
+  padding: 12px 16px;
+  border: 1px solid #a89bff60;
+  background: #151322f5;
+  color: #e1d9ff;
+  font-size: 10px;
+  box-shadow: 0 8px 30px #0006;
+}
+.intro-running .site-header {
+  visibility: hidden;
+}
+.intro-running .hero {
+  overflow: visible;
+}
+.intro-running body {
+  overflow-x: clip;
+}
+.intro-running .page-enter {
+  opacity: 1 !important;
+}
+.intro-veil {
+  background: radial-gradient(ellipse at 50% 40%, #18142d, #08090e 65%);
+}
+.intro-type > span {
+  letter-spacing: 0.25em;
+}
+.intro-identifier {
+  animation: identity-resolve 0.4s both;
+}
+.hero-scene {
+  perspective: none;
+}
+.hero h1 {
+  transform-origin: left center;
+}
+.hero-brand {
+  transform-origin: left center;
+  pointer-events: none;
+}
+.scroll-icon {
+  width: 58px;
+  height: 58px;
+  position: relative;
+}
+.scroll-icon::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid #b3a4ff30;
+  border-top-color: #b3a4ff;
+  border-radius: 50%;
+  animation: discover-orbit 6s linear infinite;
+}
+@keyframes discover-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.section {
+  --atmosphere: 0;
+}
+.services-section {
+  background: radial-gradient(
+    ellipse at 25% calc(35% + var(--atmosphere) * 20%),
+    #35315b55,
+    transparent 65%
+  );
+}
+.principles-section {
+  background: radial-gradient(
+    ellipse at calc(15% + var(--atmosphere) * 60%) 45%,
+    #263b4b45,
+    transparent 65%
+  );
+}
+.engagements-section {
+  background: radial-gradient(
+    ellipse at 70% calc(10% + var(--atmosphere) * 65%),
+    #34275055,
+    transparent 65%
+  );
+}
+.work-stage {
+  background: radial-gradient(ellipse at 50% 30%, #2e30494d, #08090e 75%);
+}
+.work-enhanced .project .project-visual-link {
+  background: transparent;
+}
+.services-spatial-mobile {
+  display: none;
+}
+.work-ready .work-world::after {
+  content: "";
+  position: absolute;
+  bottom: 5%;
+  left: 22%;
+  right: 22%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #b9b0ff80, transparent);
+  box-shadow: 0 15px 70px 30px #7166ba12;
+  pointer-events: none;
+}
+.work-enhanced .project-index {
+  font-size: 42px;
+  color: #b7aef6;
+}
+.project.is-active .project-description {
+  animation: metadata-arrive 0.4s both;
+}
+@keyframes metadata-arrive {
+  from {
+    opacity: 0.25;
+    transform: translateY(14px);
+    clip-path: inset(0 0 25% 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0);
+  }
+}
+.services-spatial {
+  height: 365px;
+}
+.process-panel {
+  min-height: 550px;
+}
+.process-spatial {
+  height: 330px;
+  top: 0;
+}
+.process-copy {
+  padding-top: 300px;
+}
+.process-copy h3 {
+  animation: metadata-arrive 0.4s both;
+}
+.process-number {
+  top: 250px;
+}
+::view-transition-old(page) {
+  animation: space-out 0.3s ease-in both;
+}
+::view-transition-new(page) {
+  animation: space-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes space-out {
+  to {
+    opacity: 0;
+    transform: perspective(1400px) translateZ(-130px) rotateY(-4deg);
+    filter: blur(4px);
+  }
+}
+@keyframes space-in {
+  from {
+    opacity: 0;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: none;
+  }
+}
+@media (max-width: 899px) {
+  .services-spatial-primary {
+    display: none;
+  }
+  .services-spatial-mobile {
+    display: block;
+  }
+  .services-spatial {
+    height: 310px;
+    margin-inline: 0;
+  }
+  .process-panel {
+    min-height: 510px;
+  }
+  .process-spatial {
+    height: 285px;
+  }
+  .process-copy {
+    padding-top: 265px;
+  }
+}
+@media (max-width: 899px) and (min-height: 600px) {
+  .services-spatial.services-spatial-mobile {
+    position: sticky;
+    top: var(--header);
+    height: 200px;
+    margin: 0;
+    z-index: 3;
+    background: radial-gradient(ellipse, #26203b, #0d0e15 75%);
+    border-bottom: 1px solid #8e80bb30;
+  }
+  .service-row {
+    scroll-margin-top: calc(var(--header) + 210px);
+  }
+}
+@media (max-width: 600px) {
+  .services-spatial {
+    height: 290px;
+  }
+  .process-panel {
+    min-height: 460px;
+  }
+  .process-spatial {
+    height: 245px;
+  }
+  .process-copy {
+    padding-top: 230px;
+  }
+  .motion-choice {
+    font-size: 9px;
+    bottom: 10px;
+    right: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) .scroll-icon::before {
+    animation: none;
+  }
+  :root:not([data-motion="full"])::view-transition-old(page),
+  :root:not([data-motion="full"])::view-transition-new(page) {
+    animation: none;
+  }
+}

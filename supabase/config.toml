@@ -1,0 +1,7 @@
+project_id = "webora-local"
+
+[functions.submit-enquiry]
+verify_jwt = false
+
+[functions.deliver-enquiry-emails]
+verify_jwt = false

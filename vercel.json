@@ -1,0 +1,43 @@
+{
+  "rewrites": [
+    { "source": "/work", "destination": "/work/index.html" },
+    { "source": "/services", "destination": "/services/index.html" },
+    { "source": "/studio", "destination": "/studio/index.html" },
+    { "source": "/start-project", "destination": "/start-project/index.html" },
+    { "source": "/privacy", "destination": "/privacy/index.html" },
+    {
+      "source": "/work/harvester-parts",
+      "destination": "/work/harvester-parts/index.html"
+    },
+    { "source": "/work/veyrath", "destination": "/work/veyrath/index.html" },
+    {
+      "source": "/work/glossboss",
+      "destination": "/work/glossboss/index.html"
+    },
+    {
+      "source": "/work/form-and-field",
+      "destination": "/work/form-and-field/index.html"
+    },
+    {
+      "source": "/work/off-script",
+      "destination": "/work/off-script/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        { "key": "X-Frame-Options", "value": "DENY" }
+      ]
+    }
+  ]
+}

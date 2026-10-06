@@ -1,0 +1,14 @@
+{
+  "environment": "Local Windows Chromium, headless; not a physical-device or production benchmark",
+  "frames": 120,
+  "frameP50": 16.699999999999818,
+  "frameP95": 33.40000000000009,
+  "maxFrameGap": 99.90000000000009,
+  "longTasks": [
+    101
+  ],
+  "layoutCount": 13,
+  "recalcStyleCount": 430,
+  "scriptDuration": 0.132347,
+  "layoutDuration": 0.002329
+}

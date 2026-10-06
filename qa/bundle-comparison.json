@@ -1,0 +1,207 @@
+{
+  "baseline": {
+    "initial": [
+      {
+        "file": "/assets/index-BcHkKL9d.js",
+        "bytes": 236843,
+        "gzip": 73099
+      },
+      {
+        "file": "/assets/rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "gzip": 428
+      },
+      {
+        "file": "/assets/motion-Br22T7KJ.js",
+        "bytes": 131466,
+        "gzip": 48908
+      },
+      {
+        "file": "/assets/three-CUvaFlOd.js",
+        "bytes": 626542,
+        "gzip": 162144
+      },
+      {
+        "file": "/assets/analytics-O_K6U-He.js",
+        "bytes": 8457,
+        "gzip": 3855
+      }
+    ],
+    "bytes": 1004024,
+    "gzip": 288434,
+    "chunks": [
+      {
+        "file": "analytics-O_K6U-He.js",
+        "bytes": 8457,
+        "initial": true
+      },
+      {
+        "file": "arrow-left-CI136kQp.js",
+        "bytes": 198,
+        "initial": false
+      },
+      {
+        "file": "CaseStudy-Cz4XpUtU.js",
+        "bytes": 3241,
+        "initial": false
+      },
+      {
+        "file": "index-BcHkKL9d.js",
+        "bytes": 236843,
+        "initial": true
+      },
+      {
+        "file": "motion-Br22T7KJ.js",
+        "bytes": 131466,
+        "initial": true
+      },
+      {
+        "file": "Privacy-B8s1JJxZ.js",
+        "bytes": 2856,
+        "initial": false
+      },
+      {
+        "file": "rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "initial": true
+      },
+      {
+        "file": "Services-BlkUB1zz.js",
+        "bytes": 674,
+        "initial": false
+      },
+      {
+        "file": "StartProject-B33l096q.js",
+        "bytes": 103405,
+        "initial": false
+      },
+      {
+        "file": "Studio-DSL3HeR4.js",
+        "bytes": 883,
+        "initial": false
+      },
+      {
+        "file": "three-CUvaFlOd.js",
+        "bytes": 626542,
+        "initial": true
+      },
+      {
+        "file": "Work-Cuqknfe0.js",
+        "bytes": 908,
+        "initial": false
+      }
+    ]
+  },
+  "current": {
+    "initial": [
+      {
+        "file": "/assets/index-CGSTqpk1.js",
+        "bytes": 254033,
+        "gzip": 78609
+      },
+      {
+        "file": "/assets/rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "gzip": 428
+      },
+      {
+        "file": "/assets/jsx-runtime-NZYk81nU.js",
+        "bytes": 435,
+        "gzip": 306
+      },
+      {
+        "file": "/assets/Spatial-UDQ42DNG.js",
+        "bytes": 52502,
+        "gzip": 18777
+      }
+    ],
+    "bytes": 307686,
+    "gzip": 98120,
+    "chunks": [
+      {
+        "file": "arrow-left-xNTfQ_8z.js",
+        "bytes": 196,
+        "initial": false
+      },
+      {
+        "file": "CaseStudy-Ln7mfbSp.js",
+        "bytes": 3620,
+        "initial": false
+      },
+      {
+        "file": "engine-Cd3NNuN1.js",
+        "bytes": 10192,
+        "initial": false
+      },
+      {
+        "file": "index-CGSTqpk1.js",
+        "bytes": 254033,
+        "initial": true
+      },
+      {
+        "file": "jsx-runtime-NZYk81nU.js",
+        "bytes": 435,
+        "initial": true
+      },
+      {
+        "file": "motion-Br22T7KJ.js",
+        "bytes": 131466,
+        "initial": false
+      },
+      {
+        "file": "pageMotion-D0dCIEL7.js",
+        "bytes": 1918,
+        "initial": false
+      },
+      {
+        "file": "Privacy-CoZ32AtF.js",
+        "bytes": 2862,
+        "initial": false
+      },
+      {
+        "file": "rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "initial": true
+      },
+      {
+        "file": "Services-D1tHnSdQ.js",
+        "bytes": 680,
+        "initial": false
+      },
+      {
+        "file": "Spatial-UDQ42DNG.js",
+        "bytes": 52502,
+        "initial": true
+      },
+      {
+        "file": "StartProject-CpJLk55f.js",
+        "bytes": 103430,
+        "initial": false
+      },
+      {
+        "file": "Studio-BsIKfGqW.js",
+        "bytes": 894,
+        "initial": false
+      },
+      {
+        "file": "three-foundation-BsSdKdBI.js",
+        "bytes": 198632,
+        "initial": false
+      },
+      {
+        "file": "three-renderer-Yx6NAbLl.js",
+        "bytes": 378332,
+        "initial": false
+      },
+      {
+        "file": "Work-BKLlNB1t.js",
+        "bytes": 903,
+        "initial": false
+      }
+    ]
+  },
+  "change": {
+    "bytes": -696338,
+    "percent": -69.35471662031983
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "baseline": {
+    "initial": [
+      {
+        "file": "/assets/index-CGSTqpk1.js",
+        "bytes": 254033,
+        "gzip": 78609
+      },
+      {
+        "file": "/assets/rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "gzip": 428
+      },
+      {
+        "file": "/assets/jsx-runtime-NZYk81nU.js",
+        "bytes": 435,
+        "gzip": 306
+      },
+      {
+        "file": "/assets/Spatial-UDQ42DNG.js",
+        "bytes": 52502,
+        "gzip": 18777
+      }
+    ],
+    "bytes": 307686,
+    "gzip": 98120,
+    "chunks": [
+      {
+        "file": "arrow-left-xNTfQ_8z.js",
+        "bytes": 196,
+        "initial": false
+      },
+      {
+        "file": "CaseStudy-Ln7mfbSp.js",
+        "bytes": 3620,
+        "initial": false
+      },
+      {
+        "file": "engine-Cd3NNuN1.js",
+        "bytes": 10192,
+        "initial": false
+      },
+      {
+        "file": "index-CGSTqpk1.js",
+        "bytes": 254033,
+        "initial": true
+      },
+      {
+        "file": "jsx-runtime-NZYk81nU.js",
+        "bytes": 435,
+        "initial": true
+      },
+      {
+        "file": "motion-Br22T7KJ.js",
+        "bytes": 131466,
+        "initial": false
+      },
+      {
+        "file": "pageMotion-D0dCIEL7.js",
+        "bytes": 1918,
+        "initial": false
+      },
+      {
+        "file": "Privacy-CoZ32AtF.js",
+        "bytes": 2862,
+        "initial": false
+      },
+      {
+        "file": "rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "initial": true
+      },
+      {
+        "file": "Services-D1tHnSdQ.js",
+        "bytes": 680,
+        "initial": false
+      },
+      {
+        "file": "Spatial-UDQ42DNG.js",
+        "bytes": 52502,
+        "initial": true
+      },
+      {
+        "file": "StartProject-CpJLk55f.js",
+        "bytes": 103430,
+        "initial": false
+      },
+      {
+        "file": "Studio-BsIKfGqW.js",
+        "bytes": 894,
+        "initial": false
+      },
+      {
+        "file": "three-foundation-BsSdKdBI.js",
+        "bytes": 198632,
+        "initial": false
+      },
+      {
+        "file": "three-renderer-Yx6NAbLl.js",
+        "bytes": 378332,
+        "initial": false
+      },
+      {
+        "file": "Work-BKLlNB1t.js",
+        "bytes": 903,
+        "initial": false
+      }
+    ]
+  },
+  "current": {
+    "initial": [
+      {
+        "file": "/assets/index-BspYM6Qw.js",
+        "bytes": 261860,
+        "gzip": 81032
+      },
+      {
+        "file": "/assets/rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "gzip": 428
+      },
+      {
+        "file": "/assets/jsx-runtime-NZYk81nU.js",
+        "bytes": 435,
+        "gzip": 306
+      },
+      {
+        "file": "/assets/scroll-SGrkmPN9.js",
+        "bytes": 411,
+        "gzip": 293
+      },
+      {
+        "file": "/assets/Spatial-DXsapc1q.js",
+        "bytes": 52711,
+        "gzip": 18837
+      }
+    ],
+    "bytes": 316133,
+    "gzip": 100896,
+    "chunks": [
+      {
+        "file": "arrow-left-NNCItt1D.js",
+        "bytes": 196,
+        "initial": false
+      },
+      {
+        "file": "CaseStudy-CX6lmROb.js",
+        "bytes": 3630,
+        "initial": false
+      },
+      {
+        "file": "engine-BU_SevJF.js",
+        "bytes": 12323,
+        "initial": false
+      },
+      {
+        "file": "index-BspYM6Qw.js",
+        "bytes": 261860,
+        "initial": true
+      },
+      {
+        "file": "jsx-runtime-NZYk81nU.js",
+        "bytes": 435,
+        "initial": true
+      },
+      {
+        "file": "motion-Br22T7KJ.js",
+        "bytes": 131466,
+        "initial": false
+      },
+      {
+        "file": "pageMotion-DeqllILW.js",
+        "bytes": 1982,
+        "initial": false
+      },
+      {
+        "file": "Privacy-CoZ32AtF.js",
+        "bytes": 2862,
+        "initial": false
+      },
+      {
+        "file": "rolldown-runtime-hePW80VL.js",
+        "bytes": 716,
+        "initial": true
+      },
+      {
+        "file": "scroll-SGrkmPN9.js",
+        "bytes": 411,
+        "initial": true
+      },
+      {
+        "file": "Services-DEgUTDE9.js",
+        "bytes": 680,
+        "initial": false
+      },
+      {
+        "file": "Spatial-DXsapc1q.js",
+        "bytes": 52711,
+        "initial": true
+      },
+      {
+        "file": "StartProject-DRBAkM3g.js",
+        "bytes": 104262,
+        "initial": false
+      },
+      {
+        "file": "Studio-Bo-zs3i9.js",
+        "bytes": 1316,
+        "initial": false
+      },
+      {
+        "file": "three-foundation-D0EEildR.js",
+        "bytes": 198641,
+        "initial": false
+      },
+      {
+        "file": "three-renderer-FG-Lu4g0.js",
+        "bytes": 378308,
+        "initial": false
+      },
+      {
+        "file": "Work-BcWsoSiq.js",
+        "bytes": 903,
+        "initial": false
+      }
+    ]
+  },
+  "change": {
+    "bytes": 8447,
+    "percent": 2.745331279291219
+  }
+}

@@ -2,6 +2,8 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LinkButton } from "../components/LinkButton";
 import { Core } from "../three/Core";
+import { useV2Experience } from "../lib/experience";
+import { LivingHome } from "./LivingHome";
 import { Projects } from "../components/Projects";
 import {
   ServicesSection,
@@ -12,6 +14,8 @@ import {
 } from "../sections/StudioSections";
 
 export default function Home() {
+  const experimental = useV2Experience();
+  if (experimental) return <LivingHome />;
   return (
     <div className="page-enter">
       <section className="hero">

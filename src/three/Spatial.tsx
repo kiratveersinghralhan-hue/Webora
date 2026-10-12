@@ -1,6 +1,8 @@
 import { isMotionReduced } from "../lib/motionPreference";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useReducedMotion } from "../hooks/useMotion";
+import { isV2Experience, useV2Experience } from "../lib/experience";
+import { ExperienceStage } from "./ExperienceStage";
 export type SceneKind = "hero" | "work" | "services" | "process" | "fabric";
 
 /** Progressive WebGL enhancement. Content always exists outside the canvas. */
@@ -11,6 +13,7 @@ export function Spatial({
   children,
   onReady,
   intro = false,
+  allowV2 = false,
 }: {
   kind: SceneKind;
   active?: number;
@@ -18,12 +21,14 @@ export function Spatial({
   children?: ReactNode;
   onReady?: (ready: boolean) => void;
   intro?: boolean;
+  allowV2?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const callback = useRef(onReady);
   callback.current = onReady;
   const [ready, setReady] = useState(false);
   const reduced = useReducedMotion();
+  const experimental = useV2Experience();
   useEffect(() => {
     const element = host.current!;
     let cleanup: (() => void) | undefined;
@@ -31,7 +36,7 @@ export function Spatial({
       started = false;
     setReady(false);
     callback.current?.(false);
-    if (reduced || isMotionReduced()) return;
+    if (reduced || isMotionReduced() || isV2Experience()) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting || started) return;
@@ -79,13 +84,23 @@ export function Spatial({
       aria-hidden="true"
     >
       <div className="spatial-fallback">{children}</div>
-      <div
-        className="spatial-canvas"
-        ref={host}
-        data-active={active}
-        data-progress={progress}
-        data-intro={intro ? "active" : "complete"}
-      />
+      {experimental && kind === "hero" && allowV2 ? (
+        <ExperienceStage
+          intro={intro}
+          onReady={(value) => {
+            setReady(value);
+            callback.current?.(value);
+          }}
+        />
+      ) : (
+        <div
+          className="spatial-canvas"
+          ref={host}
+          data-active={active}
+          data-progress={progress}
+          data-intro={intro ? "active" : "complete"}
+        />
+      )}
     </div>
   );
 }

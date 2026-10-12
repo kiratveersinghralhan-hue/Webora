@@ -9,6 +9,8 @@ import { useReducedMotion } from "../hooks/useMotion";
 import { subscribePointer } from "../lib/pointer";
 import { horizontalDrag } from "../lib/gesture";
 import { scrollToPosition } from "../lib/scroll";
+import { isV2Experience } from "../lib/experience";
+import { SpatialProjects } from "./SpatialProjects";
 
 export function ProjectActions({ project }: { project: Project }) {
   return (
@@ -37,6 +39,13 @@ export function ProjectActions({ project }: { project: Project }) {
   );
 }
 export function Projects({ archive = false }: { archive?: boolean }) {
+  return isV2Experience() ? (
+    <SpatialProjects archive={archive} />
+  ) : (
+    <LegacyProjects archive={archive} />
+  );
+}
+function LegacyProjects({ archive = false }: { archive?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const jump = useRef<(index: number) => void>(() => {});
@@ -45,7 +54,7 @@ export function Projects({ archive = false }: { archive?: boolean }) {
   const [ready, setReady] = useState(false);
   const reduced = useReducedMotion();
   useEffect(() => {
-    if (reduced || isMotionReduced()) return;
+    if (reduced || isMotionReduced() || isV2Experience()) return;
     const element = stage.current!;
     let cancelled = false,
       frame = 0,

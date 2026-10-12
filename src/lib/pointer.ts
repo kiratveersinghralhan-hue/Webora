@@ -1,3 +1,5 @@
+import { isV2Experience } from "./experience";
+import { subscribeFrame } from "./frameClock";
 /** One pointer, one damping clock: cursor, lights, meshes and shaders agree. */
 export const pointer = {
   x: -100,
@@ -9,6 +11,11 @@ export const pointer = {
   label: "",
 };
 type Listener = (state: typeof pointer) => void;
+/** Discrete semantic feedback uses the existing subscribers, with no additional clock. */
+export function setPointerLabel(label: string) {
+  pointer.label = label;
+  listeners.forEach((listener) => listener(pointer));
+}
 const listeners = new Set<Listener>();
 let stop: (() => void) | undefined;
 export function subscribePointer(listener: Listener) {
@@ -18,6 +25,8 @@ export function subscribePointer(listener: Listener) {
       previous = 0;
     const target = { x: -100, y: -100, nx: 0, ny: 0 };
     let magnetic: HTMLElement | null = null;
+    const coordinated = isV2Experience();
+    let needsTick = false;
     const clearMagnet = () => {
       magnetic?.style.removeProperty("--mag-x");
       magnetic?.style.removeProperty("--mag-y");
@@ -48,9 +57,14 @@ export function subscribePointer(listener: Listener) {
         pointer.velocity = 0;
       }
       listeners.forEach((fn) => fn(pointer));
-      if (!settled) frame = requestAnimationFrame(tick);
+      needsTick = !settled;
+      if (!settled && !coordinated) frame = requestAnimationFrame(tick);
     };
     const resume = () => {
+      if (coordinated) {
+        needsTick = true;
+        return;
+      }
       if (!frame && !document.hidden) {
         previous = 0;
         frame = requestAnimationFrame(tick);
@@ -98,8 +112,14 @@ export function subscribePointer(listener: Listener) {
     document.addEventListener("pointermove", move, { passive: true });
     document.addEventListener("pointerleave", leave);
     document.addEventListener("visibilitychange", visibility);
+    const stopClock = coordinated
+      ? subscribeFrame("pointer", (time) => {
+          if (needsTick && !document.hidden) tick(time * 1000);
+        })
+      : undefined;
     resume();
     stop = () => {
+      stopClock?.();
       cancelAnimationFrame(frame);
       clearMagnet();
       document.removeEventListener("pointermove", move);

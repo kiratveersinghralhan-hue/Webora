@@ -1,0 +1,1143 @@
+/* The living digital studio. Scoped to the V2 experience. */
+.living-layout {
+  position: relative;
+  --bg: #090c12;
+  --ink: #eeeff3;
+  --accent: #b9bff4;
+  --muted: #a4aabb;
+  --gutter: clamp(22px, 5vw, 96px);
+  background: var(--bg);
+}
+.living-layout .site-header {
+  max-width: none;
+  height: 100px;
+  border: 0;
+  gap: 24px;
+}
+.living-layout .wordmark {
+  font-size: 37px;
+  letter-spacing: -0.075em;
+}
+.living-layout .header-descriptor {
+  display: none;
+}
+.living-layout .desktop-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  border: 1px solid #9aa5cf28;
+  background: #181e2c66;
+  border-radius: 40px;
+  padding: 12px 26px;
+  gap: 30px;
+  font-size: 12px;
+}
+.living-layout .header-cta {
+  margin-left: auto;
+}
+.living-layout .header-cta .button {
+  background: none;
+  color: var(--ink);
+  border: 0;
+  padding-right: 0;
+  font-weight: 400;
+}
+.living-layout .header-cta .button svg {
+  border: 1px solid #aab9dd40;
+  border-radius: 50%;
+  box-sizing: content-box;
+  padding: 12px;
+}
+.living-layout .button {
+  border-radius: 100px;
+  min-height: 55px;
+}
+.living-layout .button:not(.button-secondary) {
+  background: #e4e8f4;
+  color: #111827;
+}
+.living-layout .button:not(.button-secondary):hover {
+  background: #bacaff;
+}
+.living-layout .header-cta .button:not(.button-secondary) {
+  background: none;
+  color: var(--ink);
+}
+.living-layout .mobile-menu {
+  background: #101624;
+}
+.living-hero {
+  max-width: none;
+  height: min(900px, calc(100svh - 100px));
+  min-height: 760px;
+  padding: 25px var(--gutter) 0;
+  isolation: isolate;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse at 50% 70%,
+    #17284c9c 0,
+    #121b3050 35%,
+    transparent 65%
+  );
+}
+.living-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  font: 10px/1.5 var(--body);
+  letter-spacing: 0.16em;
+  color: #b8bfd0;
+}
+.living-star {
+  color: #a8b4e1;
+  font-size: 20px;
+}
+.living-title {
+  position: relative;
+  padding: 12px 0 0;
+  text-align: center;
+  z-index: 3;
+  pointer-events: none;
+}
+.living-hero h1 {
+  font-family: var(--body);
+  font-weight: 450;
+  font-size: clamp(100px, 9.5vw, 168px);
+  line-height: 0.88;
+  letter-spacing: -0.072em;
+  margin: 0;
+  color: #eef0f5;
+}
+.living-hero h1 em,
+.living-home h2 em,
+.living-manifesto em {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  color: #bac8e9;
+}
+.living-hero h1 em {
+  display: inline-block;
+  padding: 0 0.05em 0.13em 0;
+}
+.living-scene {
+  position: absolute;
+  width: min(64vw, 1040px);
+  height: 62%;
+  min-height: 0;
+  top: 32%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 1;
+}
+.living-scene::before,
+.living-scene::after {
+  display: none;
+}
+.living-scene .core {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+.living-scene .core-coordinate,
+.living-scene .core-halo {
+  display: none;
+}
+.living-stage-light {
+  position: absolute;
+  width: 95%;
+  height: 32%;
+  left: 2.5%;
+  bottom: 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #3d5caa32, transparent 65%);
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+.living-scene .core-controls {
+  bottom: 0;
+  right: 50%;
+  transform: translateX(50%);
+  gap: 5px;
+}
+.living-scene .core-controls button {
+  width: 38px;
+  height: 38px;
+  min-width: 44px;
+  min-height: 44px;
+  border-color: #a5bbdf30;
+  background: #101a2a;
+}
+.living-offer,
+.living-invitation {
+  position: absolute;
+  top: 62%;
+  z-index: 4;
+}
+.living-offer {
+  left: var(--gutter);
+  width: 250px;
+}
+.living-caption {
+  font: 9px/1.6 var(--body);
+  letter-spacing: 0.17em;
+  color: #c2cadb;
+}
+.living-offer p {
+  color: #e0e5f0;
+  font: 400 24px/1.4 var(--body);
+  letter-spacing: -0.045em;
+  margin: 19px 0 14px;
+}
+.living-description {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #9da9c0;
+}
+.living-invitation {
+  right: var(--gutter);
+  width: 225px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 15px;
+}
+.living-invitation > span {
+  font-size: 12px;
+  color: #a8b3ca;
+}
+.living-invitation .button {
+  width: 100%;
+  padding: 0 23px;
+}
+.living-work-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 4px;
+  font-size: 12px;
+}
+.living-hero-foot {
+  position: absolute;
+  inset: auto var(--gutter) 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  color: #9faac0;
+  font-size: 10px;
+}
+.living-hero-foot > span:nth-child(2) {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+.living-hero-foot .scroll-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--body);
+  font-size: 12px;
+}
+.living-manifesto {
+  position: relative;
+  background: #cbd5e5;
+  color: #151f33;
+  padding: 70px var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 22px 45px;
+}
+.living-manifesto .living-caption {
+  color: #34445f;
+  margin-top: 15px;
+}
+.living-manifesto p {
+  color: #15213a;
+  font: 450 clamp(27px, 3.15vw, 54px)/1.18 var(--body);
+  letter-spacing: -0.05em;
+  margin: 0;
+}
+.living-manifesto em {
+  color: #32456d;
+}
+.living-manifesto > span:last-child {
+  grid-column: 2;
+  font-size: 13px;
+  color: #40506a;
+}
+.living-home .section {
+  padding-block: 100px;
+}
+.living-home h2 {
+  font: 450 clamp(38px, 4.5vw, 76px)/1.03 var(--body);
+  letter-spacing: -0.06em;
+}
+.living-home .section-label {
+  padding-bottom: 22px;
+  margin-bottom: 55px;
+  font-size: 10px;
+}
+.living-home .section-label .mono {
+  font: 10px/1.5 var(--body);
+  letter-spacing: 0.1em;
+}
+.living-home .section-label::after {
+  display: none;
+}
+.living-work {
+  background: linear-gradient(150deg, #101827, #0a0e17 60%);
+  max-width: none;
+}
+.living-work::before {
+  display: none;
+}
+.living-work .section-heading {
+  align-items: flex-start;
+  margin-bottom: 60px;
+  gap: 25px;
+}
+.living-work .section-heading h2 {
+  margin: 0;
+}
+.living-work .section-heading p {
+  max-width: 365px;
+  margin-top: 4px;
+  font-size: 13px;
+}
+.living-home .work-theatre {
+  border-radius: 10px;
+}
+.living-chapters .services-section {
+  border-top: 1px solid #a0b3da25;
+}
+.living-chapters .value-section {
+  background: #121b2a;
+}
+.living-chapters .service-row {
+  border-color: #a2b7dd2b;
+}
+.living-chapters .service-row.active {
+  background: #1d2c4544;
+}
+.living-chapters .service-row h3 {
+  font-family: var(--body);
+  font-weight: 450;
+  letter-spacing: -0.04em;
+}
+.living-layout .site-footer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #101827;
+  padding-top: 90px;
+}
+.living-footer-sculpture {
+  position: absolute;
+  width: 42%;
+  height: 400px;
+  right: 1%;
+  top: 10px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.45;
+}
+.living-footer-sculpture > span {
+  display: block;
+  text-align: center;
+  font: 400 300px/1.2 var(--body);
+  color: #526c9b40;
+}
+.living-footer-sculpture[data-ready="true"] > span {
+  visibility: hidden;
+}
+.living-footer-sculpture canvas {
+  position: absolute;
+  inset: 0;
+}
+.spatial-portfolio {
+  position: relative;
+  border-block: 1px solid #a2b3df30;
+  padding: 24px 0 0;
+}
+.spatial-gallery-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  font-size: 10px;
+  color: #aebcda;
+  letter-spacing: 0.12em;
+}
+.spatial-gallery-surface {
+  position: relative;
+  isolation: isolate;
+  height: clamp(370px, 39vw, 640px);
+  touch-action: pan-y;
+  cursor: grab;
+  margin: 0 calc(var(--gutter) * -1);
+  overflow: hidden;
+}
+.spatial-gallery-surface[data-dragging="true"] {
+  cursor: grabbing;
+}
+.spatial-gallery-surface canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.spatial-gallery-surface[data-ready="true"] canvas {
+  opacity: 1;
+  animation: studio-arrive 0.45s ease-out;
+}
+.spatial-gallery-fallback {
+  position: absolute;
+  inset: 9% 17%;
+  border: 2px solid #7b91bc;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px #0009;
+}
+.spatial-gallery-fallback .website-preview {
+  height: 100%;
+}
+.spatial-gallery-fallback .website-preview img {
+  width: 100%;
+  height: calc(100% - 30px);
+  object-fit: cover;
+  object-position: top;
+}
+.spatial-gallery-surface[data-ready="true"] .spatial-gallery-fallback {
+  visibility: hidden;
+}
+.spatial-gallery-floor {
+  position: absolute;
+  z-index: -1;
+  inset: 75% 16% 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #2e44714d, transparent 70%);
+}
+.spatial-gallery-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  padding: 15px 0 35px;
+  min-height: 180px;
+}
+.spatial-gallery-title > .mono {
+  color: #a8b9d8;
+  font-size: 10px;
+}
+.spatial-gallery-title .gallery-project-name {
+  font: 450 clamp(36px, 4.2vw, 66px)/1.1 var(--body);
+  letter-spacing: -0.055em;
+  margin: 16px 0;
+}
+.spatial-gallery-title .concept-tag {
+  display: inline-block;
+  position: static;
+}
+.spatial-gallery-description {
+  max-width: 460px;
+  justify-self: end;
+}
+.spatial-gallery-description p {
+  font-size: 16px;
+  color: #c4ccdc;
+  margin: 8px 0 17px;
+}
+.spatial-gallery-description .preview-note {
+  display: block;
+  font-size: 10px;
+  color: #a4b5d4;
+}
+.spatial-gallery-description .project-actions {
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.spatial-gallery-controls {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid #a4b8e633;
+}
+.spatial-gallery-controls button {
+  min-width: 44px;
+  min-height: 62px;
+  padding: 18px;
+  border: 0;
+  border-right: 1px solid #a4b8e628;
+  background: transparent;
+  color: #b2bfd8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.spatial-gallery-controls button:not(:first-child):not(:last-child) {
+  flex: 1;
+}
+.spatial-gallery-controls button[aria-current="true"] {
+  color: #f2f5ff;
+  background: #8b9edf1a;
+  box-shadow: inset 0 2px #abc6ff;
+}
+.spatial-gallery-controls button:hover:not(:disabled) {
+  color: #fff;
+  background: #8b9edf20;
+}
+.spatial-gallery-controls button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.spatial-portfolio :focus-visible {
+  outline: 2px solid #bdcfff;
+  outline-offset: -3px;
+}
+.living-layout .installation-viewport[data-ready="true"] canvas {
+  animation: studio-arrive 0.4s ease-out;
+}
+@keyframes studio-arrive {
+  from {
+    opacity: 0;
+    filter: brightness(0.7);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+.living-layout .text-link:hover {
+  color: #cad8ff;
+}
+.living-layout .service-row button:hover {
+  background: #7d95d40b;
+}
+.living-layout .footer-contact {
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 899px) {
+  .spatial-gallery-surface {
+    height: 420px;
+  }
+  .spatial-gallery-controls button {
+    padding: 16px 10px;
+    gap: 7px;
+    font-size: 11px;
+  }
+  .living-footer-sculpture {
+    opacity: 0.25;
+    width: 60%;
+    top: 0;
+    right: -15%;
+  }
+}
+@media (max-width: 599px) {
+  .spatial-gallery-top {
+    font-size: 8px;
+    letter-spacing: 0.06em;
+  }
+  .spatial-gallery-surface {
+    height: 310px;
+  }
+  .spatial-gallery-fallback {
+    inset: 14% 7%;
+  }
+  .spatial-gallery-meta {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-height: 320px;
+    padding-bottom: 24px;
+  }
+  .spatial-gallery-title .gallery-project-name {
+    margin: 10px 0 12px;
+    font-size: 40px;
+  }
+  .spatial-gallery-description {
+    justify-self: start;
+  }
+  .spatial-gallery-controls button {
+    padding: 14px 8px;
+    min-height: 50px;
+  }
+  .spatial-gallery-controls button span:last-child {
+    display: none;
+  }
+  .living-footer-sculpture {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .living-layout canvas {
+    animation: none !important;
+  }
+}
+.living-layout .footer-top h2 {
+  font-family: var(--body);
+  font-weight: 450;
+  letter-spacing: -0.06em;
+}
+.living-layout .footer-wordmark {
+  color: #869ac145;
+}
+.living-layout .experience-switcher {
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  bottom: auto;
+  transform: translateX(-50%);
+  flex-direction: row;
+  gap: 10px;
+  background: none;
+  border: 0;
+  white-space: nowrap;
+  opacity: 0.88;
+  font-size: 9px;
+  padding: 2px 8px;
+  border-color: #7b95bf40;
+}
+@media (min-width: 1900px) {
+  .living-scene {
+    height: 65%;
+    top: 30%;
+  }
+  .living-offer,
+  .living-invitation {
+    top: 60%;
+  }
+}
+@media (max-width: 1100px) {
+  .living-hero {
+    min-height: 740px;
+  }
+  .living-hero h1 {
+    font-size: 115px;
+  }
+  .living-offer {
+    width: 195px;
+  }
+  .living-offer p {
+    font-size: 20px;
+  }
+  .living-invitation {
+    width: 190px;
+  }
+  .living-description {
+    font-size: 11px;
+  }
+  .living-scene {
+    width: 70vw;
+    height: 58%;
+    top: 35%;
+  }
+  .living-drag-note {
+    display: none;
+  }
+  .living-layout .desktop-nav {
+    gap: 22px;
+    padding-inline: 22px;
+  }
+}
+@media (max-width: 899px) {
+  .living-layout .site-header {
+    height: 84px;
+  }
+  .living-layout .desktop-nav {
+    display: none;
+  }
+  .living-layout .header-cta {
+    margin-left: auto;
+  }
+  .living-hero {
+    min-height: 970px;
+    height: auto;
+    padding-top: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .living-title {
+    padding-top: 20px;
+    width: 100%;
+  }
+  .living-hero h1 {
+    font-size: clamp(84px, 14.2vw, 124px);
+  }
+  .living-offer {
+    position: static;
+    width: auto;
+    text-align: center;
+    margin-top: 25px;
+  }
+  .living-offer p {
+    font-size: 22px;
+    margin: 12px 0;
+  }
+  .living-offer .living-caption {
+    display: none;
+  }
+  .living-description {
+    font-size: 12px;
+  }
+  .living-invitation {
+    position: static;
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 23px;
+  }
+  .living-invitation > span {
+    display: none;
+  }
+  .living-invitation .button {
+    width: auto;
+  }
+  .living-work-link {
+    padding: 14px 10px;
+    gap: 14px;
+  }
+  .living-scene {
+    width: 100%;
+    height: 430px;
+    top: auto;
+    bottom: 58px;
+    left: 0;
+    transform: none;
+  }
+  .living-hero-foot {
+    bottom: 18px;
+  }
+  .living-hero-foot > span:nth-child(2) {
+    display: none;
+  }
+  .living-manifesto {
+    grid-template-columns: 1fr;
+    padding-block: 50px;
+    gap: 20px;
+  }
+  .living-manifesto > span:last-child {
+    grid-column: 1;
+  }
+  .living-manifesto p {
+    font-size: 37px;
+  }
+  .living-work .section-heading {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .living-home .section {
+    padding-block: 70px;
+  }
+}
+@media (max-width: 540px) {
+  .living-layout .site-header {
+    height: 78px;
+    padding-inline: 22px;
+  }
+  .living-layout .wordmark {
+    font-size: 31px;
+  }
+  .living-layout .header-cta {
+    display: none;
+  }
+  .living-layout .menu-toggle {
+    margin-left: auto;
+  }
+  .living-hero {
+    min-height: 945px;
+    padding-top: 20px;
+  }
+  .living-kicker {
+    font-size: 8px;
+    gap: 8px;
+    letter-spacing: 0.12em;
+  }
+  .living-star {
+    font-size: 17px;
+  }
+  .living-title {
+    padding-top: 28px;
+  }
+  .living-hero h1 {
+    font-size: clamp(70px, 17vw, 92px);
+    line-height: 0.94;
+  }
+  .living-offer {
+    margin-top: 16px;
+  }
+  .living-offer p {
+    font-size: 21px;
+  }
+  .living-description {
+    font-size: 12px;
+  }
+  .living-invitation {
+    margin-top: 20px;
+    gap: 8px;
+    width: 100%;
+  }
+  .living-invitation .button {
+    font-size: 12px;
+    padding: 0 18px;
+    min-height: 52px;
+    gap: 25px;
+  }
+  .living-work-link {
+    font-size: 11px;
+    gap: 4px;
+    padding-inline: 5px;
+  }
+  .living-scene {
+    height: 425px;
+    bottom: 56px;
+  }
+  .living-hero-foot {
+    justify-content: center;
+  }
+  .living-hero-foot .scroll-link {
+    font-size: 11px;
+  }
+  .living-manifesto p {
+    font-size: 28px;
+  }
+  .living-manifesto > span:last-child {
+    font-size: 12px;
+  }
+  .living-home .section-label {
+    margin-bottom: 32px;
+  }
+  .living-home .section-label .mono {
+    font-size: 8px;
+  }
+  .living-home .section-label .mono:last-child {
+    display: none;
+  }
+  .living-home h2 {
+    font-size: 39px;
+  }
+  .living-home .section {
+    padding-block: 60px;
+  }
+  .living-layout .experience-switcher {
+    font-size: 8px;
+  }
+}
+@media (max-width: 359px) {
+  .living-hero {
+    min-height: 940px;
+  }
+  .living-kicker {
+    font-size: 7px;
+  }
+  .living-invitation {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .living-invitation .button {
+    width: 100%;
+  }
+  .living-work-link {
+    padding-block: 6px;
+  }
+  .living-scene {
+    height: 360px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .living-layout .button {
+    transform: none;
+  }
+}
+
+/* Checkpoint A: a display installation and a six-part forged assembly. */
+.living-layout .installation-services-section,
+.living-layout .installation-process-section {
+  max-width: none;
+  overflow: hidden;
+}
+.installation-section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 38px;
+}
+.installation-section-heading h2 {
+  margin: 0;
+  font: 450 clamp(38px, 4.5vw, 76px)/1.03 var(--body);
+  letter-spacing: -0.06em;
+}
+.installation-section-heading h2 em {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  color: #bac8e9;
+}
+.installation-section-heading > p {
+  max-width: 330px;
+  margin: 0 0 6px;
+  color: #a4aabb;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.installation-services-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
+}
+.installation {
+  margin: 0;
+  min-width: 0;
+}
+.installation-viewport {
+  position: relative;
+  height: clamp(410px, 39vw, 620px);
+  isolation: isolate;
+  background: radial-gradient(
+    ellipse at 48% 55%,
+    #2639586b,
+    #111a2c33 44%,
+    transparent 72%
+  );
+}
+.installation-viewport::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 7%;
+  height: 12%;
+  border-radius: 50%;
+  background: #02050b66;
+  filter: blur(20px);
+  z-index: -1;
+}
+.installation-still {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+}
+.installation-viewport[data-ready="true"] .installation-still {
+  visibility: hidden;
+}
+.installation-viewport canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.installation figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid #a2b7dd2b;
+  color: #b9c7e0;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.installation-turn {
+  background: transparent;
+  border: 1px solid #a2b7dd40;
+  color: #dce4f5;
+  border-radius: 30px;
+  min-height: 44px;
+  padding: 10px 16px;
+  font: 12px var(--body);
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.installation-turn {
+  visibility: hidden;
+}
+.installation:has([data-ready="true"]) .installation-turn {
+  visibility: visible;
+}
+.installation-turn:hover {
+  background: #7896cb20;
+}
+.installation-source {
+  display: block;
+  color: #a4aabb;
+  font-size: 11px;
+  line-height: 1.6;
+  max-width: 480px;
+}
+.installation-services-layout .service-row h3 {
+  font-size: clamp(19px, 1.7vw, 28px);
+}
+.installation-services-layout .service-row > button {
+  min-height: 78px;
+}
+.installation-services-layout .service-row p {
+  font-size: 16px;
+}
+.installation-process-section {
+  background: linear-gradient(140deg, #101724, #090d15 65%);
+}
+.installation-process-section .installation-viewport {
+  height: clamp(380px, 35vw, 520px);
+}
+.installation-process-section .installation {
+  max-width: 1040px;
+  margin: 0 auto 30px;
+}
+.installation-process-section .process-stages {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid #a2b7dd30;
+}
+.installation-process-section .process-stages button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 23px 14px;
+  min-width: 0;
+  font-size: 16px;
+  border-bottom: 1px solid #a2b7dd30;
+  color: #a4aabb;
+}
+.installation-process-section .process-stages button.active {
+  color: #e0d6ff;
+  background: #7693cf15;
+  box-shadow: inset 0 2px #b3a4ef;
+}
+.installation-process-section .process-stages .mono {
+  font-size: 10px;
+}
+.installation-process-section .process-stages svg {
+  width: 14px;
+  flex: 0 0 auto;
+}
+.installation-process-copy {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 40px;
+  max-width: 850px;
+  margin: 40px auto 0;
+}
+.installation-process-copy[hidden] {
+  display: none;
+}
+.installation-stage-index {
+  font: 300 clamp(65px, 7vw, 100px)/1 var(--body);
+  letter-spacing: -0.08em;
+  color: #b8c7e4;
+}
+.installation-stage-index small {
+  font: 11px var(--body);
+  letter-spacing: 0;
+  margin-left: 12px;
+  color: #a4aabb;
+}
+.installation-process-copy .process-copy {
+  padding: 0;
+  min-height: 160px;
+}
+.installation-process-copy h3 {
+  font: 450 clamp(26px, 2.5vw, 40px)/1.15 var(--body);
+  letter-spacing: -0.04em;
+  margin: 12px 0;
+}
+.installation-process-copy p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #a4aabb;
+  max-width: 560px;
+}
+@media (max-width: 899px) {
+  .installation-section-heading {
+    display: block;
+    margin-bottom: 20px;
+  }
+  .installation-section-heading > p {
+    margin-top: 24px;
+    max-width: 520px;
+  }
+  .installation-services-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .installation-viewport {
+    height: 460px;
+  }
+  .installation-services-layout .service-row h3 {
+    font-size: 24px;
+  }
+  .installation-process-section .process-stages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .installation-process-section .process-stages button {
+    padding: 18px 12px;
+  }
+}
+@media (max-width: 540px) {
+  .installation-section-heading h2 {
+    font-size: 38px;
+  }
+  .installation-section-heading > p {
+    font-size: 16px;
+    margin-top: 22px;
+  }
+  .installation-viewport {
+    height: 350px;
+    margin-inline: -14px;
+  }
+  .installation figcaption {
+    gap: 8px;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+  }
+  .installation-turn {
+    padding-inline: 12px;
+    font-size: 11px;
+  }
+  .installation-services-layout .service-row h3 {
+    font-size: 21px;
+  }
+  .installation-services-layout .service-row > button {
+    min-height: 74px;
+  }
+  .installation-process-section .installation-viewport {
+    height: 290px;
+  }
+  .installation-process-section .process-stages button {
+    padding: 16px 8px;
+    font-size: 13px;
+    gap: 5px;
+  }
+  .installation-process-section .process-stages svg {
+    display: none;
+  }
+  .installation-process-copy {
+    grid-template-columns: 65px 1fr;
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .installation-stage-index {
+    font-size: 60px;
+  }
+  .installation-stage-index small {
+    display: block;
+    margin: 10px 0 0 5px;
+  }
+  .installation-process-copy .process-copy {
+    min-height: 230px;
+  }
+  .installation-process-copy h3 {
+    font-size: 27px;
+  }
+}

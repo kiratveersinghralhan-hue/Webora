@@ -16,8 +16,11 @@ import { scrollToAnchor } from "../lib/scroll";
 import { track } from "../lib/analytics";
 import { enableMotion } from "../lib/motionPreference";
 import { appRoute } from "../lib/site";
+import { ExperienceSwitcher } from "../components/ExperienceSwitcher";
+import { useV2Experience } from "../lib/experience";
 
 export function Layout() {
+  const experimental = useV2Experience();
   const [open, setOpen] = useState(false);
   const [menuPresent, setMenuPresent] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -143,7 +146,7 @@ export function Layout() {
     };
   }, [open]);
   return (
-    <>
+    <div className={experimental ? "living-layout" : undefined}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -214,6 +217,15 @@ export function Layout() {
         <Outlet />
       </main>
       <footer className="site-footer" inert={open}>
+        {experimental && location.pathname === "/" && (
+          <div
+            className="living-footer-sculpture"
+            data-installation-kind="hero"
+            aria-hidden="true"
+          >
+            <span>W</span>
+          </div>
+        )}
         <div className="footer-top">
           <div>
             <span className="eyebrow">THE NEXT CHAPTER STARTS HERE</span>
@@ -262,6 +274,7 @@ export function Layout() {
         </div>
       </footer>
       <Cursor />
+      <ExperienceSwitcher />
       {reduced && (
         <button className="motion-choice mono" onClick={enableMotion}>
           Enable 3D experience ↗
@@ -270,6 +283,6 @@ export function Layout() {
       <div className="page-progress" aria-hidden="true">
         <span />
       </div>
-    </>
+    </div>
   );
 }

@@ -2,10 +2,25 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Spatial } from "./Spatial";
 import { useReducedMotion } from "../hooks/useMotion";
 import { isMotionReduced, localIntroReplay } from "../lib/motionPreference";
+import { isV2Experience, useV2Experience } from "../lib/experience";
+import { IdentityCore } from "./IdentityCore";
 
 let visited = false;
 
-export function Core({
+export function Core(props: {
+  small?: boolean;
+  progress?: number;
+  intro?: boolean;
+}) {
+  const experimental = useV2Experience();
+  return experimental && !props.small ? (
+    <IdentityCore intro={!!props.intro} />
+  ) : (
+    <LegacyCore {...props} />
+  );
+}
+
+function LegacyCore({
   small = false,
   progress = 1,
   intro = false,
@@ -31,6 +46,7 @@ export function Core({
     setOpening(false);
   };
   useLayoutEffect(() => {
+    if (isV2Experience() && !small) return;
     if (!intro || reduced || isMotionReduced() || location.hash || scrollY > 80)
       return;
     let seen = visited;
@@ -50,7 +66,7 @@ export function Core({
     return () => {
       visited = true;
     };
-  }, [intro, reduced]);
+  }, [intro, reduced, small]);
   useLayoutEffect(() => {
     if (!opening) return;
     document.documentElement.classList.add("intro-running");
@@ -148,6 +164,7 @@ export function Core({
             progress={progress}
             intro={opening}
             onReady={setReady}
+            allowV2={!small}
           />
         </div>
         <span className="core-coordinate mono">W—01 / DIGITAL CORE</span>

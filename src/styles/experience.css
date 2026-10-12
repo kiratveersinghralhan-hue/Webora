@@ -232,3 +232,94 @@
     animation: none;
   }
 }
+.experience-switcher {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  z-index: 90;
+  display: flex;
+  gap: 12px;
+  padding: 9px 12px;
+  background: #11131cf2;
+  border: 1px solid #737ef560;
+  color: #f4f2f6;
+  font: 11px/1.5 monospace;
+  max-width: calc(100vw - 24px);
+}
+.experience-switcher a {
+  color: #bcb3ff;
+}
+@media (max-width: 600px) {
+  .experience-switcher {
+    flex-direction: column;
+    gap: 1px;
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+}
+.experience-stage {
+  overflow: hidden;
+}
+.experience-stage canvas {
+  pointer-events: none;
+}
+/* Keep Skip and the CTA still while the 3D director handles the entrance. */
+.page-enter:has(.identity-core) {
+  transform: none !important;
+  filter: none !important;
+}
+/* First successful 3D presentation replaces the SVG without a second W ghost. */
+.identity-core .core-fallback {
+  transition: none;
+}
+.identity-core .core-halo {
+  opacity: 0.45;
+}
+.identity-core .core-coordinate {
+  color: #a6b3c9;
+  letter-spacing: 0.12em;
+}
+.identity-intro {
+  position: absolute;
+  inset: 12px 18px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  z-index: 5;
+  color: #b7c5df;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+.identity-intro button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #a2b5df40;
+  background: #08090ed9;
+  color: #e3e8f5;
+  pointer-events: auto;
+  white-space: nowrap;
+}
+@media (min-width: 2000px) {
+  .hero-scene:has(.identity-core) {
+    max-width: 1000px;
+    justify-self: center;
+    width: 100%;
+  }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  .hero-scene:has(.identity-core) {
+    min-height: 340px;
+  }
+  .identity-intro {
+    inset-inline: 8px;
+  }
+}
+@media (max-width: 359px) {
+  .identity-intro {
+    inset-inline: 8px;
+    font-size: 8px;
+    gap: 6px;
+  }
+}

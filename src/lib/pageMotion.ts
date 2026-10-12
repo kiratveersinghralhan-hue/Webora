@@ -3,7 +3,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { setScrollDriver, scrollToAnchor } from "./scroll";
+import { installFrameDriver, subscribeFrame } from "./frameClock";
 gsap.registerPlugin(ScrollTrigger);
+installFrameDriver(gsap.ticker);
 export { gsap, ScrollTrigger };
 export function mountPageMotion(pathname: string, hash: string) {
   const context = gsap.context(() => {});
@@ -41,7 +43,9 @@ export function mountPageMotion(pathname: string, hash: string) {
         );
       });
       const hero = document.querySelector<HTMLElement>(".hero");
-      if (hero) {
+      // The new studio composition has its own scene framing. Keep its readable
+      // title and actions still; the full chapter director is a later milestone.
+      if (hero && !hero.classList.contains("living-hero")) {
         const depth = { value: 0 };
         const timeline = gsap.timeline({
           scrollTrigger: {
@@ -280,7 +284,7 @@ export function mountSmoothScroll() {
   );
   const tick = (time: number) => lenis.raf(time * 1000);
   lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add(tick);
+  const stopTick = subscribeFrame("scroll", tick);
   const resize = () => {
     lenis.resize();
     ScrollTrigger.refresh();
@@ -288,7 +292,7 @@ export function mountSmoothScroll() {
   window.addEventListener("resize", resize);
   return () => {
     window.removeEventListener("resize", resize);
-    gsap.ticker.remove(tick);
+    stopTick();
     lenis.off("scroll", ScrollTrigger.update);
     lenis.destroy();
     smooth = undefined;

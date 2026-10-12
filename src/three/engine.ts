@@ -4,6 +4,7 @@ import { featuredProjects } from "../data/studio";
 import type { SceneKind } from "./Spatial";
 import { horizontalDrag } from "../lib/gesture";
 import { assetUrl } from "../lib/site";
+import { recordRuntime, recordFrame, recordEvent } from "./runtime/diagnostics";
 
 const clamp = THREE.MathUtils.clamp;
 const mix = THREE.MathUtils.lerp;
@@ -21,6 +22,8 @@ export function createScene(
     powerPreference: "low-power",
   });
   const gl = renderer.getContext();
+  const diagnostics = recordRuntime("v1", kind);
+  let diagnosticTime: number | undefined;
   const debug = gl.getExtension("WEBGL_debug_renderer_info");
   const software =
     !!debug &&
@@ -688,8 +691,16 @@ export function createScene(
   };
   const render = (time: number, delta = 16.7) => {
     if (disposed || lost) return;
+    const diagnosticNow = diagnostics ? performance.now() : 0;
     update(time, delta);
     renderer.render(scene, camera);
+    recordFrame(
+      diagnostics,
+      renderer,
+      diagnosticTime === undefined ? undefined : diagnosticNow - diagnosticTime,
+    );
+    diagnosticTime = diagnosticNow;
+    if (diagnostics) diagnostics.quality = host.dataset.quality || "unknown";
     host.dataset.frames = String(++draws);
     host.dataset.dpr = String(dpr);
     dirty = false;
@@ -853,6 +864,7 @@ export function createScene(
   };
   const observer = new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
+    if (diagnostics) diagnostics.visible = visible;
     if (visible) resume();
     else {
       cancelAnimationFrame(frame);
@@ -865,6 +877,7 @@ export function createScene(
   const contextLost = (event: Event) => {
     event.preventDefault();
     lost = true;
+    recordEvent(diagnostics, "context-lost");
     visible = false;
     cancelAnimationFrame(frame);
     frame = 0;
@@ -880,6 +893,8 @@ export function createScene(
   resume();
   return () => {
     disposed = true;
+    if (diagnostics) diagnostics.active = false;
+    recordEvent(diagnostics, "disposed");
     cancelAnimationFrame(frame);
     observer.disconnect();
     resizeObserver.disconnect();

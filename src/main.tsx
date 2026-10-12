@@ -6,6 +6,7 @@ import "./styles/global.css";
 import "./styles/spatial.css";
 import "./styles/immersive.css";
 import "./styles/experience.css";
+import "./styles/living.css";
 import { captureAttribution } from "./lib/attribution";
 import { routerBase } from "./lib/site";
 

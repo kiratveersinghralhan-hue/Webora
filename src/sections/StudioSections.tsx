@@ -6,6 +6,8 @@ import { services, process, engagements } from "../data/studio";
 import { Spatial } from "../three/Spatial";
 import { useReducedMotion } from "../hooks/useMotion";
 import { Disclosure } from "../components/Disclosure";
+import { useV2Experience } from "../lib/experience";
+import { LivingServices, LivingProcess } from "./LivingSections";
 
 function ServiceModel({
   active,
@@ -31,6 +33,7 @@ function ServiceModel({
 }
 
 export function ServicesSection() {
+  const experimental = useV2Experience();
   const [active, setActive] = useState(0);
   const [compact, setCompact] = useState(false);
   useEffect(() => {
@@ -40,6 +43,8 @@ export function ServicesSection() {
     query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
   }, []);
+  if (experimental)
+    return <LivingServices active={active} select={setActive} />;
   return (
     <section className="section services-section" id="services">
       <div className="section-label">
@@ -221,6 +226,7 @@ export function PrinciplesSection() {
   );
 }
 export function ProcessSection() {
+  const experimental = useV2Experience();
   const [active, setActive] = useState(0);
   const section = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
@@ -254,6 +260,10 @@ export function ProcessSection() {
       cleanup?.();
     };
   }, [reduced]);
+  if (experimental)
+    return (
+      <LivingProcess active={active} select={setActive} sectionRef={section} />
+    );
   return (
     <section className="section process-section" id="process" ref={section}>
       <div className="section-label">

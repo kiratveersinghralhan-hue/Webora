@@ -3,13 +3,16 @@ import {
   EngagementsSection,
   ProcessSection,
 } from "../sections/StudioSections";
+import {
+  ServicesChapter,
+  ScopeChapter,
+  ProcessChapter,
+} from "../sections/ImpressionSections";
 import { useV2Experience } from "../lib/experience";
-import { InstallationRouteStage } from "../three/InstallationRouteStage";
 export default function Services() {
   const experimental = useV2Experience();
   return (
     <div className="page-enter">
-      {experimental && <InstallationRouteStage />}
       <section className="section page-heading">
         <span className="eyebrow">SERVICES / MADE AROUND YOUR BUSINESS</span>
         <h1>
@@ -23,9 +26,19 @@ export default function Services() {
           choose.
         </p>
       </section>
-      <ServicesSection />
-      <EngagementsSection />
-      <ProcessSection />
+      {experimental ? (
+        <>
+          <ServicesChapter />
+          <ProcessChapter />
+          <ScopeChapter />
+        </>
+      ) : (
+        <>
+          <ServicesSection />
+          <EngagementsSection />
+          <ProcessSection />
+        </>
+      )}
     </div>
   );
 }

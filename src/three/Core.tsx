@@ -4,6 +4,7 @@ import { useReducedMotion } from "../hooks/useMotion";
 import { isMotionReduced, localIntroReplay } from "../lib/motionPreference";
 import { isV2Experience, useV2Experience } from "../lib/experience";
 import { IdentityCore } from "./IdentityCore";
+import { ImpressionFallback } from "./ImpressionFallback";
 
 let visited = false;
 
@@ -13,10 +14,27 @@ export function Core(props: {
   intro?: boolean;
 }) {
   const experimental = useV2Experience();
-  return experimental && !props.small ? (
+  if (experimental && props.small) return <ImpressionMark {...props} />;
+  return experimental ? (
     <IdentityCore intro={!!props.intro} />
   ) : (
     <LegacyCore {...props} />
+  );
+}
+
+/** Supporting routes: the sculpted W as a still mark, with no WebGL cost. */
+function ImpressionMark({ progress = 1 }: { progress?: number }) {
+  return (
+    <div
+      className="impression-mark"
+      style={{ "--progress": progress } as React.CSSProperties}
+      aria-hidden="true"
+    >
+      <ImpressionFallback />
+      <span className="impression-mark__progress">
+        <span />
+      </span>
+    </div>
   );
 }
 

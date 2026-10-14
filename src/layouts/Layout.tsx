@@ -22,6 +22,7 @@ import "../styles/v3-tokens.css";
 import "../styles/v3-hero.css";
 import "../styles/v3-site.css";
 import "../styles/v3-folio.css";
+import "../styles/v3-pages.css";
 
 export function Layout() {
   const experimental = useV2Experience();

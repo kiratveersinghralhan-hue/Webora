@@ -48,6 +48,15 @@
   gap: 10px;
   color: var(--v3-signal);
 }
+.living-layout.v3 .page-enter {
+  counter-reset: chapter;
+}
+.living-layout.v3 .v3-chapter {
+  counter-increment: chapter;
+}
+.living-layout.v3 .v3-label span:first-child::after {
+  content: counter(chapter, decimal-leading-zero);
+}
 .living-layout.v3 .v3-label span:first-child::before {
   content: "";
   width: 7px;

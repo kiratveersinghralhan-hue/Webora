@@ -1,7 +1,14 @@
 import { Core } from "../three/Core";
 import { PrinciplesSection, ProcessSection } from "../sections/StudioSections";
 import { LinkButton } from "../components/LinkButton";
+import { useV2Experience } from "../lib/experience";
+import { IdentityCore } from "../three/IdentityCore";
+import {
+  ApproachChapter,
+  ProcessChapter,
+} from "../sections/ImpressionSections";
 export default function Studio() {
+  const experimental = useV2Experience();
   return (
     <div className="page-enter">
       <section className="section page-heading studio-intro">
@@ -33,10 +40,25 @@ export default function Studio() {
           </div>
           <LinkButton />
         </div>
-        <Core small />
+        {experimental ? (
+          <div className="v3-studio-stage">
+            <IdentityCore intro={false} studio impression />
+          </div>
+        ) : (
+          <Core small />
+        )}
       </section>
-      <PrinciplesSection />
-      <ProcessSection />
+      {experimental ? (
+        <>
+          <ApproachChapter />
+          <ProcessChapter />
+        </>
+      ) : (
+        <>
+          <PrinciplesSection />
+          <ProcessSection />
+        </>
+      )}
     </div>
   );
 }

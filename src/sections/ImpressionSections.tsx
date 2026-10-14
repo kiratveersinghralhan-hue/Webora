@@ -4,10 +4,11 @@ import { services, process, engagements } from "../data/studio";
 import { LinkButton } from "../components/LinkButton";
 import { Projects } from "../components/Projects";
 
-function ChapterLabel({ index, children }: { index: string; children: string }) {
+/** Chapter numbers come from a CSS counter, so each route numbers in order. */
+function ChapterLabel({ children }: { children: string }) {
   return (
     <div className="v3-label" data-rise>
-      <span>{index}</span>
+      <span aria-hidden="true" />
       <span>{children}</span>
     </div>
   );
@@ -16,7 +17,7 @@ function ChapterLabel({ index, children }: { index: string; children: string }) 
 export function WorkChapter() {
   return (
     <section className="v3-chapter v3-work" id="work" aria-labelledby="v3-work-title">
-      <ChapterLabel index="01">Selected work</ChapterLabel>
+      <ChapterLabel>Selected work</ChapterLabel>
       <div className="v3-heading">
         <h2 id="v3-work-title" data-rise>
           Websites with a point of view. <span>Out in the world.</span>
@@ -45,7 +46,7 @@ export function ServicesChapter() {
       id="services"
       aria-labelledby="v3-services-title"
     >
-      <ChapterLabel index="02">What we build</ChapterLabel>
+      <ChapterLabel>What we build</ChapterLabel>
       <div className="v3-services__grid">
         <div className="v3-services__intro">
           <h2 id="v3-services-title" data-rise>
@@ -109,7 +110,7 @@ export function ApproachChapter() {
       className="v3-chapter v3-approach"
       aria-labelledby="v3-approach-title"
     >
-      <ChapterLabel index="03">More than a website</ChapterLabel>
+      <ChapterLabel>More than a website</ChapterLabel>
       <div className="v3-approach__statement">
         <h2 id="v3-approach-title" data-rise>
           Your website is part of your <em>sales process.</em>
@@ -147,7 +148,7 @@ export function ProcessChapter() {
       id="process"
       aria-labelledby="v3-process-title"
     >
-      <ChapterLabel index="04">From idea to launch</ChapterLabel>
+      <ChapterLabel>From idea to launch</ChapterLabel>
       <div className="v3-heading">
         <h2 id="v3-process-title" data-rise>
           Considered in stages. <span>Connected by design.</span>
@@ -175,7 +176,7 @@ export function ProcessChapter() {
 export function ScopeChapter() {
   return (
     <section className="v3-chapter v3-scope" aria-labelledby="v3-scope-title">
-      <ChapterLabel index="05">A scope that fits</ChapterLabel>
+      <ChapterLabel>A scope that fits</ChapterLabel>
       <div className="v3-heading">
         <h2 id="v3-scope-title" data-rise>
           The right starting point. <span>Room to go further.</span>

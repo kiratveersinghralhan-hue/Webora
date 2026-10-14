@@ -11,6 +11,8 @@ export function SpatialProjects({ archive = false }: { archive?: boolean }) {
   const surface = useRef<HTMLDivElement>(null);
   const gallery = useRef<HTMLElement>(null);
   const project = featuredProjects[active];
+  const lastIndex = featuredProjects.length - 1;
+  const total = String(featuredProjects.length).padStart(2, "0");
   const ProjectHeading = archive ? "h2" : "h3";
   useEffect(() => {
     const host = surface.current!;
@@ -20,7 +22,7 @@ export function SpatialProjects({ archive = false }: { archive?: boolean }) {
     return () => host.removeEventListener("gallery-settled", settled);
   }, []);
   const select = (index: number) => {
-    const next = Math.max(0, Math.min(featuredProjects.length - 1, index));
+    const next = Math.max(0, Math.min(lastIndex, index));
     setActive(next);
     surface.current?.dispatchEvent(
       new CustomEvent("gallery-select", { detail: next }),
@@ -33,6 +35,21 @@ export function SpatialProjects({ archive = false }: { archive?: boolean }) {
       aria-roledescription="carousel"
       ref={gallery}
       onKeyDown={(event) => {
+        if (
+          event.defaultPrevented ||
+          event.altKey ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.shiftKey
+        )
+          return;
+        if (
+          !(event.target instanceof Element) ||
+          !event.target.closest(
+            ".spatial-gallery-surface, .spatial-gallery-controls",
+          )
+        )
+          return;
         if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key))
           return;
         event.preventDefault();
@@ -40,7 +57,7 @@ export function SpatialProjects({ archive = false }: { archive?: boolean }) {
           event.key === "Home"
             ? 0
             : event.key === "End"
-              ? 3
+              ? lastIndex
               : active + (event.key === "ArrowRight" ? 1 : -1),
         );
       }}
@@ -68,7 +85,7 @@ export function SpatialProjects({ archive = false }: { archive?: boolean }) {
       <div className="spatial-gallery-meta">
         <div className="spatial-gallery-title">
           <span className="mono">
-            0{active + 1} / 04 — {project.category}
+            0{active + 1} / {total} — {project.category}
           </span>
           <ProjectHeading className="gallery-project-name">
             {project.name}
@@ -106,14 +123,15 @@ export function SpatialProjects({ archive = false }: { archive?: boolean }) {
         ))}
         <button
           aria-label="Next project"
-          disabled={active === 3}
+          disabled={active === lastIndex}
           onClick={() => select(active + 1)}
         >
           →
         </button>
       </nav>
       <span className="sr-only" aria-live="polite">
-        Project {active + 1} of 4: {project.name}, {project.status}
+        Project {active + 1} of {featuredProjects.length}: {project.name},{" "}
+        {project.status}
       </span>
       {archive && (
         <details className="concept-archive">

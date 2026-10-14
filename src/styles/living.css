@@ -86,7 +86,8 @@
   align-items: center;
   justify-content: center;
   gap: 11px;
-  font: 10px/1.5 var(--body);
+  font: 11px/1.5 var(--body);
+  text-align: center;
   letter-spacing: 0.16em;
   color: #b8bfd0;
 }
@@ -183,7 +184,7 @@
   width: 250px;
 }
 .living-caption {
-  font: 9px/1.6 var(--body);
+  font: 11px/1.6 var(--body);
   letter-spacing: 0.17em;
   color: #c2cadb;
 }
@@ -229,10 +230,10 @@
   align-items: center;
   gap: 24px;
   color: #9faac0;
-  font-size: 10px;
+  font-size: 11px;
 }
 .living-hero-foot > span:nth-child(2) {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 .living-hero-foot .scroll-link {
@@ -279,10 +280,10 @@
 .living-home .section-label {
   padding-bottom: 22px;
   margin-bottom: 55px;
-  font-size: 10px;
+  font-size: 11px;
 }
 .living-home .section-label .mono {
-  font: 10px/1.5 var(--body);
+  font: 11px/1.5 var(--body);
   letter-spacing: 0.1em;
 }
 .living-home .section-label::after {
@@ -365,9 +366,10 @@
 }
 .spatial-gallery-top {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 15px;
-  font-size: 10px;
+  gap: 8px 15px;
+  font-size: 11px;
   color: #aebcda;
   letter-spacing: 0.12em;
 }
@@ -429,7 +431,7 @@
 }
 .spatial-gallery-title > .mono {
   color: #a8b9d8;
-  font-size: 10px;
+  font-size: 11px;
 }
 .spatial-gallery-title .gallery-project-name {
   font: 450 clamp(36px, 4.2vw, 66px)/1.1 var(--body);
@@ -451,8 +453,11 @@
 }
 .spatial-gallery-description .preview-note {
   display: block;
-  font-size: 10px;
+  font-size: 11px;
   color: #a4b5d4;
+}
+.living-layout .concept-tag {
+  font-size: 11px;
 }
 .spatial-gallery-description .project-actions {
   margin-top: 22px;
@@ -541,7 +546,7 @@
 }
 @media (max-width: 599px) {
   .spatial-gallery-top {
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: 0.06em;
   }
   .spatial-gallery-surface {
@@ -756,7 +761,7 @@
     padding-top: 20px;
   }
   .living-kicker {
-    font-size: 8px;
+    font-size: 10px;
     gap: 8px;
     letter-spacing: 0.12em;
   }
@@ -815,7 +820,7 @@
     margin-bottom: 32px;
   }
   .living-home .section-label .mono {
-    font-size: 8px;
+    font-size: 10px;
   }
   .living-home .section-label .mono:last-child {
     display: none;
@@ -835,7 +840,8 @@
     min-height: 940px;
   }
   .living-kicker {
-    font-size: 7px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
   }
   .living-invitation {
     flex-direction: column;
@@ -944,7 +950,7 @@
   padding: 18px 0;
   border-top: 1px solid #a2b7dd2b;
   color: #b9c7e0;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 .installation-turn {
@@ -1016,7 +1022,7 @@
   box-shadow: inset 0 2px #b3a4ef;
 }
 .installation-process-section .process-stages .mono {
-  font-size: 10px;
+  font-size: 11px;
 }
 .installation-process-section .process-stages svg {
   width: 14px;
@@ -1098,7 +1104,7 @@
   }
   .installation figcaption {
     gap: 8px;
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: 0.06em;
   }
   .installation-turn {

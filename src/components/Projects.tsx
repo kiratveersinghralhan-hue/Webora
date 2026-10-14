@@ -10,7 +10,7 @@ import { subscribePointer } from "../lib/pointer";
 import { horizontalDrag } from "../lib/gesture";
 import { scrollToPosition } from "../lib/scroll";
 import { isV2Experience } from "../lib/experience";
-import { SpatialProjects } from "./SpatialProjects";
+import { SpatialFolio } from "./SpatialFolio";
 
 export function ProjectActions({ project }: { project: Project }) {
   return (
@@ -40,7 +40,7 @@ export function ProjectActions({ project }: { project: Project }) {
 }
 export function Projects({ archive = false }: { archive?: boolean }) {
   return isV2Experience() ? (
-    <SpatialProjects archive={archive} />
+    <SpatialFolio archive={archive} />
   ) : (
     <LegacyProjects archive={archive} />
   );

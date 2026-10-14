@@ -61,20 +61,31 @@ export class ImpressionScene implements SceneModule {
   }
   private build(tier: QualityTier) {
     this.clear();
+    // Warm nickel faces with a thin lacquer; mirror-polished bevels catch the
+    // softboxes as crisp lines. Low tier drops the clearcoat pass.
     const satin = this.own(
-      new THREE.MeshStandardMaterial({
-        color: 0xb0ada5,
-        metalness: 0.94,
-        roughness: 0.29,
-        envMapIntensity: 1.35,
-      }),
+      tier === "low"
+        ? new THREE.MeshStandardMaterial({
+            color: 0xd9d2c4,
+            metalness: 1,
+            roughness: 0.26,
+            envMapIntensity: 1.25,
+          })
+        : new THREE.MeshPhysicalMaterial({
+            color: 0xd9d2c4,
+            metalness: 1,
+            roughness: 0.28,
+            clearcoat: 0.45,
+            clearcoatRoughness: 0.08,
+            envMapIntensity: 1.25,
+          }),
     );
     const polished = this.own(
       new THREE.MeshStandardMaterial({
-        color: 0x7b7973,
-        metalness: 0.98,
-        roughness: 0.17,
-        envMapIntensity: 1.55,
+        color: 0xc4b9a6,
+        metalness: 1,
+        roughness: 0.1,
+        envMapIntensity: 1.45,
       }),
     );
     this.sculpture = new THREE.Mesh(

@@ -73,8 +73,11 @@ export class WorldRuntime {
   }
   /** Match only the new hero host; other chapters retain their original light rig. */
   private lightingForHost() {
+    // The closing footer sculpture is the same W, so it shares the hero's rig.
     const impression =
-      this.impressionHero && this.host.dataset.experienceStage === "impression";
+      this.impressionHero &&
+      (this.host.dataset.experienceStage === "impression" ||
+        this.host.classList.contains("living-footer-sculpture"));
     this.blue.visible = this.violet.visible = !impression;
     this.key.color.setHex(impression ? 0xfff2db : 0xe9eaff);
     this.key.intensity = impression ? 3.2 : 3;

@@ -1,40 +1,40 @@
 /* Foundation + hero only. Gallery, footer and enquiry styles remain unchanged. */
-.living-layout:has(.impression-hero) > .site-header {
+.living-layout.v3 > .site-header {
   --ink: var(--v3-ink);
   --accent: var(--v3-signal);
   color: var(--v3-ink);
   background: var(--v3-paper);
   border-bottom: 1px solid var(--v3-rule);
 }
-.living-layout:has(.impression-hero) .site-header .desktop-nav {
+.living-layout.v3 .site-header .desktop-nav {
   background: transparent;
   border-color: transparent;
   font-size: 14px;
 }
-.living-layout:has(.impression-hero) .site-header .desktop-nav a,
-.living-layout:has(.impression-hero) .site-header .wordmark,
-.living-layout:has(.impression-hero) .site-header .menu-toggle {
+.living-layout.v3 .site-header .desktop-nav a,
+.living-layout.v3 .site-header .wordmark,
+.living-layout.v3 .site-header .menu-toggle {
   color: var(--v3-ink);
 }
-.living-layout:has(.impression-hero) .site-header .header-cta .button {
+.living-layout.v3 .site-header .header-cta .button {
   color: var(--v3-ink);
 }
-.living-layout:has(.impression-hero) .site-header .header-cta .button svg {
+.living-layout.v3 .site-header .header-cta .button svg {
   border-color: var(--v3-rule);
 }
-.living-layout:has(.impression-hero) > .mobile-menu {
+.living-layout.v3 > .mobile-menu {
   --ink: var(--v3-ink);
   --muted: var(--v3-muted);
   --accent: var(--v3-signal);
   background: var(--v3-paper);
   color: var(--v3-ink);
 }
-.living-layout:has(.impression-hero) > .mobile-menu a {
+.living-layout.v3 > .mobile-menu a {
   color: var(--v3-ink);
   border-color: var(--v3-rule);
 }
-.living-layout:has(.impression-hero) .site-header :focus-visible,
-.living-layout:has(.impression-hero) .mobile-menu :focus-visible,
+.living-layout.v3 .site-header :focus-visible,
+.living-layout.v3 .mobile-menu :focus-visible,
 .impression-hero :focus-visible {
   outline: 2px solid var(--v3-signal);
   outline-offset: 5px;
@@ -106,7 +106,7 @@
   gap: 12px 24px;
   margin-top: 28px;
 }
-.living-layout .impression-hero .button:not(.button-secondary) {
+.living-layout.v3 .impression-hero .button:not(.button-secondary) {
   min-height: 52px;
   padding: 14px 22px;
   border: 1px solid var(--v3-ink);
@@ -116,7 +116,7 @@
   font: 500 15px/1.4 var(--v3-text);
   gap: 22px;
 }
-.living-layout .impression-hero .button:not(.button-secondary):hover {
+.living-layout.v3 .impression-hero .button:not(.button-secondary):hover {
   background: var(--v3-signal);
   border-color: var(--v3-signal);
 }

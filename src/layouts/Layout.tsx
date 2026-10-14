@@ -18,6 +18,10 @@ import { enableMotion } from "../lib/motionPreference";
 import { appRoute } from "../lib/site";
 import { ExperienceSwitcher } from "../components/ExperienceSwitcher";
 import { useV2Experience } from "../lib/experience";
+import "../styles/v3-tokens.css";
+import "../styles/v3-hero.css";
+import "../styles/v3-site.css";
+import "../styles/v3-folio.css";
 
 export function Layout() {
   const experimental = useV2Experience();
@@ -146,7 +150,7 @@ export function Layout() {
     };
   }, [open]);
   return (
-    <div className={experimental ? "living-layout" : undefined}>
+    <div className={experimental ? "living-layout v3" : undefined}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -227,13 +231,17 @@ export function Layout() {
           </div>
         )}
         <div className="footer-top">
-          <div>
+          <div className="footer-invitation">
             <span className="eyebrow">THE NEXT CHAPTER STARTS HERE</span>
             <h2>
               Let’s make
               <br />
               <span>an impression.</span>
             </h2>
+            <p className="footer-intro">
+              Tell us about your business and what you want your website to
+              do. We’ll recommend the right approach for your project.
+            </p>
             <LinkButton />
           </div>
           <div className="footer-contact">
@@ -242,19 +250,25 @@ export function Layout() {
               href={`mailto:${contact.email}`}
               onClick={() => track("email_clicked")}
             >
+              <small>Email</small>
               {contact.email}
               <ArrowUpRight size={17} />
             </a>
-            <a href="tel:+919814800017">{contact.phone}</a>
+            <a href="tel:+919814800017">
+              <small>Phone</small>
+              {contact.phone}
+            </a>
             <a
               href={contact.whatsapp}
               target="_blank"
               rel="noreferrer"
               onClick={() => track("whatsapp_clicked")}
             >
+              <small>WhatsApp</small>
               WhatsApp Webora <ArrowUpRight size={17} />
             </a>
             <a href={contact.instagram} target="_blank" rel="noreferrer">
+              <small>Instagram</small>
               @webora.web.design <ArrowUpRight size={17} />
             </a>
           </div>

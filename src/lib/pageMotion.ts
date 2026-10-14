@@ -11,6 +11,7 @@ export function mountPageMotion(pathname: string, hash: string) {
   const context = gsap.context(() => {});
   let mounted = false,
     disposed = false;
+  let riseCleanup: (() => void) | undefined;
   const animate = () => {
     const page = document.querySelector<HTMLElement>(".page-enter");
     if (!page || mounted) return;
@@ -43,6 +44,34 @@ export function mountPageMotion(pathname: string, hash: string) {
           },
         );
       });
+      // Impression chapters share one restrained rise (see v3-site.css).
+      // Visibility is observed, not scroll-measured, so late layout shifts
+      // can never strand content hidden; unarmed chapters are always visible.
+      const rising = new IntersectionObserver(
+        (entries) => {
+          let order = 0;
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const item = entry.target as HTMLElement;
+            item.style.setProperty("--rise-delay", `${order++ * 70}ms`);
+            item.classList.add("is-risen");
+            rising.unobserve(item);
+          }
+        },
+        { rootMargin: "0px 0px -6% 0px" },
+      );
+      page.querySelectorAll<HTMLElement>(".v3-chapter").forEach((chapter) => {
+        chapter.dataset.riseArmed = "";
+        chapter
+          .querySelectorAll<HTMLElement>("[data-rise]")
+          .forEach((item) => rising.observe(item));
+      });
+      riseCleanup = () => {
+        rising.disconnect();
+        page
+          .querySelectorAll<HTMLElement>(".v3-chapter")
+          .forEach((chapter) => delete chapter.dataset.riseArmed);
+      };
       const hero = document.querySelector<HTMLElement>(".hero");
       // The new studio composition has its own scene framing. Keep its readable
       // title and actions still; the full chapter director is a later milestone.
@@ -249,6 +278,7 @@ export function mountPageMotion(pathname: string, hash: string) {
   return () => {
     disposed = true;
     observer.disconnect();
+    riseCleanup?.();
     window.removeEventListener("load", refresh);
     window.removeEventListener("webora-intro-complete", refresh);
     context.revert();

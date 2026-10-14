@@ -162,6 +162,7 @@ export function mountPageMotion(pathname: string, hash: string) {
           )
           .to(".hero-scene", { opacity: 0, duration: 0.18 }, 0.82);
       }
+      const impression = !!page.closest(".living-layout.v3");
       gsap.utils.toArray<HTMLElement>(".section").forEach((section, i) => {
         gsap.fromTo(
           section,
@@ -177,6 +178,9 @@ export function mountPageMotion(pathname: string, hash: string) {
             },
           },
         );
+        // Impression keeps one motion language: no legacy heading flips or
+        // card swings on V3 routes, which would also double-animate content.
+        if (impression) return;
         const heading = section.querySelector("h2");
         if (heading)
           gsap.fromTo(

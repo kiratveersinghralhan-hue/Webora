@@ -1,0 +1,19 @@
+/* Impression prototype: tokens are scoped; the existing site keeps its defaults. */
+.living-layout:has(.impression-hero) {
+  --v3-paper: #efebe3;
+  --v3-paper-deep: #e4ded2;
+  --v3-ink: #14130f;
+  --v3-muted: #5c584f;
+  --v3-rule: #14130f29;
+  --v3-signal: #b3321a;
+  --v3-display: Space, Arial, sans-serif;
+  --v3-text: DM, Arial, sans-serif;
+  --v3-gutter: clamp(20px, 4.8vw, 92px);
+  --v3-quick: 160ms;
+  --v3-settle: cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .living-layout:has(.impression-hero) {
+    --v3-quick: 0ms;
+  }
+}

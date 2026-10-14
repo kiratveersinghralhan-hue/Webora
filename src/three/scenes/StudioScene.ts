@@ -1,5 +1,6 @@
 import * as THREE from "three/src/Three.js";
 import { CoreScene } from "./CoreScene";
+import { ImpressionScene } from "./ImpressionScene";
 import { InstallationScene } from "./InstallationScene";
 import { GalleryScene } from "./GalleryScene";
 import type { FrameState, SceneContext, SceneModule } from "../runtime/types";
@@ -8,7 +9,7 @@ import type { QualityTier } from "../runtime/QualityPolicy";
 export type StudioChapter = "hero" | "gallery" | "services" | "process";
 /** One camera and renderer; scene modules are prepared when their HTML chapter enters. */
 export class StudioScene implements SceneModule {
-  readonly core = new CoreScene(true);
+  readonly core: CoreScene | ImpressionScene;
   private heroRoot = new THREE.Group();
   private context?: SceneContext;
   private scenes = new Map<StudioChapter, InstallationScene | GalleryScene>();
@@ -30,7 +31,12 @@ export class StudioScene implements SceneModule {
   private selectedIndex = 0;
   private width = 1;
   private height = 1;
-  constructor(private includeHero = true) {}
+  constructor(
+    private includeHero = true,
+    impression = false,
+  ) {
+    this.core = impression ? new ImpressionScene() : new CoreScene(true);
+  }
   mount(context: SceneContext) {
     this.context = context;
     context.root.add(this.heroRoot);

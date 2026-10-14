@@ -16,18 +16,19 @@ export function mountPageMotion(pathname: string, hash: string) {
     if (!page || mounted) return;
     mounted = true;
     context.add(() => {
-      gsap.fromTo(
-        page,
-        { opacity: 0.5, y: 18, filter: "blur(3px)" },
-        {
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-          duration: 0.65,
-          ease: "power3.out",
-          clearProps: "all",
-        },
-      );
+      if (!page.querySelector(".impression-hero"))
+        gsap.fromTo(
+          page,
+          { opacity: 0.5, y: 18, filter: "blur(3px)" },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.65,
+            ease: "power3.out",
+            clearProps: "all",
+          },
+        );
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
         gsap.fromTo(
           element,

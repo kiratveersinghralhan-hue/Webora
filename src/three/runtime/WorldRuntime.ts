@@ -34,9 +34,14 @@ export class WorldRuntime {
   private intersectionObserver?: IntersectionObserver;
   private blue = new THREE.PointLight(0x547cff, 24, 25);
   private violet = new THREE.PointLight(0xae72ff, 18, 25);
+  private key = new THREE.DirectionalLight(0xe9eaff, 3);
+  private ambient = new THREE.AmbientLight(0xabbaff, 1.1);
+  private studioEnvironment?: THREE.CubeTexture;
+  private impressionEnvironment?: THREE.CubeTexture;
   constructor(
     private host: HTMLElement,
     private status: (status: RuntimeStatus) => void,
+    private impressionHero = false,
   ) {
     this.scene.add(this.root);
   }
@@ -56,6 +61,7 @@ export class WorldRuntime {
     this.intersectionObserver?.unobserve(this.host);
     this.host = host;
     if (this.renderer) host.appendChild(this.renderer.domElement);
+    this.lightingForHost();
     this.resizeObserver?.observe(host);
     this.intersectionObserver?.observe(host);
     const rect = host.getBoundingClientRect();
@@ -63,6 +69,23 @@ export class WorldRuntime {
       rect.bottom > 0 && rect.top < innerHeight && rect.width > 0;
     this.resize();
     this.visibility();
+    this.invalidate();
+  }
+  /** Match only the new hero host; other chapters retain their original light rig. */
+  private lightingForHost() {
+    const impression =
+      this.impressionHero && this.host.dataset.experienceStage === "impression";
+    this.blue.visible = this.violet.visible = !impression;
+    this.key.color.setHex(impression ? 0xfff2db : 0xe9eaff);
+    this.key.intensity = impression ? 3.2 : 3;
+    this.key.position.set(impression ? -3 : 1, 4, 6);
+    this.ambient.color.setHex(impression ? 0xe5dfd1 : 0xabbaff);
+    this.ambient.intensity = impression ? 0.8 : 1.1;
+    if (this.renderer)
+      this.renderer.toneMappingExposure = impression ? 1.05 : 1.3;
+    this.scene.environment =
+      (impression ? this.impressionEnvironment : this.studioEnvironment) ??
+      null;
     this.invalidate();
   }
   async initialize() {
@@ -100,21 +123,20 @@ export class WorldRuntime {
       renderer.setClearColor(0x000000, 0);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.3;
-      const environment = this.assets.acquire(
-        "studio/environment",
-        createStudioEnvironment,
+      const environment = this.assets.acquire("studio/environment", () =>
+        createStudioEnvironment(),
       );
-      this.scene.environment = environment.value;
+      this.studioEnvironment = environment.value;
+      if (this.impressionHero) {
+        this.impressionEnvironment = this.assets.acquire(
+          "impression/environment",
+          () => createStudioEnvironment("impression"),
+        ).value;
+      }
       this.blue.position.set(-4, 3, 5);
       this.violet.position.set(3, -1, 4);
-      const key = new THREE.DirectionalLight(0xe9eaff, 3);
-      key.position.set(1, 4, 6);
-      this.scene.add(
-        new THREE.AmbientLight(0xabbaff, 1.1),
-        this.blue,
-        this.violet,
-        key,
-      );
+      this.scene.add(this.ambient, this.blue, this.violet, this.key);
+      this.lightingForHost();
       this.host.appendChild(renderer.domElement);
       for (const module of this.modules.values())
         module.mount({

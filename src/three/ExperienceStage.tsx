@@ -3,6 +3,7 @@ import { isMotionReduced } from "../lib/motionPreference";
 import { horizontalDrag } from "../lib/gesture";
 import { useReducedMotion } from "../hooks/useMotion";
 import type { CoreScene } from "./scenes/CoreScene";
+import type { ImpressionScene } from "./scenes/ImpressionScene";
 import type { WorldRuntime } from "./runtime/WorldRuntime";
 import type { IntroDirector } from "./runtime/IntroDirector";
 import { setPointerLabel } from "../lib/pointer";
@@ -13,14 +14,16 @@ export function ExperienceStage({
   onReady,
   director,
   studio = false,
+  impression = false,
 }: {
   intro: boolean;
   onReady?: (ready: boolean) => void;
   director?: IntroDirector;
   studio?: boolean;
+  impression?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
-  const core = useRef<CoreScene | undefined>(undefined);
+  const core = useRef<CoreScene | ImpressionScene | undefined>(undefined);
   const runtime = useRef<WorldRuntime | undefined>(undefined);
   const callback = useRef(onReady);
   callback.current = onReady;
@@ -66,19 +69,23 @@ export function ExperienceStage({
           ([{ WorldRuntime }, { CoreScene }, , studioModule, viewModule]) => {
             if (canceled) return;
             const chapters = studioModule
-              ? new studioModule.StudioScene()
+              ? new studioModule.StudioScene(true, impression)
               : undefined;
             const module = chapters?.core ?? new CoreScene(studio);
             if (director) module.setDirector(director);
             core.current = module;
-            world = new WorldRuntime(element, (status) => {
-              if (canceled) return;
-              callback.current?.(status.ready);
-              if (status.ready)
-                director?.ready(performance.now(), status.tier === "low");
-              else if (status.reason) director?.finish("unavailable");
-              if (!status.ready && status.reason) unavailable();
-            });
+            world = new WorldRuntime(
+              element,
+              (status) => {
+                if (canceled) return;
+                callback.current?.(status.ready);
+                if (status.ready)
+                  director?.ready(performance.now(), status.tier === "low");
+                else if (status.reason) director?.finish("unavailable");
+                if (!status.ready && status.reason) unavailable();
+              },
+              impression,
+            );
             runtime.current = world;
             world.register("core", chapters ?? module);
             if (chapters && viewModule)
@@ -139,12 +146,12 @@ export function ExperienceStage({
       core.current = undefined;
       runtime.current = undefined;
     };
-  }, [reduced, director, studio]);
+  }, [reduced, director, studio, impression]);
   return (
     <div
       className="spatial-canvas experience-stage"
       ref={host}
-      data-experience-stage="v2"
+      data-experience-stage={impression ? "impression" : "v2"}
       aria-hidden="true"
     />
   );

@@ -9,14 +9,17 @@ import { useReducedMotion } from "../hooks/useMotion";
 import { isMotionReduced, localIntroReplay } from "../lib/motionPreference";
 import { IntroDirector, INTRO_DEADLINE } from "./runtime/IntroDirector";
 import { ExperienceStage } from "./ExperienceStage";
+import { ImpressionFallback } from "./ImpressionFallback";
 
 let visited = false;
 export function IdentityCore({
   intro,
   studio = false,
+  impression = false,
 }: {
   intro: boolean;
   studio?: boolean;
+  impression?: boolean;
 }) {
   const [director] = useState(() => new IntroDirector());
   const phase = useSyncExternalStore(
@@ -98,29 +101,34 @@ export function IdentityCore({
       >
         <div className="core-halo" />
         <div className="core-fallback">
-          <svg viewBox="0 0 600 600">
-            <defs>
-              <linearGradient id="identity-alloy" x1="0" y1="0" x2="1" y2="1">
-                <stop stopColor="#cad5e9" />
-                <stop offset=".3" stopColor="#647fba" />
-                <stop offset=".52" stopColor="#202637" />
-                <stop offset=".8" stopColor="#8d85c4" />
-                <stop offset="1" stopColor="#343e56" />
-              </linearGradient>
-            </defs>
-            <g transform="translate(60 120) rotate(-8 230 180)">
-              <path
-                d="M30 20L120 360 235 125 340 360 450 20 375 20 327 200 245 20 208 20 134 200 92 20Z"
-                fill="url(#identity-alloy)"
-                stroke="#aabbd3"
-                strokeWidth="2"
-              />
-            </g>
-          </svg>
+          {impression ? (
+            <ImpressionFallback />
+          ) : (
+            <svg viewBox="0 0 600 600">
+              <defs>
+                <linearGradient id="identity-alloy" x1="0" y1="0" x2="1" y2="1">
+                  <stop stopColor="#cad5e9" />
+                  <stop offset=".3" stopColor="#647fba" />
+                  <stop offset=".52" stopColor="#202637" />
+                  <stop offset=".8" stopColor="#8d85c4" />
+                  <stop offset="1" stopColor="#343e56" />
+                </linearGradient>
+              </defs>
+              <g transform="translate(60 120) rotate(-8 230 180)">
+                <path
+                  d="M30 20L120 360 235 125 340 360 450 20 375 20 327 200 245 20 208 20 134 200 92 20Z"
+                  fill="url(#identity-alloy)"
+                  stroke="#aabbd3"
+                  strokeWidth="2"
+                />
+              </g>
+            </svg>
+          )}
         </div>
         <div className="core-canvas">
           <ExperienceStage
             studio={studio}
+            impression={impression}
             intro={phase !== "settled"}
             director={director}
             onReady={setReady}

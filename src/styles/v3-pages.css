@@ -283,8 +283,21 @@
   font-size: 17px;
   line-height: 1.6;
 }
+/* The legacy -35px bleed was for the old WebGL canvas; the still mark and its
+   brief meter align to the text column instead. */
 .living-layout.v3 .booking-core {
+  margin-left: 0;
+  height: auto;
   background: none;
+}
+@media (max-width: 800px) {
+  /* Watermark mode: the form's own step meter sits directly below. */
+  .living-layout.v3 .impression-mark__progress {
+    display: none;
+  }
+  .living-layout.v3 .booking-intro > p {
+    margin-bottom: 28px;
+  }
 }
 .living-layout.v3 .booking-contact {
   border-color: var(--v3-rule);

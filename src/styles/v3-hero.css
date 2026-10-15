@@ -16,6 +16,25 @@
 .living-layout.v3 .site-header .menu-toggle {
   color: var(--v3-ink);
 }
+/* Current page: a quiet signal underline (the ink colour rule above would
+   otherwise hide the legacy accent-coloured .active state). */
+.living-layout.v3 .site-header .desktop-nav a {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 7px;
+  transition: text-decoration-color var(--v3-quick);
+}
+.living-layout.v3 .site-header .desktop-nav a:hover {
+  text-decoration-color: currentColor;
+}
+.living-layout.v3 .site-header .desktop-nav a.active {
+  text-decoration-color: var(--v3-signal);
+}
+.living-layout.v3 > .mobile-menu a.active > .mono,
+.living-layout.v3 > .mobile-menu a.active > svg {
+  color: var(--v3-signal);
+}
 .living-layout.v3 .site-header .header-cta .button {
   color: var(--v3-ink);
 }
@@ -67,7 +86,8 @@
 }
 .impression-hero__eyebrow {
   display: block;
-  max-width: 36ch;
+  max-width: 52ch;
+  text-wrap: balance;
   font: 500 13px/1.6 var(--v3-display);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -248,7 +268,7 @@
   }
   .impression-hero h1 {
     max-width: 13ch;
-    font-size: clamp(56px, 8vw, 76px);
+    font-size: clamp(60px, 10vw, 96px);
   }
   .impression-hero__stage {
     height: 380px;

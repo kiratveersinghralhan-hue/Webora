@@ -5,6 +5,7 @@ import type { SceneKind } from "./Spatial";
 import { horizontalDrag } from "../lib/gesture";
 import { assetUrl } from "../lib/site";
 import { recordRuntime, recordFrame, recordEvent } from "./runtime/diagnostics";
+import { supportsWebGL } from "./runtime/webglSupport";
 
 const clamp = THREE.MathUtils.clamp;
 const mix = THREE.MathUtils.lerp;
@@ -14,6 +15,8 @@ export function createScene(
   kind: SceneKind,
   onReady: (ready: boolean) => void,
 ) {
+  // The caller (Spatial.tsx) catches this and keeps the static fallback.
+  if (!supportsWebGL()) throw new Error("WebGL unavailable");
   let mobile = matchMedia("(max-width: 760px), (pointer: coarse)").matches;
   const renderer = new THREE.WebGLRenderer({
     alpha: true,

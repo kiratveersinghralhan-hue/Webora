@@ -7,6 +7,7 @@ import { QualityPolicy, qualitySettings, resolution } from "./QualityPolicy";
 import { createStudioEnvironment } from "./studioEnvironment";
 import { recordRuntime, recordFrame, recordEvent } from "./diagnostics";
 import type { RuntimeStatus, SceneModule } from "./types";
+import { supportsWebGL } from "./webglSupport";
 
 /** Route-owned renderer. Scene modules share resources/camera and never schedule themselves. */
 export class WorldRuntime {
@@ -96,6 +97,7 @@ export class WorldRuntime {
     this.initializing = true;
     let revision = this.revision;
     try {
+      if (!supportsWebGL()) throw new Error("WebGL unavailable");
       const renderer = new THREE.WebGLRenderer({
         alpha: true,
         antialias: true,

@@ -20,6 +20,16 @@ export default tseslint.config(
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
   {
+    // CommonJS Node scripts (e.g. local Playwright QA tools): require() is the
+    // module system here, and page.evaluate callbacks run in the browser.
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: { ...globals.browser, ...globals.node },
+    },
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
+  {
     files: ["src/**/*.{ts,tsx}"],
     plugins: { "react-hooks": hooks },
     rules: {

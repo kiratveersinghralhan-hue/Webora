@@ -14,6 +14,8 @@ import type { SceneModule } from "../src/three/runtime/types";
 
 const fake = vi.hoisted(() => ({
   failCreate: false,
+  noWebGL: false,
+  created: 0,
   failRender: false,
   parallelCompile: true,
   syncCompile: vi.fn(),
@@ -27,6 +29,9 @@ vi.mock("../src/three/runtime/diagnostics", () => ({
   recordRuntime: () => undefined,
   recordEvent: () => {},
   recordFrame: () => {},
+}));
+vi.mock("../src/three/runtime/webglSupport", () => ({
+  supportsWebGL: () => !fake.noWebGL,
 }));
 vi.mock("../src/lib/pointer", () => ({
   pointer: { nx: 0, ny: 0, active: false },
@@ -53,6 +58,7 @@ vi.mock("three/src/Three.js", async (importOriginal) => {
       };
       dpr = 1;
       constructor() {
+        fake.created++;
         if (fake.failCreate) throw new Error("No GL");
       }
       getContext() {
@@ -116,7 +122,8 @@ const flush = async () => {
 };
 beforeEach(() => {
   vi.clearAllMocks();
-  fake.failCreate = fake.failRender = false;
+  fake.failCreate = fake.failRender = fake.noWebGL = false;
+  fake.created = 0;
   fake.parallelCompile = true;
   fake.syncCompile.mockReset();
   fake.compile.mockResolvedValue(undefined);
@@ -452,6 +459,16 @@ describe("WorldRuntime lifecycle", () => {
     fake.failCreate = true;
     await runtime().initialize();
     expect(statuses.at(-1)?.reason).toContain("No GL");
+    expect(ticker).toBeUndefined();
+  });
+  it("falls back without constructing a renderer when WebGL is unsupported", async () => {
+    fake.noWebGL = true;
+    await runtime().initialize();
+    expect(statuses.at(-1)).toEqual({
+      ready: false,
+      reason: "WebGL unavailable",
+    });
+    expect(fake.created).toBe(0);
     expect(ticker).toBeUndefined();
   });
   it("cancels asynchronous preparation and ignores late completion after route disposal", async () => {

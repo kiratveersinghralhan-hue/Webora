@@ -92,12 +92,17 @@ export function Layout() {
   }, [navigate, reduced]);
   useEffect(() => {
     let frame = 0;
+    // Written only on the consumers: an inherited property on <html> would
+    // restyle the whole document every scroll frame.
+    const targets = document.querySelectorAll<HTMLElement>(
+      ".page-progress, .scroll-icon",
+    );
     const paint = () => {
       frame = 0;
       const height = document.documentElement.scrollHeight - innerHeight;
-      document.documentElement.style.setProperty(
-        "--page-progress",
-        String(height > 0 ? scrollY / height : 0),
+      const progress = String(height > 0 ? scrollY / height : 0);
+      targets.forEach((target) =>
+        target.style.setProperty("--page-progress", progress),
       );
     };
     const schedule = () => {
@@ -200,13 +205,26 @@ export function Layout() {
             ["Process", "/#process"],
             ["Studio", "/studio"],
             ["Start a Project", "/start-project"],
-          ].map(([label, path], i) => (
-            <Link key={path} to={path} onClick={() => setOpen(false)}>
-              <span className="mono">0{i + 1}</span>
-              {label}
-              <ArrowUpRight />
-            </Link>
-          ))}
+          ].map(([label, path], i) => {
+            const content = (
+              <>
+                <span className="mono">0{i + 1}</span>
+                {label}
+                <ArrowUpRight />
+              </>
+            );
+            // NavLink marks the current route (aria-current); a hash link
+            // would match "/" everywhere, so Process stays a plain Link.
+            return path.includes("#") ? (
+              <Link key={path} to={path} onClick={() => setOpen(false)}>
+                {content}
+              </Link>
+            ) : (
+              <NavLink key={path} to={path} onClick={() => setOpen(false)}>
+                {content}
+              </NavLink>
+            );
+          })}
           <a
             className="menu-contact"
             href={contact.whatsapp}

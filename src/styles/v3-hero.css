@@ -150,6 +150,68 @@
   text-decoration: underline;
   text-underline-offset: 5px;
 }
+/* Who it serves, stated plainly beneath the actions. */
+.impression-hero__for {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  row-gap: 2px;
+  max-width: 46ch;
+  margin: 26px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--v3-rule);
+  color: var(--v3-ink);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.impression-hero__for > span {
+  white-space: nowrap;
+}
+/* Audiences wrap as whole phrases; trailing dots keep a wrapped line from
+   starting with an orphaned separator. */
+.impression-hero__for > span:not(:first-child):not(:last-child)::after {
+  content: "\00b7";
+  margin: 0 0.45em;
+  color: var(--v3-muted);
+}
+.impression-hero__for > span:first-child {
+  margin-right: 10px;
+  font: 500 11px/1 var(--v3-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v3-signal);
+}
+/* Gallery label at the sculpture's base, left of the rotate controls. Waits
+   for the brand reveal to finish before appearing. */
+.impression-hero__notes {
+  position: absolute;
+  left: 0;
+  right: 168px;
+  bottom: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--v3-muted);
+  pointer-events: none;
+  transition: opacity 600ms var(--v3-settle) 200ms;
+}
+.impression-hero__notes span {
+  display: block;
+  margin-bottom: 4px;
+  font: 500 11px/1 var(--v3-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v3-ink);
+}
+.impression-hero__stage:has(.identity-intro) .impression-hero__notes {
+  opacity: 0;
+  transition-delay: 0ms;
+}
 .impression-hero__stage {
   position: relative;
   min-width: 0;
@@ -197,6 +259,120 @@
   background: var(--v3-paper);
   border-color: var(--v3-rule);
   border-radius: 3px;
+}
+/* Brand reveal (first eligible visit only; never rendered for reduced motion
+   or in prerendered HTML). The wordmark rises on a paper veil while the world
+   prepares, then lifts away as the veil clears for the sculpture's assembly.
+   It covers only the stage, never the hero copy or actions. */
+.impression-hero__stage {
+  container-type: inline-size;
+}
+.intro-reveal {
+  position: absolute;
+  inset: 24px 0 60px;
+  z-index: 2;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  pointer-events: none;
+}
+.intro-reveal::before {
+  content: "";
+  position: absolute;
+  inset: -24px 0 -60px;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 50% 48%,
+    var(--v3-paper) 52%,
+    #efebe300 78%
+  );
+  transition: opacity 700ms var(--v3-settle);
+}
+.intro-reveal__word {
+  display: flex;
+  font: 600 min(20cqi, 128px) / 0.86 var(--v3-display);
+  letter-spacing: -0.02em;
+  color: var(--v3-ink);
+}
+.intro-reveal__word > span {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.04em;
+}
+.intro-reveal__word > span > span {
+  display: block;
+  animation: intro-rise 760ms var(--v3-settle) both;
+  animation-delay: calc(var(--n) * 55ms);
+}
+.intro-reveal__rule {
+  width: min(46cqi, 280px);
+  height: 2px;
+  background: var(--v3-signal);
+  transform-origin: left;
+  animation: intro-draw 620ms var(--v3-settle) 360ms both;
+}
+.intro-reveal__line {
+  font: 500 12px/1 var(--v3-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--v3-muted);
+  animation: intro-fade 520ms ease 520ms both;
+}
+.intro-reveal:is([data-phase="playing"], [data-phase="handoff"])::before,
+.intro-reveal[data-phase="leaving"]::before {
+  opacity: 0;
+  transition-delay: 820ms;
+}
+.intro-reveal[data-phase="leaving"]::before {
+  transition-delay: 380ms;
+}
+.intro-reveal:is([data-phase="playing"], [data-phase="handoff"])
+  .intro-reveal__word
+  > span
+  > span {
+  animation: intro-lift 620ms var(--v3-settle) both;
+  animation-delay: calc(480ms + var(--n) * 40ms);
+}
+.intro-reveal[data-phase="leaving"] .intro-reveal__word > span > span {
+  animation: intro-lift 520ms var(--v3-settle) both;
+  animation-delay: calc(var(--n) * 30ms);
+}
+.intro-reveal:is([data-phase="playing"], [data-phase="handoff"])
+  :is(.intro-reveal__rule, .intro-reveal__line) {
+  animation: intro-out 420ms ease 520ms both;
+}
+.intro-reveal[data-phase="leaving"]
+  :is(.intro-reveal__rule, .intro-reveal__line) {
+  animation: intro-out 320ms ease both;
+}
+@keyframes intro-rise {
+  from {
+    transform: translateY(108%);
+  }
+}
+@keyframes intro-lift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-108%);
+  }
+}
+@keyframes intro-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes intro-out {
+  to {
+    opacity: 0;
+  }
 }
 .impression-hero__object-label {
   position: absolute;
@@ -279,6 +455,13 @@
   }
 }
 @media (max-width: 700px) {
+  .impression-hero__notes {
+    display: none;
+  }
+  .impression-hero__for {
+    margin-top: 22px;
+    font-size: 13px;
+  }
   .impression-hero {
     padding-top: 32px;
   }

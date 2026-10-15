@@ -5,6 +5,18 @@ import { assetUrl } from "../lib/site";
 import { IdentityCore } from "../three/IdentityCore";
 import { LinkButton } from "./LinkButton";
 
+const audiences = [
+  "Service businesses",
+  "Online stores",
+  "Specialist commerce",
+  "Personal brands",
+];
+const notes = [
+  ["Strategy", "The right questions first."],
+  ["Design", "Unmistakably yours."],
+  ["Development", "Bringing the idea to life."],
+];
+
 /** Semantic first paint; the sculpture enhances the offer, never gates it. */
 export function ImpressionHero() {
   const proof = projects.filter(
@@ -31,12 +43,30 @@ export function ImpressionHero() {
               Explore the work <ArrowUpRight size={18} aria-hidden="true" />
             </Link>
           </div>
+          <p className="impression-hero__for">
+            <span>Built for</span>
+            {audiences.map((audience) => (
+              <span key={audience}>{audience}</span>
+            ))}
+          </p>
         </div>
         <div className="impression-hero__stage">
           <span className="impression-hero__object-label" aria-hidden="true">
             W / SCULPTED IDENTITY
           </span>
           <IdentityCore intro studio impression />
+          {/* A gallery label under the sculpture: the three disciplines the
+              description names, in the studio's own process language. */}
+          <ol className="impression-hero__notes" aria-hidden="true">
+            {notes.map(([discipline, line], index) => (
+              <li key={discipline}>
+                <span>
+                  0{index + 1} {discipline}
+                </span>
+                {line}
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
       <div

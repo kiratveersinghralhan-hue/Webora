@@ -1,7 +1,15 @@
-/* Spatial Folio: paper project sheets fanned in CSS 3D. --p is the only
-   per-frame input; each sheet derives its own offset (--o) from its index. */
+/* Spatial Folio: paper project sheets fanned in CSS 3D. --p (position) and
+   --v (velocity) are the only per-frame inputs, scoped to the stage; each
+   sheet derives its own offset (--o) from its index.
+
+   The stage is sized from the viewport height as well as its width, so the
+   stage and its controls always fit on one screen under the sticky header:
+   browsing never means scrolling past the project being shown. */
 .spatial-folio {
-  --sheet: min(54vw, 860px);
+  --chrome: 112px; /* sheet bar + caption */
+  --pad: clamp(28px, 3.2vw, 48px);
+  --sheet: min(54vw, 860px, max(420px, calc((100svh - 384px) * 1.6)));
+  --stage-h: calc(var(--sheet) * 0.625 + var(--chrome) + var(--pad) * 2);
   --spread: calc(var(--sheet) * 0.74);
   --depth: -260px;
   --turn: -24deg;
@@ -9,13 +17,22 @@
   color: var(--v3-ink);
   font-family: var(--v3-text);
 }
+.folio-viewport {
+  position: relative;
+}
 .folio-stage {
   position: relative;
-  height: calc(var(--sheet) * 0.625 + 200px);
+  height: var(--stage-h);
   margin-inline: calc(var(--v3-gutter) * -1);
   overflow: hidden;
   perspective: 2200px;
-  perspective-origin: 50% 38%;
+  perspective-origin: 50% 42%;
+  /* A warm key light on the active sheet. */
+  background: radial-gradient(
+    ellipse calc(var(--sheet) * 0.75) 62% at 50% 46%,
+    #fffaf1 0%,
+    #fffaf100 100%
+  );
   touch-action: pan-y;
   user-select: none;
   -webkit-user-select: none;
@@ -28,10 +45,69 @@
 .folio-stage:focus-visible {
   box-shadow: inset 0 0 0 2px var(--v3-signal);
 }
+/* Plinth: a horizon rule the sheets stand on, and a soft contact shadow. */
+.folio-stage::before,
+.folio-stage::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + (var(--sheet) * 0.625 + var(--chrome)) / 2 + 14px);
+  pointer-events: none;
+}
+.folio-stage::before {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--v3-rule) 18%,
+    var(--v3-rule) 82%,
+    transparent
+  );
+}
+.folio-stage::after {
+  left: 50%;
+  right: auto;
+  width: calc(var(--sheet) * 0.86);
+  height: 34px;
+  margin-top: -20px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, #14130f38, #14130f00);
+}
+/* The active project number, outlined at architectural scale: position in the
+   set, read at a glance. Sized to the free zone beside the front sheet so it
+   never sits under it; outline-only, so receding sheets read through it. */
+.folio-numeral {
+  position: absolute;
+  z-index: 2;
+  left: var(--v3-gutter);
+  top: calc(50% - (var(--sheet) * 0.625 + var(--chrome)) / 2);
+  font: 500
+    min(
+      calc(var(--stage-h) * 0.5),
+      calc(((100vw - var(--sheet)) / 2 - var(--v3-gutter) - 28px) / 1.08)
+    ) /
+    0.8 var(--v3-display);
+  letter-spacing: -0.07em;
+  color: transparent;
+  -webkit-text-stroke: 1px #14130f2e;
+  pointer-events: none;
+  animation: folio-numeral 760ms var(--v3-settle) both;
+}
+@keyframes folio-numeral {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+/* The space itself is click-through: sheets behind its z=0 plane (negative
+   depth) must still be hit-testable so a side sheet can be brought forward.
+   Drags land on the stage beneath. */
 .folio-space {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
+  pointer-events: none;
 }
 .folio-sheet {
   --o: calc(var(--i) - var(--p));
@@ -51,21 +127,29 @@
     0 1px 2px #14130f14,
     0 calc(30px + var(--near) * 30px) calc(60px + var(--near) * 40px)
       calc(-34px - var(--near) * 6px) #14130f66;
-  transform: translate(-50%, -52%)
+  /* Velocity lean (--v) tips every sheet into the motion; the critically
+     damped spring that drives --p brings it back upright as it settles. */
+  transform: translate(-50%, -50%)
     translate3d(
       calc(var(--o) * var(--spread)),
       calc(var(--a) * 18px),
       calc(var(--a) * var(--depth))
     )
-    rotateY(calc(var(--c) * var(--turn) + var(--tx, 0) * 6deg * var(--near)))
+    rotateY(
+      calc(
+        var(--c) * var(--turn) + var(--v, 0) * -3deg + var(--tx, 0) * 6deg *
+          var(--near)
+      )
+    )
     rotateX(calc(var(--ty, 0) * -4deg * var(--near)));
   opacity: clamp(0, calc(2.5 - var(--a)), 1);
   backface-visibility: hidden;
   will-change: transform;
   cursor: pointer;
+  pointer-events: auto;
 }
-.folio-stage:not([data-enhanced]) .folio-sheet {
-  transition: none;
+.folio-sheet[data-active] {
+  cursor: zoom-in;
 }
 /* Sheets further from the reader sink slightly into the paper. */
 .folio-sheet::after {
@@ -75,6 +159,20 @@
   border-radius: inherit;
   background: var(--v3-paper);
   opacity: min(0.5, calc(var(--a) * 0.32));
+  pointer-events: none;
+}
+/* A sheen that travels across the active sheet with the pointer tilt. */
+.folio-sheet[data-active] .folio-sheet__plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    #ffffff00 30%,
+    #ffffff2e 48%,
+    #ffffff00 62%
+  );
+  transform: translateX(calc(var(--tx, 0) * 22%));
   pointer-events: none;
 }
 .folio-sheet__bar {
@@ -127,6 +225,41 @@
   object-position: top center;
   pointer-events: none;
 }
+/* Pointer affordance on the front sheet; the reading panel below carries the
+   accessible links. Always shown where there is no hover. */
+.folio-sheet__open {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 99px;
+  background: var(--v3-ink);
+  color: var(--v3-paper);
+  font: 500 13px/1 var(--v3-text);
+  opacity: 0;
+  translate: 0 6px;
+  transition:
+    opacity var(--v3-quick),
+    translate 320ms var(--v3-settle),
+    background var(--v3-quick);
+}
+.folio-stage:not([data-dragging])
+  .folio-sheet[data-active]:hover
+  .folio-sheet__open {
+  opacity: 1;
+  translate: 0 0;
+  background: var(--v3-signal);
+}
+@media (hover: none) {
+  .folio-sheet__open {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
 .folio-sheet__pending {
   display: flex;
   flex-direction: column;
@@ -174,8 +307,6 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px clamp(24px, 5vw, 96px);
   align-items: start;
-  padding-top: clamp(20px, 2.5vw, 36px);
-  border-top: 1px solid var(--v3-rule);
 }
 .folio-panel__title,
 .folio-panel__body {
@@ -254,35 +385,54 @@
   color: var(--v3-muted);
 }
 
-/* Controls */
+/* Controls: a bar directly beneath the stage. From 761px the arrows lift out
+   of the bar and flank the front sheet, centred on its edges. */
 .folio-controls {
   display: flex;
-  align-items: stretch;
-  gap: 8px;
-  margin-top: clamp(24px, 3vw, 40px);
+  align-items: center;
+  gap: 8px 28px;
+  min-height: 56px;
 }
 .folio-arrow {
   flex: none;
   display: grid;
   place-items: center;
   width: 52px;
-  min-height: 52px;
-  border: 1px solid var(--v3-rule);
+  height: 52px;
+  border: 0;
   border-radius: 50%;
-  background: transparent;
-  color: var(--v3-ink);
+  background: var(--v3-ink);
+  color: var(--v3-paper);
+  box-shadow:
+    0 0 0 5px #efebe3d9,
+    0 16px 32px -14px #14130fa6;
   cursor: pointer;
   transition:
     background var(--v3-quick),
-    color var(--v3-quick),
-    opacity var(--v3-quick);
+    opacity var(--v3-quick),
+    scale 360ms var(--v3-settle);
+}
+.folio-arrow svg {
+  transition: translate 360ms var(--v3-settle);
 }
 .folio-arrow:hover:not(:disabled) {
-  background: var(--v3-ink);
-  color: var(--v3-paper);
+  background: var(--v3-signal);
+  scale: 1.07;
+}
+.folio-arrow--prev:hover:not(:disabled) svg {
+  translate: -2px 0;
+}
+.folio-arrow--next:hover:not(:disabled) svg {
+  translate: 2px 0;
+}
+.folio-arrow:active:not(:disabled) {
+  scale: 0.96;
 }
 .folio-arrow:disabled {
-  opacity: 0.3;
+  background: var(--v3-paper-deep);
+  color: var(--v3-muted);
+  box-shadow: none;
+  opacity: 0.55;
   cursor: default;
 }
 .folio-index {
@@ -317,7 +467,7 @@
   left: 0;
   right: 12px;
   height: 2px;
-  background: var(--v3-ink);
+  background: var(--v3-signal);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 420ms var(--v3-settle);
@@ -326,14 +476,44 @@
 .folio-index button[aria-current] {
   color: var(--v3-ink);
 }
+.folio-index button[aria-current] > span:first-child {
+  color: var(--v3-signal);
+}
 .folio-index button[aria-current]::before {
   transform: scaleX(1);
+}
+.folio-hint {
+  flex: none;
+  font: 500 11px/1 var(--v3-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v3-muted);
 }
 .spatial-folio :focus-visible {
   outline: 2px solid var(--v3-signal);
   outline-offset: 3px;
 }
+@media (min-width: 761px) {
+  .folio-arrow {
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--stage-h) / 2);
+    width: 64px;
+    height: 64px;
+    translate: -50% -50%;
+  }
+  .folio-arrow--prev {
+    left: calc(50% - var(--sheet) / 2);
+  }
+  .folio-arrow--next {
+    left: calc(50% + var(--sheet) / 2);
+  }
+}
 
+/* Reading panel follows the controls. */
+.folio-panel {
+  margin-top: clamp(28px, 3vw, 48px);
+}
 /* Archive */
 .folio-archive {
   margin-top: clamp(48px, 6vw, 88px);
@@ -386,7 +566,7 @@
 
 @media (max-width: 1000px) {
   .spatial-folio {
-    --sheet: min(70vw, 620px);
+    --sheet: min(70vw, 620px, max(380px, calc((100svh - 384px) * 1.6)));
     --spread: calc(var(--sheet) * 0.8);
   }
   .folio-index button > span:last-child {
@@ -400,17 +580,36 @@
     left: 4px;
   }
 }
-@media (max-width: 700px) {
+/* Phones: a viewport-aware sheet with its controls immediately below. */
+@media (max-width: 760px) {
   .spatial-folio {
-    --sheet: min(82vw, 440px);
+    --chrome: 92px;
+    --pad: 18px;
+    --sheet: min(84vw, 440px, max(232px, calc((100svh - 290px) * 1.6)));
     --spread: calc(var(--sheet) * 0.92);
     --depth: -180px;
     --turn: -18deg;
   }
   .folio-stage {
-    height: calc(var(--sheet) * 0.625 + 170px);
     perspective: 1400px;
   }
+  .folio-numeral {
+    display: none;
+  }
+  .folio-controls {
+    gap: 10px;
+  }
+  .folio-hint {
+    display: none;
+  }
+  .folio-sheet__open {
+    right: 8px;
+    bottom: 8px;
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 700px) {
   .folio-sheet__bar {
     gap: 10px;
     padding: 11px 12px;
@@ -433,10 +632,6 @@
   .folio-panel {
     grid-template-columns: 1fr;
   }
-  .folio-arrow {
-    width: 48px;
-    min-height: 48px;
-  }
   .folio-archive__list a {
     grid-template-columns: 1fr auto;
   }
@@ -446,10 +641,14 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .folio-panel__title,
-  .folio-panel__body {
+  .folio-panel__body,
+  .folio-numeral {
     animation: none;
   }
-  .folio-index button::before {
+  .folio-index button::before,
+  .folio-arrow,
+  .folio-arrow svg,
+  .folio-sheet__open {
     transition: none;
   }
 }

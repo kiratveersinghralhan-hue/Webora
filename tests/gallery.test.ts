@@ -18,6 +18,22 @@ it("settles to the same selection at different frame rates without overshooting 
     expect(controller.position).toBe(0);
   }
 });
+it("settles in real time even when frames are slow", () => {
+  const controller = new GalleryController(4);
+  controller.select(3);
+  for (let i = 0; i < 10; i++) controller.update(1 / 10);
+  expect(Math.abs(controller.position - 3)).toBeLessThan(0.02);
+});
+it("accumulates rapid steps from the target, within bounds", () => {
+  const controller = new GalleryController(4);
+  controller.step(1);
+  controller.step(1);
+  expect(controller.target).toBe(2);
+  controller.step(5);
+  expect(controller.target).toBe(3);
+  controller.step(-9);
+  expect(controller.target).toBe(0);
+});
 it("takes direct drag input, projects release velocity and cancels safely", () => {
   const controller = new GalleryController(4);
   controller.start();

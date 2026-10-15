@@ -667,7 +667,9 @@
 .living-layout.v3 .site-footer:has(.living-footer-sculpture) .footer-top {
   grid-template-columns: minmax(0, 1fr);
 }
-.living-layout.v3 .site-footer:has(.living-footer-sculpture) .footer-invitation {
+.living-layout.v3
+  .site-footer:has(.living-footer-sculpture)
+  .footer-invitation {
   position: relative;
   z-index: 1;
   max-width: 54%;
@@ -676,7 +678,10 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 0;
 }
-.living-layout.v3 .site-footer:has(.living-footer-sculpture) .footer-contact > a {
+.living-layout.v3
+  .site-footer:has(.living-footer-sculpture)
+  .footer-contact
+  > a {
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
   align-content: center;
@@ -696,7 +701,9 @@
   .living-layout.v3 .footer-top {
     grid-template-columns: 1fr;
   }
-  .living-layout.v3 .site-footer:has(.living-footer-sculpture) .footer-invitation {
+  .living-layout.v3
+    .site-footer:has(.living-footer-sculpture)
+    .footer-invitation {
     max-width: 66%;
   }
   .living-layout.v3 .site-footer:has(.living-footer-sculpture) .footer-contact {
@@ -711,7 +718,9 @@
   .living-layout.v3 .living-footer-sculpture {
     display: none;
   }
-  .living-layout.v3 .site-footer:has(.living-footer-sculpture) .footer-invitation {
+  .living-layout.v3
+    .site-footer:has(.living-footer-sculpture)
+    .footer-invitation {
     max-width: none;
   }
   .living-layout.v3 .site-footer:has(.living-footer-sculpture) .footer-contact {
@@ -769,4 +778,120 @@
   font: 500 12px/1 var(--v3-display);
   letter-spacing: 0.04em;
   box-shadow: 0 8px 30px #14130f26;
+}
+
+/* V3.1 — chapter accents, process progression and contextual actions.
+   "Unrisen" states only apply while the rise observer has armed a chapter
+   ([data-rise-armed]), so without JS, with reduced motion or if observation
+   fails, everything renders in its final, visible state. */
+.living-layout.v3 .v3-label {
+  position: relative;
+}
+.living-layout.v3 .v3-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: clamp(56px, 6vw, 96px);
+  height: 2px;
+  background: var(--v3-signal);
+  transform-origin: left;
+  transition: transform 900ms var(--v3-settle) 160ms;
+}
+.living-layout.v3 [data-rise-armed] .v3-label:not(.is-risen)::after {
+  transform: scaleX(0);
+}
+/* Process: each stage draws its segment of a signal timeline and its number
+   resolves from a faint outline as the reader arrives at it. */
+.living-layout.v3 .v3-process__steps li::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--v3-signal);
+  transform-origin: left;
+  transition: transform 900ms var(--v3-settle)
+    calc(var(--rise-delay, 0ms) + 220ms);
+}
+.living-layout.v3 .v3-process__number {
+  transition:
+    color 420ms var(--v3-settle),
+    -webkit-text-stroke-color 700ms var(--v3-settle)
+      calc(var(--rise-delay, 0ms) + 260ms);
+}
+.living-layout.v3
+  [data-rise-armed]
+  .v3-process__steps
+  li:not(.is-risen)::before {
+  transform: scaleX(0);
+}
+.living-layout.v3
+  [data-rise-armed]
+  .v3-process__steps
+  li:not(.is-risen)
+  .v3-process__number {
+  -webkit-text-stroke-color: var(--v3-rule);
+}
+.living-layout.v3 .v3-process__next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 40px;
+  margin-top: clamp(32px, 4vw, 56px);
+}
+.living-layout.v3 .v3-process__next p {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--v3-muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.living-layout.v3 .v3-process__next strong {
+  color: var(--v3-ink);
+  font-weight: 500;
+}
+.living-layout.v3 .site-header .header-cta.is-here {
+  visibility: hidden;
+}
+/* Phones: a compact, persistent route to the enquiry beside the menu. */
+@media (min-width: 360px) and (max-width: 540px) {
+  .living-layout.v3 .site-header .header-cta {
+    display: flex;
+    margin-left: auto;
+  }
+  .living-layout.v3 .site-header .wordmark {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .living-layout.v3 .site-header .header-cta .button {
+    min-height: 40px;
+    padding: 0 14px;
+    gap: 8px;
+    border: 1px solid var(--v3-ink);
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .living-layout.v3 .site-header .header-cta .button svg {
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    border: 0;
+  }
+  .living-layout.v3 .site-header .header-cta.is-here {
+    display: none;
+  }
+  .living-layout.v3 .site-header .header-cta:not(.is-here) + .menu-toggle {
+    margin-left: 4px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .living-layout.v3 .v3-label::after,
+  .living-layout.v3 .v3-process__steps li::before,
+  .living-layout.v3 .v3-process__number {
+    transition: none;
+  }
 }

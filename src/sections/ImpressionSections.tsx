@@ -16,7 +16,11 @@ function ChapterLabel({ children }: { children: string }) {
 
 export function WorkChapter() {
   return (
-    <section className="v3-chapter v3-work" id="work" aria-labelledby="v3-work-title">
+    <section
+      className="v3-chapter v3-work"
+      id="work"
+      aria-labelledby="v3-work-title"
+    >
       <ChapterLabel>Selected work</ChapterLabel>
       <div className="v3-heading">
         <h2 id="v3-work-title" data-rise>
@@ -169,6 +173,14 @@ export function ProcessChapter() {
           </li>
         ))}
       </ol>
+      {/* The natural next step after reading the process: step 01 itself. */}
+      <div className="v3-process__next" data-rise>
+        <p>
+          <strong>Every project begins with Discover.</strong> Tell us about
+          your business and goals in a short, six-step brief.
+        </p>
+        <LinkButton>Start your brief</LinkButton>
+      </div>
     </section>
   );
 }

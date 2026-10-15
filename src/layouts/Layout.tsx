@@ -175,7 +175,10 @@ export function Layout() {
           <Link to="/#process">Process</Link>
           <NavLink to="/studio">Studio</NavLink>
         </nav>
-        <div className="header-cta">
+        {/* Hidden on the enquiry itself: a CTA to the current page is noise. */}
+        <div
+          className={`header-cta${location.pathname === "/start-project" ? " is-here" : ""}`}
+        >
           <LinkButton />
         </div>
         <button
@@ -258,8 +261,8 @@ export function Layout() {
               <span>an impression.</span>
             </h2>
             <p className="footer-intro">
-              Tell us about your business and what you want your website to
-              do. We’ll recommend the right approach for your project.
+              Tell us about your business and what you want your website to do.
+              We’ll recommend the right approach for your project.
             </p>
             <LinkButton />
           </div>

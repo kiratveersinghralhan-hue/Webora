@@ -7,9 +7,14 @@ import {
 } from "react";
 import { useReducedMotion } from "../hooks/useMotion";
 import { isMotionReduced, localIntroReplay } from "../lib/motionPreference";
-import { IntroDirector, INTRO_DEADLINE } from "./runtime/IntroDirector";
+import {
+  IntroDirector,
+  INTRO_DEADLINE,
+  type IntroPhase,
+} from "./runtime/IntroDirector";
 import { ExperienceStage } from "./ExperienceStage";
 import { ImpressionFallback } from "./ImpressionFallback";
+import { isSoftwareRenderer, supportsWebGL } from "./runtime/webglSupport";
 
 let visited = false;
 export function IdentityCore({
@@ -25,9 +30,17 @@ export function IdentityCore({
   const phase = useSyncExternalStore(
     director.subscribe,
     director.snapshot,
-    () => "settled",
+    (): IntroPhase => "settled",
   );
   const [ready, setReady] = useState(false);
+  // The wordmark reveal follows the intro phase, then stays mounted as
+  // "leaving" so it exits gracefully instead of vanishing; CSS owns all of its
+  // motion. Derived during render so the same element persists across the
+  // settle (an effect would unmount it for a frame and restart its veil).
+  const [reveal, setReveal] = useState<IntroPhase | "leaving" | null>(null);
+  if (phase !== "settled" && reveal !== phase) setReveal(phase);
+  if (phase === "settled" && reveal && reveal !== "leaving")
+    setReveal("leaving");
   const reduced = useReducedMotion();
   const sculpture = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -41,7 +54,14 @@ export function IdentityCore({
     director.request(performance.now(), {
       seen,
       reduced: reduced || isMotionReduced(),
-      eligible: intro && !location.hash && scrollY < 80,
+      // Hardware WebGL only: without it the world fails fast (the reveal would
+      // flash), and CPU-emulated GL blocks the main thread. Local replay can
+      // still force it for inspection.
+      eligible:
+        intro &&
+        !location.hash &&
+        scrollY < 80 &&
+        ((supportsWebGL() && !isSoftwareRenderer()) || localIntroReplay()),
       replay: localIntroReplay(),
       mobile: matchMedia("(pointer: coarse)").matches || innerWidth < 700,
     });
@@ -56,6 +76,11 @@ export function IdentityCore({
     // React StrictMode rehearses effects without leaving this route. The stage
     // owns actual unmount cancellation; a rehearsal must not consume the intro.
   }, [director, intro, reduced]);
+  useEffect(() => {
+    if (reveal !== "leaving") return;
+    const timer = window.setTimeout(() => setReveal(null), 1100);
+    return () => clearTimeout(timer);
+  }, [reveal]);
   useEffect(() => {
     if (phase === "settled") {
       window.dispatchEvent(new Event("webora-intro-complete"));
@@ -136,6 +161,21 @@ export function IdentityCore({
         </div>
         <span className="core-coordinate mono">W—01 / FORGED IN MOTION</span>
       </div>
+      {impression && reveal && (
+        <div className="intro-reveal" data-phase={reveal} aria-hidden="true">
+          <span className="intro-reveal__word">
+            {[..."WEBORA"].map((letter, index) => (
+              <span key={index} style={{ "--n": index } as React.CSSProperties}>
+                <span>{letter}</span>
+              </span>
+            ))}
+          </span>
+          <span className="intro-reveal__rule" />
+          <span className="intro-reveal__line">
+            Strategy &middot; Design &middot; Development
+          </span>
+        </div>
+      )}
       {phase !== "settled" && (
         <div className="identity-intro" data-testid="webora-intro">
           <span className="mono" aria-live="polite">

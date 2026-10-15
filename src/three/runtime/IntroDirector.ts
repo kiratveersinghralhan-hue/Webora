@@ -1,5 +1,6 @@
 export type IntroPhase = "settled" | "preparing" | "playing" | "handoff";
-export const INTRO_DEADLINE = 2900;
+/** Whole brand reveal, request to settle: 1.5-2.5s on a first eligible visit. */
+export const INTRO_DEADLINE = 2500;
 /** Logical timeline only. The existing world clock samples it; no RAF or timer ownership. */
 export class IntroDirector {
   phase: IntroPhase = "settled";
@@ -55,7 +56,7 @@ export class IntroDirector {
       return;
     }
     this.startedAt = now;
-    this.duration = Math.min(this.mobile ? 1400 : 2200, remaining);
+    this.duration = Math.min(this.mobile ? 1600 : 2000, remaining);
     this.transition("playing");
   }
   sample(now: number) {

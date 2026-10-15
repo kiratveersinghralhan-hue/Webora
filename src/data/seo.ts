@@ -1,40 +1,56 @@
-import { projects } from "./studio";
+import { projects, type ProjectStatus } from "./studio";
+
+/** Plain-language status for search snippets (never invented outcomes). */
+const statusPhrase = {
+  LIVE: "Live website case study by Webora.",
+  "CASE STUDY": "Website case study by Webora.",
+  "IN PROGRESS": "Website in progress, designed and built by Webora.",
+  CONCEPT: "Website concept explored by Webora.",
+} as const satisfies Record<ProjectStatus, string>;
+
 export function metadata(path: string) {
   const pages: Record<string, [string, string]> = {
     "/": [
-      "Premium Web Design Studio",
-      "Premium websites for businesses ready to look the part. Strategy, design and development by Webora.",
+      "Premium Web Design & Development Studio",
+      "Webora designs and develops distinctive, responsive websites for businesses: business websites, online stores, landing pages and custom interactive experiences.",
     ],
     "/work": [
-      "Selected Work",
-      "Explore Webora website work: Harvester Parts, Gloss Boss, VEYRATH and an editorial website in progress.",
+      "Website Design Work & Case Studies",
+      "Explore Webora website work: Harvester Parts, Gloss Boss, VEYRATH and an editorial website in progress, with case studies and live websites.",
     ],
     "/services": [
-      "Services",
-      "Business websites, landing pages, e-commerce, redesigns and custom interactive experiences, scoped around your business.",
+      "Web Design & Development Services",
+      "Business websites, landing pages, e-commerce, website redesigns and custom interactive experiences, each scoped around your business.",
     ],
     "/studio": [
-      "The Studio",
-      "Meet the thinking behind Webora: business-first strategy, custom design and purposeful digital experiences.",
+      "About the Studio",
+      "Meet the thinking behind Webora: business-first strategy, custom design and purposeful, responsive digital experiences.",
     ],
     "/start-project": [
-      "Start a Project",
-      "Tell Webora about your business and website goals. Start a considered project conversation with a simple six-step brief.",
+      "Start a Website Project",
+      "Tell Webora about your business and website goals in a short six-step brief, and start a considered project conversation.",
     ],
     "/privacy": [
-      "Privacy",
+      "Privacy Policy",
       "How Webora handles your enquiry, contact details, optional saved drafts and privacy choices.",
     ],
   };
   const project = projects.find((p) => path === `/work/${p.slug}`);
-  const [name, description] = project
-    ? [
-        project.name,
-        `${project.tagline} ${project.description} Status: ${project.status}.`,
-      ]
-    : pages[path] || [
-        "Page Not Found",
-        "Find your way back to the Webora studio.",
-      ];
+  if (project) {
+    const lead =
+      project.description === project.tagline
+        ? project.tagline
+        : `${project.tagline} ${project.description}`;
+    const kind =
+      project.status === "CONCEPT" ? "Website Concept" : "Website Case Study";
+    return {
+      title: `${project.name}: ${kind} — WEBORA`,
+      description: `${lead} ${statusPhrase[project.status]}`,
+    };
+  }
+  const [name, description] = pages[path] || [
+    "Page Not Found",
+    "Find your way back to the Webora studio.",
+  ];
   return { title: `${name} — WEBORA`, description };
 }

@@ -25,11 +25,11 @@ describe("readiness-driven identity timeline", () => {
     expect(d.phase).toBe("preparing");
     d.ready(400, false);
     expect(d.phase).toBe("playing");
-    expect(d.duration).toBe(2200);
+    expect(d.duration).toBe(2000);
     expect(d.sample(400)).toBe(0);
-    expect(d.sample(2050)).toBe(0.75);
+    expect(d.sample(1900)).toBe(0.75);
     expect(d.phase).toBe("handoff");
-    expect(d.sample(2600)).toBe(1);
+    expect(d.sample(2400)).toBe(1);
     expect(d.reason).toBe("complete");
   });
   it("skips late preparation and low capability, while explicit local replay can inspect low-tier assembly", () => {
@@ -44,7 +44,7 @@ describe("readiness-driven identity timeline", () => {
     const replay = new IntroDirector();
     request(replay, true, true);
     replay.ready(400, true);
-    expect(replay.duration).toBe(1400);
+    expect(replay.duration).toBe(1600);
     expect(replay.phase).toBe("playing");
   });
   it("never reopens after skip or failure and caps delayed playback to the remaining deadline", () => {
@@ -57,7 +57,7 @@ describe("readiness-driven identity timeline", () => {
     expect(d.phase).toBe("settled");
     const delayed = new IntroDirector();
     request(delayed);
-    delayed.ready(1600, false);
+    delayed.ready(1200, false);
     expect(delayed.duration).toBe(1250);
     delayed.sample(3000);
     expect(delayed.reason).toBe("deadline");

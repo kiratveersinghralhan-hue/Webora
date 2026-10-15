@@ -12,6 +12,10 @@ export class GalleryController {
     this.target = this.clamp(index);
     this.dragging = false;
   }
+  /** Relative to the settling target, so rapid presses accumulate. */
+  step(delta: number) {
+    this.select(Math.round(this.target) + delta);
+  }
   start() {
     this.dragging = true;
     this.velocity = 0;
@@ -31,8 +35,10 @@ export class GalleryController {
   }
   update(delta: number) {
     if (this.dragging) return true;
-    // Exact critically damped spring: stable across frame rates and tab resumes.
-    const dt = Math.min(1 / 30, Math.max(0, delta)),
+    // Exact critically damped spring: the closed form is stable at any step,
+    // so slow frames still settle in real time. The cap only bounds the jump
+    // after a tab resume.
+    const dt = Math.min(0.1, Math.max(0, delta)),
       omega = 12;
     const offset = this.position - this.target,
       c = this.velocity + omega * offset;

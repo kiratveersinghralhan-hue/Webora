@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { featuredProjects, projects, type Project } from "../data/studio";
 import { assetUrl } from "../lib/site";
@@ -10,13 +10,25 @@ import { useReducedMotion } from "../hooks/useMotion";
 import { ProjectActions } from "./Projects";
 
 const pad = (value: number) => String(value).padStart(2, "0");
+const concepts = projects.filter((item) => !item.featured);
 
-function Sheet({ project, index }: { project: Project; index: number }) {
+function Sheet({
+  project,
+  index,
+  active,
+}: {
+  project: Project;
+  index: number;
+  active: boolean;
+}) {
+  const opens = active && project.caseStudy;
   return (
     <article
       className={`folio-sheet folio-${project.theme}`}
       style={{ "--i": index } as React.CSSProperties}
       data-index={index}
+      data-active={active || undefined}
+      data-cursor={opens ? "VIEW" : undefined}
     >
       <header className="folio-sheet__bar">
         <span>{project.number}</span>
@@ -46,6 +58,11 @@ function Sheet({ project, index }: { project: Project; index: number }) {
             </strong>
           </div>
         )}
+        {opens && (
+          <span className="folio-sheet__open">
+            View case study <ArrowUpRight size={15} />
+          </span>
+        )}
       </div>
       <footer className="folio-sheet__caption">
         <strong>{project.name}</strong>
@@ -62,8 +79,10 @@ function Sheet({ project, index }: { project: Project; index: number }) {
  */
 export function SpatialFolio({ archive = false }: { archive?: boolean }) {
   const [active, setActive] = useState(0);
+  const navigate = useNavigate();
   const stage = useRef<HTMLDivElement>(null);
   const select = useRef<(index: number) => void>(() => {});
+  const step = useRef<(delta: number) => void>(() => {});
   const reduced = useReducedMotion();
   const last = featuredProjects.length - 1;
   const project = featuredProjects[active];
@@ -82,6 +101,11 @@ export function SpatialFolio({ archive = false }: { archive?: boolean }) {
     );
     const paint = () => {
       element.style.setProperty("--p", controller.position.toFixed(4));
+      // Sheets lean into the motion and settle upright with the spring.
+      element.style.setProperty(
+        "--v",
+        Math.max(-2.5, Math.min(2.5, controller.velocity)).toFixed(3),
+      );
       const nearest = Math.round(controller.position);
       if (nearest !== settled) {
         settled = nearest;
@@ -111,6 +135,10 @@ export function SpatialFolio({ archive = false }: { archive?: boolean }) {
     };
     select.current = (index) => {
       controller.select(index);
+      wake();
+    };
+    step.current = (delta) => {
+      controller.step(delta);
       wake();
     };
     const stopDrag = horizontalDrag(element, {
@@ -163,8 +191,7 @@ export function SpatialFolio({ archive = false }: { archive?: boolean }) {
       element.style.setProperty("--ty", "0");
     };
     const visibility = () => {
-      if (!document.hidden && controller.position !== controller.target)
-        wake();
+      if (!document.hidden && controller.position !== controller.target) wake();
     };
     element.addEventListener("wheel", wheel, { passive: false });
     element.addEventListener("pointermove", tilt);
@@ -182,6 +209,7 @@ export function SpatialFolio({ archive = false }: { archive?: boolean }) {
       element.removeEventListener("pointerleave", untilt);
       document.removeEventListener("visibilitychange", visibility);
       select.current = () => {};
+      step.current = () => {};
       delete element.dataset.enhanced;
     };
   }, [reduced, last]);
@@ -208,36 +236,89 @@ export function SpatialFolio({ archive = false }: { archive?: boolean }) {
         if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key))
           return;
         event.preventDefault();
-        go(
-          event.key === "Home"
-            ? 0
-            : event.key === "End"
-              ? last
-              : active + (event.key === "ArrowRight" ? 1 : -1),
-        );
+        if (event.key === "Home") go(0);
+        else if (event.key === "End") go(last);
+        else step.current(event.key === "ArrowRight" ? 1 : -1);
       }}
     >
-      <div
-        className="folio-stage"
-        ref={stage}
-        data-active={active}
-        style={{ "--p": 0, "--count": featuredProjects.length } as React.CSSProperties}
-        tabIndex={0}
-        role="group"
-        aria-label={`Project sheets. Showing ${project.name}. Use the left and right arrow keys to browse.`}
-        data-cursor="DRAG"
-        onClick={(event) => {
-          const sheet = (event.target as Element).closest<HTMLElement>(
-            ".folio-sheet",
-          );
-          if (sheet) go(Number(sheet.dataset.index));
-        }}
-      >
-        <div className="folio-space" aria-hidden="true">
-          {featuredProjects.map((item, index) => (
-            <Sheet key={item.slug} project={item} index={index} />
-          ))}
+      <div className="folio-viewport">
+        <div
+          className="folio-stage"
+          ref={stage}
+          data-active={active}
+          style={
+            {
+              "--p": 0,
+              "--v": 0,
+              "--count": featuredProjects.length,
+            } as React.CSSProperties
+          }
+          tabIndex={0}
+          role="group"
+          aria-label={`Project sheets. Showing ${project.name}. Use the left and right arrow keys to browse.`}
+          data-cursor="DRAG"
+          onClick={(event) => {
+            const sheet = (event.target as Element).closest<HTMLElement>(
+              ".folio-sheet",
+            );
+            if (!sheet) return;
+            const index = Number(sheet.dataset.index);
+            // The settled front sheet opens its case study; others come forward.
+            if (index === active && featuredProjects[index].caseStudy)
+              navigate(`/work/${featuredProjects[index].slug}`);
+            else go(index);
+          }}
+        >
+          <span className="folio-numeral" aria-hidden="true" key={active}>
+            {pad(active + 1)}
+          </span>
+          <div className="folio-space" aria-hidden="true">
+            {featuredProjects.map((item, index) => (
+              <Sheet
+                key={item.slug}
+                project={item}
+                index={index}
+                active={index === active}
+              />
+            ))}
+          </div>
         </div>
+        {/* Directly under the stage, so browsing never requires scrolling past
+            the showcased project. On wide screens the arrows flank the card. */}
+        <nav className="folio-controls" aria-label="Browse projects">
+          <button
+            className="folio-arrow folio-arrow--prev"
+            aria-label="Previous project"
+            disabled={active === 0}
+            onClick={() => step.current(-1)}
+          >
+            <ArrowLeft size={20} aria-hidden="true" />
+          </button>
+          <div className="folio-index">
+            {featuredProjects.map((item, index) => (
+              <button
+                key={item.slug}
+                onClick={() => go(index)}
+                aria-label={`Show ${item.name}`}
+                aria-current={index === active ? "true" : undefined}
+              >
+                <span>{pad(index + 1)}</span>
+                <span>{item.name}</span>
+              </button>
+            ))}
+          </div>
+          <span className="folio-hint" aria-hidden="true">
+            Drag, swipe or use &larr; &rarr;
+          </span>
+          <button
+            className="folio-arrow folio-arrow--next"
+            aria-label="Next project"
+            disabled={active === last}
+            onClick={() => step.current(1)}
+          >
+            <ArrowRight size={20} aria-hidden="true" />
+          </button>
+        </nav>
       </div>
       <div className="folio-panel">
         <div className="folio-panel__title" key={project.slug}>
@@ -256,37 +337,6 @@ export function SpatialFolio({ archive = false }: { archive?: boolean }) {
           <ProjectActions project={project} />
         </div>
       </div>
-      <nav className="folio-controls" aria-label="Browse projects">
-        <button
-          className="folio-arrow"
-          aria-label="Previous project"
-          disabled={active === 0}
-          onClick={() => go(active - 1)}
-        >
-          <ArrowLeft size={18} aria-hidden="true" />
-        </button>
-        <div className="folio-index">
-          {featuredProjects.map((item, index) => (
-            <button
-              key={item.slug}
-              onClick={() => go(index)}
-              aria-label={`Show ${item.name}`}
-              aria-current={index === active ? "true" : undefined}
-            >
-              <span>{pad(index + 1)}</span>
-              <span>{item.name}</span>
-            </button>
-          ))}
-        </div>
-        <button
-          className="folio-arrow"
-          aria-label="Next project"
-          disabled={active === last}
-          onClick={() => go(active + 1)}
-        >
-          <ArrowRight size={18} aria-hidden="true" />
-        </button>
-      </nav>
       <span className="sr-only" aria-live="polite">
         Project {active + 1} of {featuredProjects.length}: {project.name},{" "}
         {project.status === "LIVE" ? "live website" : "in progress"}
@@ -294,18 +344,17 @@ export function SpatialFolio({ archive = false }: { archive?: boolean }) {
       {archive && (
         <details className="folio-archive">
           <summary>
-            Website concept archive <span>02 explorations</span>
+            Website concept archive{" "}
+            <span>{pad(concepts.length)} explorations</span>
           </summary>
           <div className="folio-archive__list">
-            {projects
-              .filter((item) => !item.featured)
-              .map((item) => (
-                <Link key={item.slug} to={`/work/${item.slug}`}>
-                  <span>{item.name}</span>
-                  <span>Concept &middot; Website design</span>
-                  <ArrowUpRight size={18} aria-hidden="true" />
-                </Link>
-              ))}
+            {concepts.map((item) => (
+              <Link key={item.slug} to={`/work/${item.slug}`}>
+                <span>{item.name}</span>
+                <span>Concept &middot; Website design</span>
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </Link>
+            ))}
           </div>
         </details>
       )}

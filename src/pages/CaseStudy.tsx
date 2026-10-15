@@ -25,7 +25,7 @@ export default function CaseStudy() {
         <div className="case-title">
           <h1>
             {project.name}
-            <span>✳</span>
+            <span aria-hidden="true">✳</span>
           </h1>
           <span className="concept-tag">
             {project.status === "CONCEPT" ? "Concept Project" : project.status}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { isMotionReduced } from "../lib/motionPreference";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   ArrowLeft,
   ArrowRight,
@@ -28,6 +28,8 @@ import { track } from "../lib/analytics";
 import { Core } from "../three/Core";
 import { restoreDraft } from "../lib/draft";
 import { captureAttribution } from "../lib/attribution";
+import { applyGift, findGift } from "../data/diwali";
+import { DiyaIcon } from "../components/Diwali";
 
 const STORAGE_KEY = "webora-enquiry-draft-v1";
 const emptyDraft: Draft = {
@@ -80,6 +82,10 @@ const descriptions = [
 ];
 
 export default function StartProject() {
+  const { search } = useLocation();
+  const [gift] = useState(() =>
+    findGift(new URLSearchParams(search).get("gift")),
+  );
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -162,23 +168,29 @@ export default function StartProject() {
     const attribution = captureAttribution();
     const savedAttribution =
       !!restored.landing_page || Object.keys(restored.utm || {}).length > 0;
-    setDraft({
-      ...emptyDraft,
-      ...restored,
-      ...attribution,
-      ...(savedAttribution
-        ? {
-            source: restored.source || attribution.source,
-            utm: restored.utm || attribution.utm,
-            referrer: restored.referrer || attribution.referrer,
-            landing_page: restored.landing_page || attribution.landing_page,
-          }
-        : {}),
-      submission_id: restored.submission_id || crypto.randomUUID(),
-      consent: false,
-    });
+    if (gift) track("gift_package_selected", { gift: gift.id, from: "brief" });
+    setDraft(
+      applyGift(
+        {
+          ...emptyDraft,
+          ...restored,
+          ...attribution,
+          ...(savedAttribution
+            ? {
+                source: restored.source || attribution.source,
+                utm: restored.utm || attribution.utm,
+                referrer: restored.referrer || attribution.referrer,
+                landing_page: restored.landing_page || attribution.landing_page,
+              }
+            : {}),
+          submission_id: restored.submission_id || crypto.randomUUID(),
+          consent: false,
+        },
+        gift,
+      ),
+    );
     setLoaded(true);
-  }, []);
+  }, [gift]);
   useEffect(() => {
     if (!loaded || success) return;
     try {
@@ -478,6 +490,19 @@ export default function StartProject() {
             </div>
           ) : (
             <>
+              {gift && (
+                <p className="dw-brief-gift" role="note">
+                  <DiyaIcon />
+                  <span>
+                    <strong>
+                      Diwali Memory Gift · {gift.name} · {gift.price}
+                    </strong>
+                    We’ve noted your edition. For a gift, tell us who it’s for
+                    in place of a business name; choose “Other” as the category.{" "}
+                    <Link to="/diwali-gifts#editions">Change edition</Link>
+                  </span>
+                </p>
+              )}
               <div className="form-progress">
                 <div>
                   <span className="mono">YOUR PROJECT BRIEF</span>
@@ -523,10 +548,16 @@ export default function StartProject() {
                         autoComplete: "name",
                         placeholder: "Your name",
                       })}
-                      {field("business_name", "Business / brand", {
-                        autoComplete: "organization",
-                        placeholder: "Your business name",
-                      })}
+                      {field(
+                        "business_name",
+                        gift ? "Who is the gift for?" : "Business / brand",
+                        {
+                          autoComplete: gift ? "off" : "organization",
+                          placeholder: gift
+                            ? "e.g. My parents, Meera"
+                            : "Your business name",
+                        },
+                      )}
                       {field("email", "Email address", {
                         type: "email",
                         autoComplete: "email",
@@ -580,11 +611,14 @@ export default function StartProject() {
                       </div>
                       {field(
                         "business_description",
-                        "What does your business do?",
+                        gift
+                          ? "Tell us about the memories"
+                          : "What does your business do?",
                         {
                           area: true,
-                          placeholder:
-                            "Your offer, your audience, and what makes you different…",
+                          placeholder: gift
+                            ? "The occasion, the people, and the moments you’d like to include…"
+                            : "Your offer, your audience, and what makes you different…",
                         },
                       )}
                       <fieldset className="choice-field">

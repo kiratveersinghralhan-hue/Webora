@@ -1,0 +1,1068 @@
+/* Diwali Edition 2026. One scoped layer over the Impression tokens: a warm
+   night palette, gilded type, and festive details used with restraint.
+   Everything here is scoped to .living-layout.v3.diwali, so removing the
+   class from Layout restores the standard edition exactly. */
+.living-layout.v3.diwali {
+  --v3-paper: #0e0a06;
+  --v3-paper-deep: #1a120a;
+  --v3-ink: #f4e8d0;
+  --v3-muted: #b9a684;
+  --v3-rule: #f4e8d021;
+  --v3-signal: #e3a947;
+  --v3-signal-light: #f6cd7c;
+  --dw-amber: #ff9a3c;
+  --dw-bronze: #a8692a;
+  --dw-night: #070503;
+  --dw-card: #150e08;
+  --dw-gold: linear-gradient(
+    100deg,
+    #f8dc9c 0%,
+    #e3a947 38%,
+    #b8752c 62%,
+    #f2c873 100%
+  );
+  color-scheme: dark;
+}
+body:has(.living-layout.v3.diwali) {
+  background: #0e0a06;
+}
+.living-layout.v3.diwali ::selection {
+  background: var(--v3-signal);
+  color: var(--dw-night);
+}
+
+/* Gilded second lines: every two-tone heading reads as light on night. */
+.living-layout.v3.diwali
+  :is(
+    .impression-hero h1 span,
+    .page-heading h1 span,
+    .v3-chapter h2 span,
+    .v3-chapter h2 em,
+    .footer-top h2 span,
+    .booking-intro h1 span,
+    .case-devices h2 span
+  ) {
+  background: var(--dw-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+@media (forced-colors: active) {
+  .living-layout.v3.diwali :is(.impression-hero h1 span, .v3-chapter h2 span) {
+    -webkit-text-fill-color: currentColor;
+    color: CanvasText;
+  }
+}
+
+/* Primary actions become gold; secondary links keep their ivory rule. */
+.living-layout.v3.diwali
+  :is(.v3-chapter, .site-footer, .page-enter, .impression-hero)
+  .button:not(.button-secondary) {
+  border-color: var(--v3-signal);
+  background: var(--v3-signal);
+  color: var(--dw-night);
+}
+.living-layout.v3.diwali
+  :is(.v3-chapter, .site-footer, .page-enter, .impression-hero)
+  .button:not(.button-secondary):hover {
+  border-color: var(--v3-signal-light);
+  background: var(--v3-signal-light);
+  color: var(--dw-night);
+  box-shadow: 0 10px 40px -12px #ff9a3c99;
+}
+.living-layout.v3.diwali > .site-header {
+  background: color-mix(in srgb, var(--v3-paper) 92%, transparent);
+  border-bottom-color: #e3a94729;
+}
+.living-layout.v3.diwali .site-header .desktop-nav .nav-diwali {
+  color: var(--v3-signal-light);
+}
+.living-layout.v3.diwali .site-header .desktop-nav .nav-diwali::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 8px 2px 0;
+  border-radius: 50%;
+  background: var(--dw-amber);
+  box-shadow: 0 0 8px 2px #ff9a3c99;
+}
+.living-layout.v3.diwali .cursor {
+  border-color: #e3a94799;
+}
+.living-layout.v3.diwali .cursor.has-label {
+  background: var(--v3-signal);
+  border-color: var(--v3-signal);
+  color: var(--dw-night);
+}
+.living-layout.v3.diwali .motion-choice {
+  box-shadow: 0 8px 30px #00000080;
+}
+
+/* Hero: the sculpture stands in a pool of lamplight over a rangoli. ------- */
+.living-layout.v3.diwali .impression-hero {
+  background:
+    radial-gradient(ellipse 60% 55% at 72% 62%, #3a1f0b 0%, transparent 70%),
+    var(--v3-paper);
+}
+.living-layout.v3.diwali .impression-hero__stage {
+  background: radial-gradient(
+    ellipse at 50% 78%,
+    #ff9a3c26 0%,
+    transparent 62%
+  );
+}
+.living-layout.v3.diwali .impression-hero__object-label {
+  color: var(--v3-signal);
+}
+.impression-hero__rangoli {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: min(100%, 640px);
+  translate: -50% -48%;
+  opacity: 0.32;
+  pointer-events: none;
+}
+.dw-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-bottom: clamp(18px, 2.2vw, 28px);
+  padding: 6px 14px 6px 8px;
+  border: 1px solid #e3a94759;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2a170a, #140d07);
+  color: var(--v3-ink);
+  font: 500 13px/1.3 var(--v3-text);
+  text-decoration: none;
+  transition:
+    border-color var(--v3-quick),
+    box-shadow var(--v3-quick);
+}
+.dw-ribbon strong {
+  color: var(--v3-signal-light);
+  font-weight: 600;
+}
+.dw-ribbon .dw-diya {
+  width: 34px;
+  flex: none;
+}
+.dw-ribbon:hover {
+  border-color: var(--v3-signal);
+  box-shadow: 0 0 30px -8px #ff9a3c80;
+}
+
+/* Intro: gilded wordmark and a single light trail across the revolution. */
+.living-layout.v3.diwali .intro-reveal__word > span > span {
+  background: var(--dw-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.living-layout.v3.diwali .intro-reveal__rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--v3-signal),
+    transparent
+  );
+  box-shadow: 0 0 12px #ff9a3c99;
+}
+.living-layout.v3.diwali .intro-reveal__line {
+  color: var(--v3-signal-light);
+}
+.living-layout.v3.diwali .identity-intro .mono {
+  color: var(--v3-signal-light);
+}
+
+/* Rangoli ------------------------------------------------------------------ */
+.dw-rangoli {
+  overflow: visible;
+  fill: none;
+  stroke: #e3a947;
+  stroke-width: 1.2;
+  filter: drop-shadow(0 0 5px #ff9a3c66);
+}
+.dw-rangoli__petals path {
+  fill: #e3a94712;
+}
+.dw-rangoli__petals--wide path {
+  stroke: #f6cd7c;
+  fill: #ff9a3c0d;
+}
+.dw-rangoli__dot {
+  fill: #f6cd7c;
+  stroke: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dw-rangoli :is(path, circle:not(.dw-rangoli__dot)) {
+    stroke-dasharray: 1;
+    animation: dw-draw 2.6s cubic-bezier(0.45, 0, 0.2, 1) both;
+  }
+  .dw-rangoli__petals path {
+    animation-delay: 0.35s;
+  }
+  .dw-rangoli__petals--wide path {
+    animation-delay: 0.7s;
+  }
+  .dw-rangoli__dot {
+    animation: dw-fade 1.6s ease 1.4s both;
+  }
+}
+@keyframes dw-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dw-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Sparks and a light trail: finite, compositor-only, then at rest. -------- */
+.dw-sparks {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.dw-sparks i {
+  position: absolute;
+  left: var(--x);
+  bottom: 8%;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: #ffd08a;
+  box-shadow:
+    0 0 6px 2px #ff9a3caa,
+    0 0 14px 4px #ff9a3c44;
+  opacity: 0;
+}
+.dw-sparks::before {
+  content: "";
+  position: absolute;
+  left: -40%;
+  top: 58%;
+  width: 40%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #f6cd7c, transparent);
+  box-shadow: 0 0 10px #ff9a3c;
+  opacity: 0;
+  rotate: -9deg;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dw-sparks i {
+    animation: dw-rise var(--t) cubic-bezier(0.2, 0.6, 0.3, 1) var(--d) 4 both;
+  }
+  .dw-sparks::before {
+    animation: dw-trail 2.8s cubic-bezier(0.5, 0, 0.2, 1) 0.8s 1 both;
+  }
+}
+@keyframes dw-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift), -260px, 0) scale(0.4);
+  }
+}
+@keyframes dw-trail {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(350%);
+  }
+}
+
+/* Diya icon -------------------------------------------------------------- */
+.dw-diya {
+  display: block;
+  width: 44px;
+  height: auto;
+  overflow: visible;
+}
+.dw-diya__flame,
+.dw-diya__glow {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  opacity: 0;
+  scale: 0.3;
+  transition:
+    opacity 360ms ease,
+    scale 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.dw-diya__glow {
+  transform-origin: 50% 50%;
+}
+.dw-diya.is-lit :is(.dw-diya__flame, .dw-diya__glow) {
+  opacity: 1;
+  scale: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dw-ribbon .dw-diya.is-lit .dw-diya__flame,
+  .dw-card:is(:hover, :focus-within) .dw-diya.is-lit .dw-diya__flame,
+  .dw-phone.is-lit .dw-diya.is-lit .dw-diya__flame {
+    animation: dw-flicker 1.4s ease-in-out 8;
+  }
+}
+@keyframes dw-flicker {
+  0%,
+  100% {
+    transform: scale(1, 1) rotate(0);
+  }
+  30% {
+    transform: scale(0.94, 1.08) rotate(-3deg);
+  }
+  60% {
+    transform: scale(1.04, 0.95) rotate(2deg);
+  }
+}
+
+/* Chapters ---------------------------------------------------------------- */
+.living-layout.v3.diwali .v3-approach {
+  background:
+    radial-gradient(ellipse 70% 60% at 85% 20%, #3a1f0b 0%, transparent 70%),
+    var(--dw-night);
+  color: var(--v3-ink);
+  --v3-rule: #e3a94726;
+  --v3-muted: #b9a684;
+  border-block: 1px solid #e3a94729;
+}
+.living-layout.v3.diwali .site-footer {
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 0%, #3a1f0b 0%, transparent 70%),
+    var(--dw-night);
+  color: var(--v3-ink);
+  border-top: 1px solid #e3a94733;
+}
+.living-layout.v3.diwali .footer-wordmark {
+  background: var(--dw-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.5;
+}
+.dw-chapter {
+  isolation: isolate;
+}
+.dw-chapter__rangoli {
+  position: absolute;
+  z-index: -1;
+  right: max(-120px, -8vw);
+  top: clamp(40px, 6vw, 110px);
+  width: clamp(260px, 34vw, 520px);
+  opacity: 0.22;
+  pointer-events: none;
+}
+.dw-kicker {
+  display: block;
+  color: var(--v3-signal);
+  font: 500 12px/1.4 var(--v3-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Gift cards -------------------------------------------------------------- */
+.dw-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.6vw, 24px);
+  margin-top: clamp(36px, 4vw, 64px);
+}
+.dw-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(22px, 2.2vw, 34px);
+  border: 1px solid #e3a94730;
+  border-radius: 6px;
+  background: linear-gradient(
+    165deg,
+    #1d140b 0%,
+    var(--dw-card) 55%,
+    #0f0a06 100%
+  );
+  color: var(--v3-ink);
+  transition:
+    transform 420ms var(--v3-settle),
+    border-color var(--v3-quick),
+    box-shadow 420ms var(--v3-settle);
+}
+.dw-card:hover,
+.dw-card:focus-within {
+  border-color: #e3a94799;
+  box-shadow: 0 40px 80px -40px #ff9a3c66;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .dw-card:hover {
+    transform: translateY(-6px);
+  }
+}
+.dw-card--our-story {
+  background: linear-gradient(165deg, #2a170a 0%, #170e07 60%, #0f0a06 100%);
+  border-color: #c58a2e55;
+}
+.dw-card--forever-edition {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(165deg, #2e1b0b, #120b06) padding-box,
+    linear-gradient(140deg, #f8dc9c, #a8692a 40%, #3a1f0b 60%, #e3a947)
+      border-box;
+}
+.dw-card--forever-edition::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid #e3a9471f;
+  border-radius: 3px;
+  pointer-events: none;
+}
+.dw-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.dw-card__number {
+  color: var(--v3-signal);
+  font: 500 12px/1 var(--v3-display);
+  letter-spacing: 0.1em;
+}
+.dw-lamps {
+  display: flex;
+  gap: 2px;
+}
+.dw-lamps .dw-diya {
+  width: 30px;
+}
+.dw-lamps .dw-diya:not(.is-lit) {
+  opacity: 0.35;
+}
+.dw-card h3 {
+  margin: clamp(26px, 3vw, 44px) 0 0;
+  font: 500 clamp(28px, 2.6vw, 42px) / 1.05 var(--v3-display);
+  letter-spacing: -0.04em;
+}
+.dw-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 10px 0 0;
+}
+.dw-card__price strong {
+  background: var(--dw-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font: 500 clamp(34px, 3vw, 48px) / 1 var(--v3-display);
+  letter-spacing: -0.04em;
+}
+.dw-card__price span {
+  color: var(--v3-muted);
+  font-size: 13px;
+}
+.dw-card__tagline {
+  margin: 18px 0 0;
+  font: 500 17px/1.45 var(--v3-text);
+  text-wrap: balance;
+}
+.dw-card__story {
+  margin: 12px 0 0;
+  color: var(--v3-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.dw-card__includes {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 22px 0 0;
+  border-top: 1px solid var(--v3-rule);
+  list-style: none;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.dw-card__includes li {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+}
+.dw-card__includes svg {
+  margin-top: 3px;
+  color: var(--v3-signal);
+}
+.dw-card__ideal {
+  margin: 22px 0 0;
+  color: var(--v3-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.dw-card__ideal span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--v3-signal);
+  font: 500 11px/1.4 var(--v3-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.dw-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 52px;
+  margin-top: auto;
+  padding: 14px 18px;
+  border: 1px solid #e3a94766;
+  border-radius: 3px;
+  color: var(--v3-ink);
+  font: 500 15px/1.3 var(--v3-text);
+  text-decoration: none;
+  transition:
+    background var(--v3-quick),
+    color var(--v3-quick),
+    border-color var(--v3-quick);
+}
+.dw-card__ideal + .dw-card__cta {
+  margin-top: 28px;
+}
+.dw-card__ideal {
+  margin-bottom: auto;
+}
+.dw-card__cta:hover,
+.dw-card--forever-edition .dw-card__cta {
+  border-color: var(--v3-signal);
+  background: var(--v3-signal);
+  color: var(--dw-night);
+}
+.dw-card--forever-edition .dw-card__cta:hover {
+  background: var(--v3-signal-light);
+}
+.dw-card :focus-visible,
+.dw-ribbon:focus-visible,
+.dw-preview :focus-visible {
+  outline: 2px solid var(--v3-signal-light);
+  outline-offset: 4px;
+}
+
+/* Diwali page ------------------------------------------------------------- */
+.living-layout.v3.diwali .dw-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-bottom: clamp(64px, 8vw, 128px);
+}
+.dw-hero__rangoli {
+  position: absolute;
+  z-index: -1;
+  right: max(-160px, -10vw);
+  top: 50%;
+  width: clamp(320px, 46vw, 760px);
+  translate: 0 -50%;
+  opacity: 0.4;
+  pointer-events: none;
+}
+.dw-hero .dw-sparks {
+  z-index: -1;
+}
+.living-layout.v3.diwali .dw-hero .eyebrow {
+  color: var(--v3-signal);
+}
+.dw-hero__actions,
+.dw-close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+  margin-top: 32px;
+}
+.dw-hero__actions .v3-link,
+.dw-close__actions .v3-link {
+  margin-top: 0;
+}
+.living-layout.v3.diwali .dw-hero .button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 14px 22px;
+  gap: 22px;
+  border-radius: 3px;
+  font: 500 15px/1.4 var(--v3-text);
+  text-decoration: none;
+}
+
+.dw-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+  gap: clamp(32px, 6vw, 110px);
+  align-items: center;
+  margin-top: clamp(32px, 4vw, 56px);
+}
+.dw-preview__controls > p {
+  max-width: 44ch;
+  margin: 22px 0 0;
+  color: var(--v3-muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.dw-preview__controls strong {
+  color: var(--v3-ink);
+}
+.dw-preview__note {
+  font-size: 13px !important;
+}
+.dw-preview__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.dw-preview__tabs button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--v3-rule);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--v3-ink);
+  font: 500 14px/1 var(--v3-text);
+  cursor: pointer;
+  transition:
+    background var(--v3-quick),
+    border-color var(--v3-quick),
+    color var(--v3-quick);
+}
+.dw-preview__tabs button:hover {
+  border-color: var(--v3-signal);
+}
+.dw-preview__tabs button[aria-pressed="true"] {
+  border-color: var(--v3-signal);
+  background: var(--v3-signal);
+  color: var(--dw-night);
+}
+.dw-phone {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 9 / 17;
+  margin-inline: auto;
+  padding: 12px;
+  border: 1px solid #e3a94755;
+  border-radius: 38px;
+  background: #050403;
+  box-shadow: 0 50px 90px -40px #000;
+  transition: box-shadow 900ms ease;
+}
+.dw-phone.is-lit {
+  box-shadow:
+    0 50px 90px -40px #000,
+    0 0 120px -30px #ff9a3c88;
+}
+.dw-phone__screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+  padding: 34px 22px;
+  border-radius: 28px;
+  background: radial-gradient(circle at 50% 38%, #24150a 0%, #0d0805 70%);
+  text-align: center;
+  transition: background 900ms ease;
+}
+.dw-phone.is-lit .dw-phone__screen {
+  background: radial-gradient(
+    circle at 50% 34%,
+    #5a300f 0%,
+    #1a0e06 48%,
+    #0b0704 80%
+  );
+}
+.dw-phone__edition {
+  color: var(--v3-signal);
+  font: 500 11px/1.4 var(--v3-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.dw-phone__lamp {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: clamp(28px, 8%, 56px);
+  padding: 12px 18px;
+  border: 0;
+  background: transparent;
+  color: var(--v3-muted);
+  font: 500 13px/1.3 var(--v3-text);
+  cursor: pointer;
+}
+.dw-phone__lamp .dw-diya {
+  width: 120px;
+}
+.dw-phone__lamp:hover span {
+  color: var(--v3-ink);
+}
+.dw-phone h4 {
+  margin: 18px 0 0;
+  color: var(--v3-ink);
+  font: 500 clamp(22px, 2vw, 27px) / 1.15 var(--v3-display);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.dw-phone__lines {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  color: #e9d8b6;
+  font: italic 400 15px/1.5 var(--v3-text);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dw-phone__lines li {
+    animation: dw-line 700ms var(--v3-settle) both;
+    animation-delay: calc(350ms + var(--i) * 260ms);
+  }
+}
+@keyframes dw-line {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+}
+
+.dw-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 40px);
+  margin: clamp(32px, 4vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.dw-steps li {
+  padding-top: 20px;
+  border-top: 1px solid #e3a94740;
+}
+.dw-steps span {
+  color: var(--v3-signal);
+  font: 500 12px/1 var(--v3-display);
+  letter-spacing: 0.1em;
+}
+.dw-steps h3 {
+  margin: 20px 0 0;
+  font: 500 clamp(21px, 1.7vw, 26px) / 1.15 var(--v3-display);
+  letter-spacing: -0.03em;
+}
+.dw-steps p {
+  margin: 10px 0 0;
+  color: var(--v3-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.dw-compare {
+  margin-top: clamp(32px, 4vw, 56px);
+  overflow-x: auto;
+  border: 1px solid var(--v3-rule);
+  border-radius: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+.dw-compare table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.dw-compare :is(th, td) {
+  padding: 16px clamp(14px, 1.6vw, 24px);
+  border-bottom: 1px solid var(--v3-rule);
+  text-align: left;
+  vertical-align: middle;
+}
+.dw-compare tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.dw-compare thead th {
+  color: var(--v3-ink);
+  font: 500 17px/1.2 var(--v3-display);
+  background: #1a120a;
+}
+.dw-compare thead th span {
+  display: block;
+  margin-top: 4px;
+  color: var(--v3-signal);
+  font-size: 14px;
+}
+.dw-compare tbody th {
+  color: var(--v3-muted);
+  font-weight: 400;
+}
+.dw-compare td svg[aria-label="Included"] {
+  color: var(--v3-signal);
+}
+.dw-compare td svg[aria-label="Not included"] {
+  color: #b9a68455;
+}
+.dw-compare :is(th, td):first-child {
+  position: sticky;
+  left: 0;
+  background: var(--v3-paper);
+}
+.dw-compare thead :is(th):first-child {
+  background: #1a120a;
+}
+
+.dw-close {
+  padding-bottom: clamp(96px, 10vw, 168px);
+}
+.dw-close__inner {
+  max-width: 920px;
+  margin-inline: auto;
+  padding: clamp(36px, 5vw, 72px);
+  border: 1px solid #e3a94733;
+  border-radius: 6px;
+  background: radial-gradient(ellipse at 50% 0%, #3a1f0b 0%, transparent 70%);
+  text-align: center;
+}
+.dw-close__inner h2 {
+  margin: 0;
+  font: 500 clamp(34px, 4.4vw, 68px) / 1.02 var(--v3-display);
+  letter-spacing: -0.055em;
+}
+.dw-close__inner h2 span {
+  display: block;
+}
+.dw-close__inner p {
+  max-width: 46ch;
+  margin: 20px auto 0;
+  color: var(--v3-muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.dw-close__actions {
+  justify-content: center;
+}
+
+/* Enquiry: a gift brief note ---------------------------------------------- */
+.dw-brief-gift {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin: 0 0 28px;
+  padding: 16px 18px;
+  border: 1px solid #e3a94759;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #2a170a, transparent);
+  color: var(--v3-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.dw-brief-gift strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--v3-signal-light);
+  font-weight: 600;
+}
+.dw-brief-gift a {
+  color: var(--v3-ink);
+}
+.dw-brief-gift .dw-diya {
+  width: 40px;
+  flex: none;
+  margin-top: 2px;
+}
+
+/* Responsive -------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .dw-cards {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 620px;
+  }
+  .dw-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .dw-preview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dw-hero__rangoli {
+    top: 10%;
+    right: -38%;
+    width: 110vw;
+    translate: none;
+    opacity: 0.22;
+  }
+  .impression-hero__rangoli {
+    opacity: 0.24;
+  }
+}
+@media (max-width: 520px) {
+  .dw-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dw-ribbon {
+    font-size: 12px;
+  }
+  .dw-phone {
+    width: min(100%, 300px);
+  }
+}
+/* Decorative rangoli may bleed past the gutter; it must never widen the page. */
+.dw-chapter,
+.living-layout.v3.diwali .dw-hero {
+  overflow-x: clip;
+}
+
+/* Night chapters that were ink-on-paper inversions keep their mapping:
+   inside them "paper" is the light text colour. */
+.living-layout.v3.diwali :is(.v3-approach, .site-footer) {
+  /* Both read as light text here; their backgrounds are set explicitly. */
+  --v3-paper: #f4e8d0;
+  --v3-ink: #f4e8d0;
+}
+.living-layout.v3.diwali .v3-studio-stage {
+  background: radial-gradient(
+    closest-side at 50% 72%,
+    #ff9a3c22 0%,
+    transparent 100%
+  );
+}
+.living-layout.v3.diwali .footer-bottom a,
+.living-layout.v3.diwali .footer-contact a small {
+  color: #cdbb98;
+}
+.living-layout.v3.diwali .living-footer-sculpture > span {
+  color: #e3a9470f;
+}
+
+/* Spatial Folio: website captures stay on light sheets (a light island),
+   lit by lamplight rather than a white key. */
+.living-layout.v3.diwali .folio-stage {
+  background: radial-gradient(
+    ellipse calc(var(--sheet) * 0.75) 62% at 50% 46%,
+    #ff9a3c2e 0%,
+    #ff9a3c00 100%
+  );
+}
+.living-layout.v3.diwali .folio-sheet {
+  --v3-paper: #efebe3;
+  --v3-paper-deep: #e4ded2;
+  --v3-ink: #14130f;
+  --v3-muted: #5c584f;
+  --v3-rule: #14130f29;
+  --v3-signal: #9a5a12;
+  color: #14130f;
+  box-shadow:
+    0 1px 2px #00000040,
+    0 40px 80px -40px #000,
+    0 0 90px -30px #ff9a3c40;
+}
+.living-layout.v3.diwali .folio-numeral {
+  -webkit-text-stroke-color: #e3a94738;
+}
+.living-layout.v3.diwali .folio-arrow {
+  background: var(--v3-signal);
+  color: var(--dw-night);
+  box-shadow:
+    0 0 0 5px #0e0a06d9,
+    0 16px 32px -14px #000;
+}
+.living-layout.v3.diwali .dw-chapter__rangoli {
+  opacity: 0.13;
+}
+.living-layout.v3.diwali .dw-hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.dw-phone {
+  aspect-ratio: 9 / 16;
+}
+.dw-phone__screen {
+  justify-content: center;
+}
+.dw-phone__edition {
+  position: absolute;
+  top: 30px;
+  inset-inline: 16px;
+}
+.dw-phone__lamp {
+  margin-top: 0;
+}
+.living-layout.v3.diwali .footer-wordmark {
+  opacity: 0.38;
+}
+
+/* Enquiry controls on the night palette: dark fields, ivory text, gold focus. */
+.living-layout.v3.diwali .field :is(input, select, textarea),
+.living-layout.v3.diwali .choice {
+  border-color: #f4e8d033;
+  background: #17100a;
+  color: var(--v3-ink);
+}
+.living-layout.v3.diwali .field :is(input, textarea)::placeholder {
+  color: #8f7f63;
+}
+.living-layout.v3.diwali .field :is(input, select, textarea):hover,
+.living-layout.v3.diwali .choice:hover {
+  border-color: #e3a94799;
+}
+.living-layout.v3.diwali .field :is(input, select, textarea):focus {
+  border-color: var(--v3-signal);
+}
+.living-layout.v3.diwali .field select option {
+  background: #17100a;
+  color: var(--v3-ink);
+}
+.living-layout.v3.diwali .choice.selected {
+  border-color: var(--v3-signal);
+  background: var(--v3-signal);
+  color: var(--dw-night);
+}
+.living-layout.v3.diwali .field :is(input, textarea):-webkit-autofill {
+  -webkit-text-fill-color: var(--v3-ink);
+  box-shadow: 0 0 0 40px #17100a inset;
+}
+.living-layout.v3.diwali :is(.submission-error, .storage-notice) {
+  border-color: #e3a94766;
+  background: #e3a9470d;
+}
+.living-layout.v3.diwali .success-mark {
+  background: var(--v3-signal);
+  border-color: var(--v3-signal);
+  color: var(--dw-night);
+}
+.dw-compare-hint {
+  display: none;
+}
+@media (max-width: 700px) {
+  .dw-compare-hint {
+    display: block;
+    margin-top: 14px;
+    color: var(--v3-muted);
+    font-size: 13px;
+  }
+}

@@ -7,16 +7,13 @@ import {
 } from "react";
 import { useReducedMotion } from "../hooks/useMotion";
 import { isMotionReduced, localIntroReplay } from "../lib/motionPreference";
-import {
-  IntroDirector,
-  INTRO_DEADLINE,
-  type IntroPhase,
-} from "./runtime/IntroDirector";
+import { IntroDirector, type IntroPhase } from "./runtime/IntroDirector";
 import { ExperienceStage } from "./ExperienceStage";
 import { ImpressionFallback } from "./ImpressionFallback";
 import { isSoftwareRenderer, supportsWebGL } from "./runtime/webglSupport";
 
 let visited = false;
+let visitedRevolution = false;
 export function IdentityCore({
   intro,
   studio = false,
@@ -26,7 +23,9 @@ export function IdentityCore({
   studio?: boolean;
   impression?: boolean;
 }) {
-  const [director] = useState(() => new IntroDirector());
+  const [director] = useState(
+    () => new IntroDirector(impression ? "revolution" : "assembly"),
+  );
   const phase = useSyncExternalStore(
     director.subscribe,
     director.snapshot,
@@ -45,37 +44,70 @@ export function IdentityCore({
   const sculpture = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (reduced || isMotionReduced()) director.finish("reduced-motion");
-    let seen = visited;
-    try {
-      seen ||= sessionStorage.getItem("webora-intro-v2") === "seen";
-    } catch {
-      /* In-memory fallback. */
-    }
-    director.request(performance.now(), {
-      seen,
-      reduced: reduced || isMotionReduced(),
-      // Hardware WebGL only: without it the world fails fast (the reveal would
-      // flash), and CPU-emulated GL blocks the main thread. Local replay can
-      // still force it for inspection.
-      eligible:
-        intro &&
-        !location.hash &&
-        scrollY < 80 &&
-        ((supportsWebGL() && !isSoftwareRenderer()) || localIntroReplay()),
-      replay: localIntroReplay(),
-      mobile: matchMedia("(pointer: coarse)").matches || innerWidth < 700,
-    });
-    if (director.phase === "preparing") {
-      visited = true;
+    const key = impression ? "webora-intro-v3.2" : "webora-intro-v2";
+    const remember = () => {
+      if (impression) visitedRevolution = true;
+      else visited = true;
       try {
-        sessionStorage.setItem("webora-intro-v2", "seen");
+        sessionStorage.setItem(key, "seen");
       } catch {
         /* Optional storage. */
       }
-    }
+    };
+    const stop = director.subscribe(() => {
+      // Loading alone is not a viewed intro. Remember actual playback or the
+      // visitor's explicit dismissal, including when storage is unavailable.
+      if (
+        director.phase === "playing" ||
+        ["skip", "intent", "drag", "control"].includes(director.reason)
+      )
+        remember();
+    });
+    const request = () => {
+      const rect = sculpture.current?.getBoundingClientRect();
+      if (impression) {
+        if (!rect || document.hidden) return;
+        const visible =
+          Math.min(innerHeight, rect.bottom) - Math.max(100, rect.top);
+        if (visible < Math.min(rect.height, innerHeight - 100) * 0.45) return;
+      }
+      let seen = impression ? visitedRevolution : visited;
+      try {
+        seen ||= sessionStorage.getItem(key) === "seen";
+      } catch {
+        /* In-memory fallback. */
+      }
+      director.request(performance.now(), {
+        seen,
+        reduced: reduced || isMotionReduced(),
+        eligible:
+          intro &&
+          !location.hash &&
+          (impression || scrollY < 80) &&
+          ((supportsWebGL() && !isSoftwareRenderer()) || localIntroReplay()),
+        replay: localIntroReplay(),
+        mobile: matchMedia("(pointer: coarse)").matches || innerWidth < 700,
+      });
+      // The first useful frame may precede the visibility observer on mobile.
+      if (impression && ready) director.ready(performance.now(), false);
+      if (!impression && director.phase === "preparing") remember();
+    };
+    request();
+    const observer = impression
+      ? new IntersectionObserver(request, {
+          threshold: [0, 0.45, 0.75, 1],
+        })
+      : undefined;
+    if (sculpture.current) observer?.observe(sculpture.current);
+    document.addEventListener("visibilitychange", request);
     // React StrictMode rehearses effects without leaving this route. The stage
     // owns actual unmount cancellation; a rehearsal must not consume the intro.
-  }, [director, intro, reduced]);
+    return () => {
+      stop();
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", request);
+    };
+  }, [director, intro, reduced, impression, ready]);
   useEffect(() => {
     if (reveal !== "leaving") return;
     const timer = window.setTimeout(() => setReveal(null), 1100);
@@ -87,6 +119,13 @@ export function IdentityCore({
       return;
     }
     const finish = () => director.finish("intent");
+    const scroll = () => {
+      if (!impression) return finish();
+      const rect = sculpture.current?.getBoundingClientRect();
+      // Scrolling to a below-fold mobile sculpture must not cancel its first
+      // visible turn. Leaving the sculpture still ends it immediately.
+      if (rect && (rect.bottom <= 100 || rect.top >= innerHeight)) finish();
+    };
     const key = (event: KeyboardEvent) => {
       if (["Escape", "PageDown", "ArrowDown", " "].includes(event.key))
         finish();
@@ -95,23 +134,28 @@ export function IdentityCore({
       if ((event.target as Element).closest("a, .menu-toggle")) finish();
     };
     const timer = window.setTimeout(
-      () => director.finish("deadline"),
-      Math.max(0, director.requestedAt + INTRO_DEADLINE - performance.now()),
+      () => {
+        if (impression) director.sample(performance.now());
+        else director.finish("deadline");
+      },
+      Math.max(0, director.deadlineAt - performance.now()),
     );
-    window.addEventListener("wheel", finish, { passive: true });
-    window.addEventListener("touchstart", finish, { passive: true });
-    window.addEventListener("scroll", finish, { passive: true });
+    if (!impression) {
+      window.addEventListener("wheel", finish, { passive: true });
+      window.addEventListener("touchstart", finish, { passive: true });
+    }
+    window.addEventListener("scroll", scroll, { passive: true });
     window.addEventListener("keydown", key);
     document.addEventListener("click", navigation, true);
     return () => {
       clearTimeout(timer);
       window.removeEventListener("wheel", finish);
       window.removeEventListener("touchstart", finish);
-      window.removeEventListener("scroll", finish);
+      window.removeEventListener("scroll", scroll);
       window.removeEventListener("keydown", key);
       document.removeEventListener("click", navigation, true);
     };
-  }, [director, phase]);
+  }, [director, phase, impression]);
   const turn = (amount: number) =>
     sculpture.current?.dispatchEvent(
       new CustomEvent("core-turn", { detail: amount }),
@@ -172,7 +216,7 @@ export function IdentityCore({
           </span>
           <span className="intro-reveal__rule" />
           <span className="intro-reveal__line">
-            Strategy &middot; Design &middot; Development
+            Shubh Deepavali &middot; Diwali Edition
           </span>
         </div>
       )}
@@ -183,7 +227,9 @@ export function IdentityCore({
               ? "FORM / MATERIAL / LIGHT"
               : phase === "handoff"
                 ? "WEBORA / A NEW DIMENSION"
-                : "W—01 / COMING TOGETHER"}
+                : impression
+                  ? "DIWALI EDITION / LIGHT IN FULL CIRCLE"
+                  : "W—01 / COMING TOGETHER"}
           </span>
           <button onClick={() => director.finish("skip")}>Skip intro ↗</button>
         </div>

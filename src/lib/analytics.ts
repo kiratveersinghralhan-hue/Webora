@@ -5,7 +5,8 @@ export type StudioEvent =
   | "enquiry_submitted"
   | "whatsapp_clicked"
   | "email_clicked"
-  | "project_viewed";
+  | "project_viewed"
+  | "gift_package_selected";
 // Integration point only. No external tracker, cookies or personal data.
 export function track(
   event: StudioEvent,

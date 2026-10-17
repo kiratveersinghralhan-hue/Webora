@@ -41,6 +41,7 @@ try {
     "/services",
     "/studio",
     "/start-project",
+    "/diwali-gifts",
     "/privacy",
     ...projects
       .filter((project) => project.caseStudy)

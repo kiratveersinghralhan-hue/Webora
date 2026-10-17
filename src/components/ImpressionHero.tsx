@@ -4,6 +4,8 @@ import { projects } from "../data/studio";
 import { assetUrl } from "../lib/site";
 import { IdentityCore } from "../three/IdentityCore";
 import { LinkButton } from "./LinkButton";
+import { DiyaIcon, Rangoli, Sparks } from "./Diwali";
+import { diwaliEdition } from "../data/diwali";
 
 const audiences = [
   "Service businesses",
@@ -27,6 +29,16 @@ export function ImpressionHero() {
     <section className="impression-hero" aria-labelledby="impression-title">
       <div className="impression-hero__grid">
         <div className="impression-hero__copy">
+          <Link className="dw-ribbon" to={diwaliEdition.route}>
+            <DiyaIcon />
+            <span>
+              <strong>
+                {diwaliEdition.name} {diwaliEdition.year}
+              </strong>{" "}
+              Memory Gifts from ₹999
+            </span>
+            <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
           <span className="impression-hero__eyebrow">
             Webora &mdash; Premium web design &amp; development studio
           </span>
@@ -51,8 +63,10 @@ export function ImpressionHero() {
           </p>
         </div>
         <div className="impression-hero__stage">
+          <Rangoli className="impression-hero__rangoli" />
+          <Sparks count={10} />
           <span className="impression-hero__object-label" aria-hidden="true">
-            W / SCULPTED IDENTITY
+            W / LIT FOR DIWALI
           </span>
           <IdentityCore intro studio impression />
           {/* A gallery label under the sculpture: the three disciplines the

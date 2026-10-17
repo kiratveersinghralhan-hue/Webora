@@ -9,6 +9,7 @@ import {
 import { flushSync } from "react-dom";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { contact } from "../data/studio";
+import { diwaliEdition } from "../data/diwali";
 import { LinkButton } from "../components/LinkButton";
 import { Cursor } from "../components/Cursor";
 import { usePageMotion, useReducedMotion } from "../hooks/useMotion";
@@ -23,6 +24,7 @@ import "../styles/v3-hero.css";
 import "../styles/v3-site.css";
 import "../styles/v3-folio.css";
 import "../styles/v3-pages.css";
+import "../styles/v3-diwali.css";
 
 export function Layout() {
   const experimental = useV2Experience();
@@ -156,7 +158,7 @@ export function Layout() {
     };
   }, [open]);
   return (
-    <div className={experimental ? "living-layout v3" : undefined}>
+    <div className={experimental ? "living-layout v3 diwali" : undefined}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -174,6 +176,9 @@ export function Layout() {
           <NavLink to="/services">Services</NavLink>
           <Link to="/#process">Process</Link>
           <NavLink to="/studio">Studio</NavLink>
+          <NavLink className="nav-diwali" to={diwaliEdition.route}>
+            Diwali Gifts
+          </NavLink>
         </nav>
         {/* Hidden on the enquiry itself: a CTA to the current page is noise. */}
         <div
@@ -207,6 +212,7 @@ export function Layout() {
             ["Services", "/services"],
             ["Process", "/#process"],
             ["Studio", "/studio"],
+            ["Diwali Gifts", diwaliEdition.route],
             ["Start a Project", "/start-project"],
           ].map(([label, path], i) => {
             const content = (
@@ -304,9 +310,12 @@ export function Layout() {
             <Link to="/work">Work</Link>
             <Link to="/services">Services</Link>
             <Link to="/studio">Studio</Link>
+            <Link to={diwaliEdition.route}>Diwali Gifts</Link>
             <Link to="/privacy">Privacy</Link>
           </nav>
-          <span className="mono">DESIGNED TO BE REMEMBERED ↗</span>
+          <span className="mono">
+            {diwaliEdition.greeting.toUpperCase()} · DESIGNED TO BE REMEMBERED
+          </span>
         </div>
       </footer>
       <Cursor />

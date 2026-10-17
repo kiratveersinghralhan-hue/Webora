@@ -260,38 +260,28 @@
   border-color: var(--v3-rule);
   border-radius: 3px;
 }
-/* Brand reveal (first eligible visit only; never rendered for reduced motion
-   or in prerendered HTML). The wordmark rises on a paper veil while the world
-   prepares, then lifts away as the veil clears for the sculpture's assembly.
-   It covers only the stage, never the hero copy or actions. */
+/* Type occupies the stage's upper margin; no veil hides the actual revolution.
+   The rendered first frame starts the reveal. Handoff follows the full turn. */
 .impression-hero__stage {
   container-type: inline-size;
 }
 .intro-reveal {
   position: absolute;
-  inset: 24px 0 60px;
+  inset: 24px 0 auto;
   z-index: 2;
   display: grid;
   place-content: center;
   justify-items: center;
-  gap: 14px;
+  gap: 8px;
   pointer-events: none;
+  transition: opacity 180ms ease;
 }
-.intro-reveal::before {
-  content: "";
-  position: absolute;
-  inset: -24px 0 -60px;
-  z-index: -1;
-  background: radial-gradient(
-    ellipse at 50% 48%,
-    var(--v3-paper) 52%,
-    #efebe300 78%
-  );
-  transition: opacity 700ms var(--v3-settle);
+.intro-reveal[data-phase="preparing"] {
+  opacity: 0;
 }
 .intro-reveal__word {
   display: flex;
-  font: 600 min(20cqi, 128px) / 0.86 var(--v3-display);
+  font: 600 min(10cqi, 56px) / 0.86 var(--v3-display);
   letter-spacing: -0.02em;
   color: var(--v3-ink);
 }
@@ -302,47 +292,37 @@
 }
 .intro-reveal__word > span > span {
   display: block;
+}
+.intro-reveal[data-phase="playing"] .intro-reveal__word > span > span {
   animation: intro-rise 760ms var(--v3-settle) both;
   animation-delay: calc(var(--n) * 55ms);
 }
 .intro-reveal__rule {
-  width: min(46cqi, 280px);
+  width: min(26cqi, 160px);
   height: 2px;
   background: var(--v3-signal);
   transform-origin: left;
-  animation: intro-draw 620ms var(--v3-settle) 360ms both;
 }
 .intro-reveal__line {
-  font: 500 12px/1 var(--v3-display);
-  letter-spacing: 0.14em;
+  font: 500 clamp(8px, 1.7cqi, 10px)/1 var(--v3-display);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--v3-muted);
-  animation: intro-fade 520ms ease 520ms both;
 }
-.intro-reveal:is([data-phase="playing"], [data-phase="handoff"])::before,
-.intro-reveal[data-phase="leaving"]::before {
-  opacity: 0;
-  transition-delay: 820ms;
+.intro-reveal[data-phase="playing"] .intro-reveal__rule {
+  animation: intro-draw 620ms var(--v3-settle) 200ms both;
 }
-.intro-reveal[data-phase="leaving"]::before {
-  transition-delay: 380ms;
+.intro-reveal[data-phase="playing"] .intro-reveal__line {
+  animation: intro-fade 520ms ease 360ms both;
 }
-.intro-reveal:is([data-phase="playing"], [data-phase="handoff"])
+.intro-reveal:is([data-phase="handoff"], [data-phase="leaving"])
   .intro-reveal__word
   > span
   > span {
-  animation: intro-lift 620ms var(--v3-settle) both;
-  animation-delay: calc(480ms + var(--n) * 40ms);
+  animation: intro-lift 420ms var(--v3-settle) both;
+  animation-delay: calc(var(--n) * 25ms);
 }
-.intro-reveal[data-phase="leaving"] .intro-reveal__word > span > span {
-  animation: intro-lift 520ms var(--v3-settle) both;
-  animation-delay: calc(var(--n) * 30ms);
-}
-.intro-reveal:is([data-phase="playing"], [data-phase="handoff"])
-  :is(.intro-reveal__rule, .intro-reveal__line) {
-  animation: intro-out 420ms ease 520ms both;
-}
-.intro-reveal[data-phase="leaving"]
+.intro-reveal:is([data-phase="handoff"], [data-phase="leaving"])
   :is(.intro-reveal__rule, .intro-reveal__line) {
   animation: intro-out 320ms ease both;
 }
@@ -455,6 +435,15 @@
   }
 }
 @media (max-width: 700px) {
+  .intro-reveal {
+    gap: 5px;
+  }
+  .intro-reveal__word {
+    font-size: min(8cqi, 30px);
+  }
+  .intro-reveal__line {
+    display: none;
+  }
   .impression-hero__notes {
     display: none;
   }

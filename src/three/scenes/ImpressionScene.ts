@@ -1,10 +1,11 @@
 import * as THREE from "three/src/Three.js";
 import { createImpressionGeometry } from "../geometry/impressionGeometry";
 import type { IntroDirector } from "../runtime/IntroDirector";
+import { DiyaLights } from "./DiyaLights";
 import type { QualityTier } from "../runtime/QualityPolicy";
 import type { FrameState, SceneContext, SceneModule } from "../runtime/types";
 
-/** Shared-world scene: finite choreography, bounded input, no RAF or renderer. */
+/** Shared-world scene: one finite revolution, free yaw, no RAF or renderer. */
 export class ImpressionScene implements SceneModule {
   readonly group = new THREE.Group();
   yaw = 0;
@@ -16,6 +17,8 @@ export class ImpressionScene implements SceneModule {
   private context?: SceneContext;
   private director?: IntroDirector;
   private sculpture?: THREE.Mesh;
+  private diyas?: DiyaLights;
+  private kindled = false;
   private releases: (() => void)[] = [];
   private serial = 0;
   private width = 1;
@@ -23,7 +26,7 @@ export class ImpressionScene implements SceneModule {
   private distance = 10;
   private progress = 1;
   private finePointer = false;
-  private readonly maxYaw = Math.PI * 0.19;
+  private introTurn = 0;
 
   mount(context: SceneContext) {
     this.context = context;
@@ -61,18 +64,18 @@ export class ImpressionScene implements SceneModule {
   }
   private build(tier: QualityTier) {
     this.clear();
-    // Warm nickel faces with a thin lacquer; mirror-polished bevels catch the
-    // softboxes as crisp lines. Low tier drops the clearcoat pass.
+    // Diwali Edition: burnished gold faces with a thin lacquer; mirror-polished
+    // bevels catch the softboxes as crisp lines. Low tier drops the clearcoat.
     const satin = this.own(
       tier === "low"
         ? new THREE.MeshStandardMaterial({
-            color: 0xd9d2c4,
+            color: 0xe3c58c,
             metalness: 1,
             roughness: 0.26,
             envMapIntensity: 1.25,
           })
         : new THREE.MeshPhysicalMaterial({
-            color: 0xd9d2c4,
+            color: 0xe3c58c,
             metalness: 1,
             roughness: 0.28,
             clearcoat: 0.45,
@@ -82,7 +85,7 @@ export class ImpressionScene implements SceneModule {
     );
     const polished = this.own(
       new THREE.MeshStandardMaterial({
-        color: 0xc4b9a6,
+        color: 0xd6a85a,
         metalness: 1,
         roughness: 0.1,
         envMapIntensity: 1.45,
@@ -127,6 +130,8 @@ export class ImpressionScene implements SceneModule {
       shadow.position.y = -1.95;
       this.group.add(shadow);
     }
+    this.diyas = new DiyaLights((resource) => this.own(resource), tier);
+    this.group.add(this.diyas.group);
     this.resize(this.width, this.height);
   }
   setDirector(director: IntroDirector) {
@@ -142,17 +147,13 @@ export class ImpressionScene implements SceneModule {
     this.target = undefined;
   }
   drag(dx: number, dy: number, milliseconds: number) {
-    const change = (dx * 1.8) / Math.max(300, this.width);
-    this.yaw = THREE.MathUtils.clamp(
-      this.yaw + change,
-      -this.maxYaw,
-      this.maxYaw,
-    );
+    const change = (dx * Math.PI * 2) / Math.max(300, this.width);
+    this.yaw += change;
     this.pitch = THREE.MathUtils.clamp(this.pitch + dy * 0.002, -0.2, 0.2);
     this.velocity = THREE.MathUtils.clamp(
       change / Math.max(0.008, milliseconds / 1000),
-      -1.2,
-      1.2,
+      -3,
+      3,
     );
     this.context?.invalidate();
   }
@@ -167,17 +168,14 @@ export class ImpressionScene implements SceneModule {
     this.velocity = 0;
     this.target =
       amount === 0
-        ? 0
-        : THREE.MathUtils.clamp(
-            this.yaw + Math.sign(amount) * 0.24,
-            -this.maxYaw,
-            this.maxYaw,
-          );
+        ? Math.round(this.yaw / (Math.PI * 2)) * Math.PI * 2
+        : (this.target ?? this.yaw) + amount;
     if (amount === 0) this.pitch = 0;
     this.context?.invalidate();
   }
   update(frame: FrameState) {
-    if (this.suspended || !this.context || !this.sculpture) return false;
+    if (this.suspended || !this.context || !this.sculpture || !this.diyas)
+      return false;
     const { delta, pointer } = frame;
     this.progress = this.director?.sample(frame.now ?? frame.time * 1000) ?? 1;
     if (this.target !== undefined) {
@@ -188,29 +186,51 @@ export class ImpressionScene implements SceneModule {
       }
     } else if (!this.dragging && this.velocity) {
       const decay = Math.exp(-delta / 0.16);
-      this.yaw = THREE.MathUtils.clamp(
-        this.yaw + this.velocity * 0.16 * (1 - decay),
-        -this.maxYaw,
-        this.maxYaw,
-      );
+      this.yaw += this.velocity * 0.16 * (1 - decay);
       this.velocity *= decay;
-      if (Math.abs(this.velocity) < 0.005 || Math.abs(this.yaw) >= this.maxYaw)
-        this.velocity = 0;
+      if (Math.abs(this.velocity) < 0.005) this.velocity = 0;
     }
-    const reveal = THREE.MathUtils.smoothstep(this.progress, 0, 1);
-    const arc = 1 - reveal;
-    const px = this.finePointer && pointer.active ? pointer.nx : 0;
-    const py = this.finePointer && pointer.active ? pointer.ny : 0;
+    // A fixed camera and an actual mesh turn expose both edges and the back.
+    // The first tenth gives the type time to arrive; the final portion holds
+    // the exact hero pose while the type exits. No counter-rotating camera.
+    const revolution = THREE.MathUtils.smoothstep(this.progress, 0.1, 0.88);
+    this.introTurn = Math.PI * 2 * revolution;
+    const opening =
+      this.director !== undefined && this.director.phase !== "settled";
+    const px = !opening && this.finePointer && pointer.active ? pointer.nx : 0;
+    const py = !opening && this.finePointer && pointer.active ? pointer.ny : 0;
     this.sculpture.rotation.set(
       -0.1 + this.pitch - py * 0.025,
-      -0.26 + this.yaw + px * 0.055 + arc * 0.45,
+      -0.26 + this.yaw + px * 0.055 + this.introTurn,
       -0.08,
     );
-    this.sculpture.position.set(0, -0.13 + arc * 0.16, 0);
-    const distance = this.distance * (1 - arc * 0.2);
-    this.context.camera.position.set(-arc * 1.2, 0.6 + arc * 0.5, distance);
-    this.context.camera.lookAt(0, -0.12, 0);
+    // Reserve breathing room for the wordmark while the tall side profiles
+    // pass. Only after the revolution do we ease into the approved hero frame.
+    const settle = THREE.MathUtils.smoothstep(this.progress, 0.88, 1);
+    this.sculpture.position.set(0, -0.13 - (1 - settle) * 0.15, 0);
+    this.context.camera.position.set(
+      0,
+      0.6,
+      this.distance * (1 + (1 - settle) * 0.22),
+    );
+    // Narrow stages reserve a separate upper band for the intro wordmark.
+    // Move the whole composition, including its contact shadow, together.
+    this.context.camera.lookAt(
+      0,
+      -0.12 + (this.width < 500 ? (1 - settle) * 0.6 : 0),
+      0,
+    );
+    // The lamps catch one after another during the revolution, then rest lit.
+    // A first frame with a director (the hero) also earns a short flicker.
+    const flickering = this.diyas.update(
+      frame.now ?? frame.time * 1000,
+      opening ? THREE.MathUtils.smoothstep(this.progress, 0, 0.9) : 1,
+      opening || (!this.kindled && this.director !== undefined),
+      this.finePointer ? pointer : undefined,
+    );
+    this.kindled = true;
     return (
+      flickering ||
       this.dragging ||
       this.velocity !== 0 ||
       this.target !== undefined ||
@@ -250,12 +270,16 @@ export class ImpressionScene implements SceneModule {
       yaw: this.yaw,
       pitch: this.pitch,
       progress: this.progress,
+      introTurn: this.introTurn,
+      rotationY: this.sculpture?.rotation.y ?? 0,
       sculptureId: this.sculpture?.uuid ?? "",
       geometryId: this.sculpture?.geometry.uuid ?? "",
-      material: "Impression / standard metal",
+      material: "Impression / standard metal, Diwali gold",
+      diyas: this.diyas?.group.children.length ?? 0,
       introPhase: this.director?.phase ?? "settled",
       introDuration: this.director?.duration ?? 0,
       introStartedAt: this.director?.startedAt ?? 0,
+      introReason: this.director?.reason ?? "session",
     };
   }
   dispose() {

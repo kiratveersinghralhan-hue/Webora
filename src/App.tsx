@@ -11,6 +11,7 @@ const Services = lazy(() => import("./pages/Services"));
 const Studio = lazy(() => import("./pages/Studio"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const StartProject = lazy(() => import("./pages/StartProject"));
+const DiwaliGifts = lazy(() => import("./pages/DiwaliGifts"));
 const page = (content: React.ReactNode) => (
   <Suspense
     fallback={
@@ -69,6 +70,7 @@ export function App() {
         <Route path="services" element={page(<Services />)} />
         <Route path="studio" element={page(<Studio />)} />
         <Route path="start-project" element={page(<StartProject />)} />
+        <Route path="diwali-gifts" element={page(<DiwaliGifts />)} />
         <Route path="privacy" element={page(<Privacy />)} />
         <Route path="*" element={<NotFound />} />
       </Route>

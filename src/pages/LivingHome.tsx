@@ -1,4 +1,5 @@
 import { ImpressionHero } from "../components/ImpressionHero";
+import { GiftsChapter } from "../components/Diwali";
 import {
   WorkChapter,
   ServicesChapter,
@@ -13,6 +14,7 @@ export function LivingHome() {
     <div className="page-enter living-home v3-home">
       <ImpressionHero />
       <WorkChapter />
+      <GiftsChapter />
       <ServicesChapter />
       <ApproachChapter />
       <ProcessChapter />

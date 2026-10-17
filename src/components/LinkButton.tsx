@@ -17,7 +17,9 @@ export function LinkButton({
       to={to}
       data-magnetic
       data-cursor="GO"
-      onClick={() => to === "/start-project" && track("start_project_clicked")}
+      onClick={() =>
+        to.startsWith("/start-project") && track("start_project_clicked")
+      }
     >
       <span>{children}</span>
       {secondary ? <ArrowRight size={18} /> : <ArrowUpRight size={19} />}

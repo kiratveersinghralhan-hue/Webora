@@ -216,7 +216,7 @@ export function IdentityCore({
           </span>
           <span className="intro-reveal__rule" />
           <span className="intro-reveal__line">
-            Shubh Deepavali &middot; Diwali Edition
+            Premium web design &amp; development
           </span>
         </div>
       )}
@@ -228,7 +228,7 @@ export function IdentityCore({
               : phase === "handoff"
                 ? "WEBORA / A NEW DIMENSION"
                 : impression
-                  ? "DIWALI EDITION / LIGHT IN FULL CIRCLE"
+                  ? "WEBORA / FORM IN FULL CIRCLE"
                   : "W—01 / COMING TOGETHER"}
           </span>
           <button onClick={() => director.finish("skip")}>Skip intro ↗</button>

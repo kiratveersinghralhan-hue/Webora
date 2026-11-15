@@ -31,8 +31,8 @@ export function metadata(path: string) {
       "Tell Webora about your business and website goals in a short six-step brief, and start a considered project conversation.",
     ],
     "/diwali-gifts": [
-      "Diwali Memory Gifts: Personal Gift Websites",
-      "This Diwali, gift a memory: personal websites designed by Webora from your photographs and words. Little Moments ₹999, Our Story ₹2,499, Forever Edition ₹4,999.",
+      "Memory Gifts: Personal Gift Websites",
+      "Personal gift websites from ₹999. After discussion and work begins, preview in under 60 minutes and receive your gift website within 90 minutes.",
     ],
     "/privacy": [
       "Privacy Policy",

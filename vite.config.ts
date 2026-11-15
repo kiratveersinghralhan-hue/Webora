@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
                 "/services",
                 "/studio",
                 "/start-project",
+                "/diwali-gifts",
                 "/privacy",
                 "/work/form-and-field",
                 "/work/off-script",

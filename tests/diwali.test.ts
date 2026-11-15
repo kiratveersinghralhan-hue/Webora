@@ -19,7 +19,7 @@ import { validLead } from "./fixture";
 
 afterEach(() => vi.unstubAllGlobals());
 
-describe("Diwali Edition Memory Gifts", () => {
+describe("Memory Gifts", () => {
   it("offers exactly the three priced editions, each with a valid comparison column", () => {
     expect(giftPackages.map((g) => [g.name, g.price, g.priceValue])).toEqual([
       ["Little Moments", "₹999", 999],
@@ -54,18 +54,31 @@ describe("Diwali Edition Memory Gifts", () => {
     expect(validateStep(draft, 2)).toEqual({});
     expect(validateStep(draft, 3)).toEqual({});
     expect(draft.additional_requirements).toBe(
-      "Diwali Memory Gift: Forever Edition (₹4,999).\nPlease include the 1976 photographs.",
+      "Memory Gift: Forever Edition (₹4,999).\nPlease include the 1976 photographs.",
     );
     // Switching edition replaces the note instead of stacking a second one.
     const switched = applyGift(draft, findGift("little-moments"));
     expect(
-      switched.additional_requirements.match(/Diwali Memory Gift/g),
+      switched.additional_requirements.match(/Memory Gift/g),
     ).toHaveLength(1);
     expect(switched.additional_requirements).toContain("Little Moments (₹999)");
     const lead = enquirySchema.parse({ ...switched, consent: true });
     expect(formspreePayload(lead).additional_requirements).toContain(
-      "Diwali Memory Gift: Little Moments (₹999).",
+      "Memory Gift: Little Moments (₹999).",
     );
+  });
+
+  it("replaces legacy and current gift notes while retaining the saved brief", () => {
+    const draft = {
+      ...validLead,
+      additional_requirements:
+        "Diwali Memory Gift: Our Story (₹2,499).\nMemory Gift: Little Moments (₹999).\nKeep the family photographs.",
+    } as never;
+    const changed = applyGift(draft, findGift("forever-edition"));
+    expect(changed.additional_requirements).toBe(
+      "Memory Gift: Forever Edition (₹4,999).\nKeep the family photographs.",
+    );
+    expect(applyGift(changed, findGift("forever-edition"))).toEqual(changed);
   });
 
   it("leaves an ordinary business brief untouched", () => {
@@ -75,7 +88,7 @@ describe("Diwali Edition Memory Gifts", () => {
 
   it("has indexable metadata for the gifts route", () => {
     const { title, description } = metadata("/diwali-gifts");
-    expect(title).toContain("Diwali Memory Gifts");
+    expect(title).toContain("Memory Gifts");
     expect(description).toContain("₹999");
   });
 });

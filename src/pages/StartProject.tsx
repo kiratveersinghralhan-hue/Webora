@@ -83,9 +83,8 @@ const descriptions = [
 
 export default function StartProject() {
   const { search } = useLocation();
-  const [gift] = useState(() =>
-    findGift(new URLSearchParams(search).get("gift")),
-  );
+  const initialSearch = useRef(search);
+  const [gift, setGift] = useState<ReturnType<typeof findGift>>();
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -147,6 +146,10 @@ export default function StartProject() {
     }, 90);
   }
   useEffect(() => {
+    // Apply the initial package with draft recovery after hydration, so the
+    // first browser render matches the static enquiry page.
+    const gift = findGift(new URLSearchParams(initialSearch.current).get("gift"));
+    setGift(gift);
     let restored: Partial<Draft> = {};
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -190,7 +193,7 @@ export default function StartProject() {
       ),
     );
     setLoaded(true);
-  }, [gift]);
+  }, []);
   useEffect(() => {
     if (!loaded || success) return;
     try {
@@ -495,7 +498,7 @@ export default function StartProject() {
                   <DiyaIcon />
                   <span>
                     <strong>
-                      Diwali Memory Gift · {gift.name} · {gift.price}
+                      Memory Gift · {gift.name} · {gift.price}
                     </strong>
                     We’ve noted your edition. For a gift, tell us who it’s for
                     in place of a business name; choose “Other” as the category.{" "}
@@ -540,7 +543,7 @@ export default function StartProject() {
                   </h2>
                   <p>{descriptions[step]}</p>
                 </div>
-                <fieldset className="form-fields" disabled={pending}>
+                <fieldset className="form-fields" disabled={pending || !loaded}>
                   <legend className="sr-only">{steps[step]}</legend>
                   {step === 0 && (
                     <div className="fields-grid">

@@ -25,6 +25,7 @@ import "../styles/v3-site.css";
 import "../styles/v3-folio.css";
 import "../styles/v3-pages.css";
 import "../styles/v3-diwali.css";
+import "../styles/v3-signature.css";
 
 export function Layout() {
   const experimental = useV2Experience();
@@ -35,6 +36,11 @@ export function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const reduced = useReducedMotion();
+  // Festive presentation belongs to the gift route alone; every other page
+  // wears the evergreen studio shell. Visual only: routing is untouched.
+  const giftRoute =
+    location.pathname === diwaliEdition.route ||
+    location.pathname.startsWith(`${diwaliEdition.route}/`);
   usePageMotion();
   useEffect(() => {
     if (open) {
@@ -158,7 +164,13 @@ export function Layout() {
     };
   }, [open]);
   return (
-    <div className={experimental ? "living-layout v3 diwali" : undefined}>
+    <div
+      className={
+        experimental
+          ? `living-layout v3${giftRoute ? " diwali" : ""}`
+          : undefined
+      }
+    >
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -176,8 +188,11 @@ export function Layout() {
           <NavLink to="/services">Services</NavLink>
           <Link to="/#process">Process</Link>
           <NavLink to="/studio">Studio</NavLink>
-          <NavLink className="nav-diwali" to={diwaliEdition.route}>
-            Diwali Gifts
+          <NavLink
+            className={giftRoute ? "nav-diwali" : undefined}
+            to={diwaliEdition.route}
+          >
+            Memory Gifts
           </NavLink>
         </nav>
         {/* Hidden on the enquiry itself: a CTA to the current page is noise. */}
@@ -212,7 +227,7 @@ export function Layout() {
             ["Services", "/services"],
             ["Process", "/#process"],
             ["Studio", "/studio"],
-            ["Diwali Gifts", diwaliEdition.route],
+            ["Memory Gifts", diwaliEdition.route],
             ["Start a Project", "/start-project"],
           ].map(([label, path], i) => {
             const content = (
@@ -310,11 +325,12 @@ export function Layout() {
             <Link to="/work">Work</Link>
             <Link to="/services">Services</Link>
             <Link to="/studio">Studio</Link>
-            <Link to={diwaliEdition.route}>Diwali Gifts</Link>
+            <Link to={diwaliEdition.route}>Memory Gifts</Link>
             <Link to="/privacy">Privacy</Link>
           </nav>
           <span className="mono">
-            {diwaliEdition.greeting.toUpperCase()} · DESIGNED TO BE REMEMBERED
+            {giftRoute && `${diwaliEdition.greeting.toUpperCase()} · `}
+            DESIGNED TO BE REMEMBERED
           </span>
         </div>
       </footer>

@@ -20,12 +20,12 @@ const steps = [
     "Send photographs, names, dates and the words you want to say. We help shape the story.",
   ],
   [
-    "We design it by hand",
-    "Typography, light and motion composed around your memories, never a fill-in template.",
+    "Preview in under 60 minutes",
+    "After our discussion and once work starts, review a preview shaped around your memories.",
   ],
   [
-    "Give the link",
-    "A private link, ready to send on WhatsApp or reveal on the day itself.",
+    "Your gift within 90 minutes",
+    "Receive your finished gift website within 90 minutes of work starting, ready to share on WhatsApp or reveal in person.",
   ],
 ];
 
@@ -39,15 +39,16 @@ export default function DiwaliGifts() {
         <Rangoli className="dw-hero__rangoli" />
         <Sparks />
         <span className="eyebrow">
-          {diwaliEdition.name} {diwaliEdition.year} / Memory Gifts
+          {diwaliEdition.name} / Personal gift websites
         </span>
         <h1 id="dw-title">
           Some memories deserve <span>their own light.</span>
         </h1>
         <p>
-          This Diwali, give a personal website made from your photographs and
-          words. Designed by the Webora studio, lit like a lamp in the window,
-          and kept long after the festival ends.
+          Give a personal website made from your photographs and words, for
+          birthdays, anniversaries, festivals and the people you love. After we
+          discuss your idea and start work, see your preview in under 60 minutes
+          and receive your finished gift website within 90 minutes.
         </p>
         <div className="dw-hero__actions">
           <a className="button" href="#editions">

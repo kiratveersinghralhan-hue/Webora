@@ -1,0 +1,334 @@
+/* V3 Signature: Sculpted Identity + Spatial Folio, evergreen studio shell.
+   Imported last from Layout, it settles one hierarchy across the hero,
+   work, services, studio/process and footer. Every rule is scoped to
+   .living-layout.v3 (the V1 comparison is untouched) and selects only
+   classes in the current markup. Festive presentation stays on the gift
+   route, where Layout adds .diwali; evergreen-only rules use :not(.diwali). */
+.living-layout.v3 {
+  --sig-plinth-top: #f8f5ef;
+  --sig-plinth-low: #e2dccf;
+  --sig-hair: #14130f1f;
+  --sig-display-xl: clamp(2.5rem, 1.15rem + 4.6vw, 5.75rem);
+  --sig-display-l: clamp(2.25rem, 1.4rem + 4.2vw, 5.25rem);
+  --sig-lede: clamp(1rem, 0.94rem + 0.28vw, 1.1875rem);
+}
+/* One visible signal ring through page content; the folio stage keeps its
+   own inset ring. */
+.living-layout.v3 main :focus-visible:not(.folio-stage) {
+  outline: 2px solid var(--v3-signal);
+  outline-offset: 4px;
+}
+
+/* Hero: offer and action, followed by the sculpture and live project proof. */
+.living-layout.v3 .impression-hero h1 {
+  max-width: 12ch;
+  font-size: var(--sig-display-xl);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+.living-layout.v3 .impression-hero__description {
+  max-width: 42ch;
+  font-size: var(--sig-lede);
+}
+.living-layout.v3 .impression-hero__evidence {
+  display: grid;
+  gap: 12px;
+  max-width: none;
+  margin: 32px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--v3-rule);
+}
+.living-layout.v3 .impression-hero__evidence > p {
+  max-width: none;
+  margin: 0;
+  color: var(--v3-muted);
+}
+.living-layout.v3 .impression-hero__evidence-title {
+  font: 500 0.8125rem/1.5 var(--v3-display);
+}
+.living-layout.v3 .impression-hero__evidence-title > span {
+  margin-right: 10px;
+  color: var(--v3-signal);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.living-layout.v3 .impression-hero__evidence ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 4px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.living-layout.v3 .impression-hero__project {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 6px 0;
+  color: var(--v3-ink);
+}
+.living-layout.v3 .impression-hero__project img {
+  width: 96px;
+  height: 60px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 2px;
+  background: var(--v3-paper-deep);
+}
+.living-layout.v3 .impression-hero__project strong {
+  font-size: 0.9375rem;
+}
+.living-layout.v3 .impression-hero__project small {
+  font-size: 0.8125rem;
+}
+.living-layout.v3 .impression-hero__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 4px;
+  color: var(--v3-ink);
+  font: 500 0.6875rem/1 var(--v3-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.living-layout.v3 .impression-hero__status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2f8a4c;
+}
+.living-layout.v3 .impression-hero__project > svg {
+  color: var(--v3-muted);
+  transition:
+    color var(--v3-quick),
+    translate 320ms var(--v3-settle);
+}
+.living-layout.v3 .impression-hero__project:hover > svg {
+  color: var(--v3-signal);
+  translate: 2px -2px;
+}
+.living-layout.v3 .impression-hero__capture {
+  font-size: 0.75rem;
+}
+.living-layout.v3 .impression-hero__stage {
+  margin-top: 28px;
+  border: 1px solid var(--sig-hair);
+  border-radius: 4px;
+  background:
+    radial-gradient(ellipse 60% 46% at 50% 46%, #fffdf8 0%, #fffdf800 72%),
+    linear-gradient(
+      180deg,
+      var(--sig-plinth-top) 0%,
+      var(--v3-paper) 56%,
+      var(--sig-plinth-low) 100%
+    );
+}
+.living-layout.v3 .impression-hero__object-label {
+  top: 16px;
+  left: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 0.6875rem/1.4 var(--v3-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: opacity 600ms var(--v3-settle) 200ms;
+}
+.living-layout.v3 .impression-hero__object-label::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--v3-signal);
+}
+.living-layout.v3
+  .impression-hero__stage:has(.identity-intro)
+  .impression-hero__object-label {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+.living-layout.v3 .impression-hero__notes {
+  left: 18px;
+  right: 176px;
+  bottom: 14px;
+}
+.living-layout.v3 .impression-hero__stage .core-controls {
+  right: 12px;
+  bottom: 10px;
+}
+.living-layout.v3 .impression-hero__stage .identity-intro {
+  inset: auto 12px 10px 18px;
+}
+@media (min-width: 1001px) {
+  .living-layout.v3 .impression-hero {
+    padding-top: clamp(28px, 3vw, 52px);
+    padding-bottom: clamp(36px, 4vw, 64px);
+  }
+  .living-layout.v3 .impression-hero__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "copy stage"
+      "proof stage";
+    align-items: stretch;
+    column-gap: clamp(40px, 4.4vw, 88px);
+  }
+  .living-layout.v3 .impression-hero__copy {
+    grid-area: copy;
+    align-self: center;
+    padding-bottom: 8px;
+  }
+  .living-layout.v3 .impression-hero__evidence {
+    grid-area: proof;
+    align-self: end;
+  }
+  .living-layout.v3 .impression-hero__stage {
+    grid-area: stage;
+    height: clamp(540px, calc(100svh - var(--header, 98px) - 72px), 800px);
+    margin-top: 0;
+  }
+}
+@media (min-width: 701px) and (max-width: 1000px) {
+  .living-layout.v3 .impression-hero h1 {
+    max-width: 13ch;
+    font-size: clamp(3.5rem, 7.4vw, 4.75rem);
+  }
+  .living-layout.v3 .impression-hero__stage {
+    height: clamp(380px, 54vw, 500px);
+    margin-top: 32px;
+  }
+}
+@media (max-width: 700px) {
+  .living-layout.v3 .impression-hero {
+    padding-top: 24px;
+    padding-bottom: 36px;
+  }
+  .living-layout.v3 .impression-hero__eyebrow {
+    margin-bottom: 16px;
+    font-size: 0.6875rem;
+  }
+  .living-layout.v3 .impression-hero__description {
+    margin-top: 16px;
+  }
+  .living-layout.v3 .impression-hero__actions {
+    margin-top: 22px;
+  }
+  .living-layout.v3 .impression-hero__actions > .button {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+  .living-layout.v3 .impression-hero__for {
+    margin-top: 18px;
+    padding-top: 14px;
+  }
+  .living-layout.v3 .impression-hero__evidence {
+    margin-top: 26px;
+  }
+  .living-layout.v3 .impression-hero__project img {
+    width: 80px;
+    height: 50px;
+  }
+  .living-layout.v3 .impression-hero__stage {
+    height: clamp(272px, 80vw, 360px);
+    margin-top: 24px;
+  }
+  .living-layout.v3 .impression-hero__object-label {
+    top: 12px;
+    left: 14px;
+    font-size: 0.625rem;
+  }
+}
+@media (max-width: 1000px) and (max-height: 500px) and (orientation: landscape) {
+  .living-layout.v3 .impression-hero__stage {
+    height: 300px;
+  }
+}
+
+/* Chapters: one display ramp and lede size from hero to scope. */
+.living-layout.v3 .v3-chapter h2 {
+  font-size: var(--sig-display-l);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+.living-layout.v3 .v3-chapter.v3-approach h2 {
+  font-size: clamp(2.5rem, 1.4rem + 5vw, 6.5rem);
+}
+.living-layout.v3 .v3-heading p,
+.living-layout.v3 .v3-services__intro p {
+  font-size: var(--sig-lede);
+}
+.living-layout.v3
+  :is(
+    .v3-services__number,
+    .v3-process__number,
+    .v3-scope__list span,
+    .v3-approach__outcomes span,
+    .folio-panel__index
+  ) {
+  font-variant-numeric: tabular-nums;
+}
+/* Work: the folio stands on the same studio sweep as the sculpture. */
+.living-layout.v3 .v3-work .folio-stage {
+  background:
+    radial-gradient(
+      ellipse calc(var(--sheet) * 0.75) 62% at 50% 46%,
+      #fffaf1 0%,
+      #fffaf100 100%
+    ),
+    linear-gradient(
+      180deg,
+      var(--v3-paper) 0%,
+      var(--sig-plinth-top) 50%,
+      var(--v3-paper) 100%
+    );
+}
+/* Services: hover glides on the compositor instead of re-flowing padding. */
+@media (hover: hover) {
+  .living-layout.v3 .v3-services__list li:hover {
+    padding-left: 0;
+  }
+  .living-layout.v3 .v3-services__list li > div {
+    transition: translate 420ms var(--v3-settle);
+  }
+  .living-layout.v3 .v3-services__list li:hover > div {
+    translate: 12px 0;
+  }
+}
+/* Scope: the closing enquiry plate, marked with the one signal rule. */
+.living-layout.v3 .v3-scope__cta {
+  border: 1px solid var(--sig-hair);
+  border-top: 2px solid var(--v3-signal);
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(
+    180deg,
+    var(--sig-plinth-top),
+    var(--v3-paper-deep)
+  );
+}
+/* Footer wordmark remains readable against the dark studio footer. */
+.living-layout.v3 .footer-wordmark {
+  color: #918a7b;
+}
+@media (prefers-reduced-motion: reduce) {
+  .living-layout.v3 .impression-hero__project > svg,
+  .living-layout.v3 .impression-hero__object-label,
+  .living-layout.v3 .v3-services__list li > div {
+    transition: none;
+  }
+  .living-layout.v3 .impression-hero__project:hover > svg,
+  .living-layout.v3 .v3-services__list li:hover > div {
+    translate: none;
+  }
+}
+
+/* The local comparison control follows the current page palette. */
+.living-layout.v3 .experience-switcher {
+  color: var(--v3-muted);
+  font-size: 11px;
+}
+.living-layout.v3 .experience-switcher a {
+  color: var(--v3-signal);
+}

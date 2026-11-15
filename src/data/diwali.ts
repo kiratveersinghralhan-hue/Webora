@@ -1,14 +1,14 @@
 import type { Draft } from "../../shared/enquiry";
 
 /**
- * Diwali Edition 2026: seasonal Memory Gift packages. Personal websites given
+ * Memory Gift packages for personal celebrations. Personal websites given
  * as gifts, enquired through the existing six-step brief (?gift=<id>).
  * All sample content shown with these packages is fictional demonstration copy.
  */
 export const diwaliEdition = {
-  name: "Diwali Edition",
+  name: "Memory Gifts",
   year: 2026,
-  greeting: "Shubh Deepavali",
+  greeting: "Made for someone special",
   route: "/diwali-gifts",
 } as const;
 
@@ -36,7 +36,7 @@ export const giftPackages: GiftPackage[] = [
     tagline: "One page. One lamp. Everything you meant to say.",
     story:
       "A single, beautifully lit page that gathers a handful of photographs and the words you never quite find time to say out loud.",
-    idealFor: "A sibling, a best friend, a first Diwali together",
+    idealFor: "A sibling, a best friend, a first celebration together",
     includes: [
       "A one-page memory website",
       "Up to 15 photographs",
@@ -98,10 +98,10 @@ export const giftPackages: GiftPackage[] = [
       "A wishes wall from family and friends",
       "Printable QR keepsake card",
       "Two rounds of revisions",
-      "Priority delivery before Diwali",
+      "Gift website ready within 90 minutes of work starting",
     ],
     sample: {
-      title: "Nani & Nana · Fifty Diwalis",
+      title: "Nani & Nana · Fifty Years Together",
       lines: [
         "Opening · The courtyard, lit",
         "Gallery · 1976 to today",
@@ -130,7 +130,7 @@ export const findGift = (id: string | null | undefined) =>
 
 /** The line added to the enquiry so the studio sees the chosen package. */
 export const giftEnquiryNote = (gift: GiftPackage) =>
-  `Diwali Memory Gift: ${gift.name} (${gift.price}).`;
+  `Memory Gift: ${gift.name} (${gift.price}).`;
 
 /** A Memory Gift arrives through the same brief, with its package noted. */
 export function applyGift(draft: Draft, gift: GiftPackage | undefined): Draft {
@@ -138,7 +138,11 @@ export function applyGift(draft: Draft, gift: GiftPackage | undefined): Draft {
   const note = giftEnquiryNote(gift);
   const others = draft.additional_requirements
     .split(/\r?\n/)
-    .filter((line) => !line.startsWith("Diwali Memory Gift:"))
+    .filter(
+      (line) =>
+        !line.startsWith("Diwali Memory Gift:") &&
+        !line.startsWith("Memory Gift:"),
+    )
     .join("\n")
     .trim();
   return {

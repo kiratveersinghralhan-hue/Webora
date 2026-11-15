@@ -1,7 +1,6 @@
 import * as THREE from "three/src/Three.js";
 import { createImpressionGeometry } from "../geometry/impressionGeometry";
 import type { IntroDirector } from "../runtime/IntroDirector";
-import { DiyaLights } from "./DiyaLights";
 import type { QualityTier } from "../runtime/QualityPolicy";
 import type { FrameState, SceneContext, SceneModule } from "../runtime/types";
 
@@ -17,8 +16,9 @@ export class ImpressionScene implements SceneModule {
   private context?: SceneContext;
   private director?: IntroDirector;
   private sculpture?: THREE.Mesh;
-  private diyas?: DiyaLights;
-  private kindled = false;
+  /** Eased pointer lean: parallax glides instead of snapping to the cursor. */
+  private leanX = 0;
+  private leanY = 0;
   private releases: (() => void)[] = [];
   private serial = 0;
   private width = 1;
@@ -64,31 +64,34 @@ export class ImpressionScene implements SceneModule {
   }
   private build(tier: QualityTier) {
     this.clear();
-    // Diwali Edition: burnished gold faces with a thin lacquer; mirror-polished
-    // bevels catch the softboxes as crisp lines. Low tier drops the clearcoat.
+    // Studio edition: satin nickel faces under a thin lacquer, so the folded
+    // planes read as one continuous neutral metal against the ivory page.
+    // Mirror-polished bevels draw the softboxes as crisp silver lines. The
+    // warm rim card in the environment supplies the only warmth. Low tier
+    // drops the clearcoat.
     const satin = this.own(
       tier === "low"
         ? new THREE.MeshStandardMaterial({
-            color: 0xe3c58c,
+            color: 0xc8c4bb,
             metalness: 1,
-            roughness: 0.26,
-            envMapIntensity: 1.25,
+            roughness: 0.3,
+            envMapIntensity: 1.2,
           })
         : new THREE.MeshPhysicalMaterial({
-            color: 0xe3c58c,
+            color: 0xc8c4bb,
             metalness: 1,
-            roughness: 0.28,
-            clearcoat: 0.45,
-            clearcoatRoughness: 0.08,
-            envMapIntensity: 1.25,
+            roughness: 0.32,
+            clearcoat: 0.3,
+            clearcoatRoughness: 0.12,
+            envMapIntensity: 1.2,
           }),
     );
     const polished = this.own(
       new THREE.MeshStandardMaterial({
-        color: 0xd6a85a,
+        color: 0xe6e2da,
         metalness: 1,
-        roughness: 0.1,
-        envMapIntensity: 1.45,
+        roughness: 0.08,
+        envMapIntensity: 1.5,
       }),
     );
     this.sculpture = new THREE.Mesh(
@@ -130,8 +133,6 @@ export class ImpressionScene implements SceneModule {
       shadow.position.y = -1.95;
       this.group.add(shadow);
     }
-    this.diyas = new DiyaLights((resource) => this.own(resource), tier);
-    this.group.add(this.diyas.group);
     this.resize(this.width, this.height);
   }
   setDirector(director: IntroDirector) {
@@ -174,8 +175,7 @@ export class ImpressionScene implements SceneModule {
     this.context?.invalidate();
   }
   update(frame: FrameState) {
-    if (this.suspended || !this.context || !this.sculpture || !this.diyas)
-      return false;
+    if (this.suspended || !this.context || !this.sculpture) return false;
     const { delta, pointer } = frame;
     this.progress = this.director?.sample(frame.now ?? frame.time * 1000) ?? 1;
     if (this.target !== undefined) {
@@ -197,11 +197,22 @@ export class ImpressionScene implements SceneModule {
     this.introTurn = Math.PI * 2 * revolution;
     const opening =
       this.director !== undefined && this.director.phase !== "settled";
-    const px = !opening && this.finePointer && pointer.active ? pointer.nx : 0;
-    const py = !opening && this.finePointer && pointer.active ? pointer.ny : 0;
+    const ax = !opening && this.finePointer && pointer.active ? pointer.nx : 0;
+    const ay = !opening && this.finePointer && pointer.active ? pointer.ny : 0;
+    const ease = 1 - Math.exp(-delta / 0.22);
+    this.leanX += (ax - this.leanX) * ease;
+    this.leanY += (ay - this.leanY) * ease;
+    const leaning =
+      Math.abs(ax - this.leanX) + Math.abs(ay - this.leanY) > 0.0005;
+    if (!leaning) {
+      this.leanX = ax;
+      this.leanY = ay;
+    }
+    // The mid-turn tilt exposes the top bevel and returns to zero at rest.
+    const arc = revolution < 1 ? Math.sin(Math.PI * revolution) : 0;
     this.sculpture.rotation.set(
-      -0.1 + this.pitch - py * 0.025,
-      -0.26 + this.yaw + px * 0.055 + this.introTurn,
+      -0.1 + this.pitch - this.leanY * 0.025 + arc * 0.14,
+      -0.26 + this.yaw + this.leanX * 0.055 + this.introTurn,
       -0.08,
     );
     // Reserve breathing room for the wordmark while the tall side profiles
@@ -220,17 +231,8 @@ export class ImpressionScene implements SceneModule {
       -0.12 + (this.width < 500 ? (1 - settle) * 0.6 : 0),
       0,
     );
-    // The lamps catch one after another during the revolution, then rest lit.
-    // A first frame with a director (the hero) also earns a short flicker.
-    const flickering = this.diyas.update(
-      frame.now ?? frame.time * 1000,
-      opening ? THREE.MathUtils.smoothstep(this.progress, 0, 0.9) : 1,
-      opening || (!this.kindled && this.director !== undefined),
-      this.finePointer ? pointer : undefined,
-    );
-    this.kindled = true;
     return (
-      flickering ||
+      leaning ||
       this.dragging ||
       this.velocity !== 0 ||
       this.target !== undefined ||
@@ -274,8 +276,8 @@ export class ImpressionScene implements SceneModule {
       rotationY: this.sculpture?.rotation.y ?? 0,
       sculptureId: this.sculpture?.uuid ?? "",
       geometryId: this.sculpture?.geometry.uuid ?? "",
-      material: "Impression / standard metal, Diwali gold",
-      diyas: this.diyas?.group.children.length ?? 0,
+      material: "Impression / standard metal, studio nickel",
+      diyas: 0,
       introPhase: this.director?.phase ?? "settled",
       introDuration: this.director?.duration ?? 0,
       introStartedAt: this.director?.startedAt ?? 0,

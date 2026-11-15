@@ -207,8 +207,8 @@ export function ScopeChapter() {
       </ol>
       <div className="v3-scope__cta" data-rise>
         <p>
-          Every Webora project is scoped around the business. Tell us what
-          you’re building and we’ll recommend the right approach.
+          After we discuss your brief and start work, see your first preview in
+          under 60 minutes and get your website completed the same day.
         </p>
         <LinkButton />
       </div>

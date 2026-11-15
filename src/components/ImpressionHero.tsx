@@ -4,8 +4,6 @@ import { projects } from "../data/studio";
 import { assetUrl } from "../lib/site";
 import { IdentityCore } from "../three/IdentityCore";
 import { LinkButton } from "./LinkButton";
-import { DiyaIcon, Rangoli, Sparks } from "./Diwali";
-import { diwaliEdition } from "../data/diwali";
 
 const audiences = [
   "Service businesses",
@@ -19,7 +17,12 @@ const notes = [
   ["Development", "Bringing the idea to life."],
 ];
 
-/** Semantic first paint; the sculpture enhances the offer, never gates it. */
+/**
+ * Sculpted Identity hero. Reading order is business order: offer, action,
+ * sculpture, then live proof, so nothing a visitor needs waits for
+ * WebGL, the intro or the sculpture controls. Desktop sets the sculpture
+ * on a full-height plinth beside the copy; phones keep the same order.
+ */
 export function ImpressionHero() {
   const proof = projects.filter(
     (project) =>
@@ -29,16 +32,6 @@ export function ImpressionHero() {
     <section className="impression-hero" aria-labelledby="impression-title">
       <div className="impression-hero__grid">
         <div className="impression-hero__copy">
-          <Link className="dw-ribbon" to={diwaliEdition.route}>
-            <DiyaIcon />
-            <span>
-              <strong>
-                {diwaliEdition.name} {diwaliEdition.year}
-              </strong>{" "}
-              Memory Gifts from ₹999
-            </span>
-            <ArrowUpRight size={15} aria-hidden="true" />
-          </Link>
           <span className="impression-hero__eyebrow">
             Webora &mdash; Premium web design &amp; development studio
           </span>
@@ -63,10 +56,8 @@ export function ImpressionHero() {
           </p>
         </div>
         <div className="impression-hero__stage">
-          <Rangoli className="impression-hero__rangoli" />
-          <Sparks count={10} />
           <span className="impression-hero__object-label" aria-hidden="true">
-            W / LIT FOR DIWALI
+            Drag to rotate
           </span>
           <IdentityCore intro studio impression />
           {/* A gallery label under the sculpture: the three disciplines the
@@ -82,36 +73,46 @@ export function ImpressionHero() {
             ))}
           </ol>
         </div>
-      </div>
-      <div
-        className="impression-hero__evidence"
-        aria-label="Selected live website projects"
-      >
-        <p>
-          Real businesses.
-          <br />
-          Work you can explore.
-        </p>
-        {proof.map((project) => (
-          <Link
-            className="impression-hero__project"
-            key={project.slug}
-            to={`/work/${project.slug}`}
-          >
-            <img
-              src={assetUrl(project.image!)}
-              width="80"
-              height="56"
-              alt=""
-              decoding="async"
-            />
-            <span>
-              <strong>{project.name}</strong>
-              <small>{project.status} &middot; Website capture</small>
-            </span>
-            <ArrowUpRight size={16} aria-hidden="true" />
-          </Link>
-        ))}
+        {proof.length > 0 && (
+          <div className="impression-hero__evidence">
+            <p
+              className="impression-hero__evidence-title"
+              id="impression-proof"
+            >
+              <span>Live now</span> Real businesses. Work you can explore.
+            </p>
+            <ul aria-labelledby="impression-proof">
+              {proof.map((project) => (
+                <li key={project.slug}>
+                  <Link
+                    className="impression-hero__project"
+                    to={`/work/${project.slug}`}
+                  >
+                    <img
+                      src={assetUrl(project.image!)}
+                      width="160"
+                      height="100"
+                      alt=""
+                      decoding="async"
+                    />
+                    <span>
+                      <strong>{project.name}</strong>
+                      <small>
+                        <span className="impression-hero__status">Live</span>{" "}
+                        {project.category}
+                      </small>
+                    </span>
+                    <span className="sr-only">, case study</span>
+                    <ArrowUpRight size={16} aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="impression-hero__capture">
+              Thumbnails are captures of each live website.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

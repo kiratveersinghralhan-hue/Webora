@@ -147,7 +147,7 @@ export function DiyaIcon({
 
 function Lamps({ count }: { count: number }) {
   return (
-    <span className="dw-lamps" aria-label={`${count} of 5 lamps`}>
+    <span className="dw-lamps" role="img" aria-label={`${count} of 5 lamps`}>
       {Array.from({ length: 5 }, (_, i) => (
         <DiyaIcon key={i} lit={i < count} />
       ))}
@@ -334,12 +334,12 @@ export function GiftsChapter() {
     >
       <div className="v3-label" data-rise>
         <span aria-hidden="true" />
-        <span>Diwali Edition · Memory Gifts</span>
+        <span>Memory Gifts</span>
       </div>
       <Rangoli className="dw-chapter__rangoli" />
       <div className="v3-heading">
         <h2 id="dw-home-title" data-rise>
-          This Diwali, gift a memory. <span>Lit for the people you love.</span>
+          Give a memory. <span>Made for the people you love.</span>
         </h2>
         <div data-rise>
           <p>
